@@ -35,7 +35,10 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = {inherit inputs outputs;};
         # > Our main home-manager configuration file <
-        modules = [./home-manager/home.nix];
+        modules = [
+                  ./home-manager/home.nix
+                  ./home-manager/zsh.nix
+                  ];
       };
     };
   };
