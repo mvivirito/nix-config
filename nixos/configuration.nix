@@ -94,6 +94,8 @@
     ];
   };
 
+  users.defaultUserShell = pkgs.zsh;
+
   # Install firefox.
   programs.firefox.enable = true;
   programs._1password.enable = true;
@@ -114,6 +116,17 @@
     wget
     htop
     gnome.gnome-tweaks
+    neovim
+    zsh
+    xsel
+    vlc
+    tmux
+    fzf
+    ffmpeg
+    xcape
+    figlet
+    cmatrix
+    pipes
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -144,3 +157,4 @@
   system.stateVersion = "23.11"; # Did you read the comment?
 
 }
+
