@@ -103,7 +103,7 @@
     # require enabling PolKit integration on some desktop environments (e.g. Plasma).
     polkitPolicyOwners = [ "michael" ];
   };
-  # Allow unfree packages
+  programs.zsh.enable = true;  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
