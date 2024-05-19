@@ -114,6 +114,8 @@
     neovim
     pipes
     swaynotificationcenter
+    xdg-desktop-portal-hyprland
+    libsForQt5.polkit-kde-agent 
     tmux
     vim
     vlc
