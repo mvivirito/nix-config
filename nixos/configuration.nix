@@ -113,7 +113,7 @@
     kitty
     neovim
     pipes
-    swaync
+    swaynotificationcenter
     tmux
     vim
     vlc
