@@ -57,7 +57,6 @@
 
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
-#   services.xserver.desktopManager.hyprland.enable = true;
   programs.hyprland.enable = true;
 
   # Configure keymap in X11
@@ -114,6 +113,7 @@
     gnome.gnome-tweaks
     htop
     kitty
+    kmonad
     neovim
     polkit_gnome    
     pipes
@@ -123,7 +123,6 @@
     vim
     vlc
     wget
-    xcape
     xsel
     zsh
   ];
