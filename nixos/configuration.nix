@@ -115,7 +115,7 @@
     htop
     kitty
     neovim
-    gnome_polkit
+    polkit_gnome    
     pipes
     swaynotificationcenter
     xdg-desktop-portal-hyprland
