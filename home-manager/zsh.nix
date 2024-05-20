@@ -6,6 +6,7 @@
     oh-my-zsh = {
       enable = true;
       theme = "agnoster";
+      plugins = ["vi-mode"];
     };
     plugins = [
       {
@@ -23,7 +24,6 @@
       v = "vim";
     };
     initExtra = ''
-      bindkey -v
     '';
   };
 }
