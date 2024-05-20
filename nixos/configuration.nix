@@ -113,8 +113,8 @@
     gnome.gnome-tweaks
     htop
     kitty
-    kmonad
     neovim
+    haskellPackages.kmonad
     polkit_gnome    
     pipes
     swaynotificationcenter
