@@ -114,6 +114,9 @@
     htop
     kitty
     wev
+    rofi-wayland
+    ranger
+    waybar
     neovim
     polkit_gnome    
     pipes
