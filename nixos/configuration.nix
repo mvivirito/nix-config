@@ -114,7 +114,6 @@
     htop
     kitty
     neovim
-    haskellPackages.kmonad
     polkit_gnome    
     pipes
     swaynotificationcenter
