@@ -6,7 +6,7 @@
     oh-my-zsh = {
       enable = true;
       theme = "agnoster";
-      plugins = ["vi-mode"];
+      plugins = ["vi-mode" "fzf"];
     };
     plugins = [
       {
