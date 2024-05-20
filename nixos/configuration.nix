@@ -4,6 +4,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      ./keyd
     ];
 
   # Bootloader.
@@ -49,21 +50,20 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
   # Enable fingerprint reader
   services.fprintd.enable = true;
 
-  # Enable the GNOME Desktop Environment.
-  services.xserver.displayManager.gdm.enable = true;
-  programs.hyprland.enable = true;
 
   # Configure keymap in X11
   services.xserver = {
+    enable = true;
     layout = "us";
-    xkbVariant = "";
   };
+
+  # Enable the gdm.
+  services.xserver.displayManager.gdm.enable = true;
+  # Enable hyprland window manager
+  programs.hyprland.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -113,6 +113,7 @@
     gnome.gnome-tweaks
     htop
     kitty
+    wev
     neovim
     polkit_gnome    
     pipes
