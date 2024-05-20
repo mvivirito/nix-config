@@ -25,6 +25,9 @@
 
   };
 
+  # Security Settings
+  security.polkit.enable = true;
+
   # Enable networking
   networking.networkmanager.enable = true;
 
@@ -112,10 +115,10 @@
     htop
     kitty
     neovim
+    gnome_polkit
     pipes
     swaynotificationcenter
     xdg-desktop-portal-hyprland
-    libsForQt5.polkit-kde-agent 
     tmux
     vim
     vlc
