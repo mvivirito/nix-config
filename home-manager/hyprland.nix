@@ -7,16 +7,6 @@
 #    ../dunst.nix
   ];
 
-  home.packages = with pkgs; [
-    playerctl
-    swaybg
-    wl-clipboard
-    grim
-    slurp
-    neofetch
-    libnotify
-  ];
-
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";
     bind =

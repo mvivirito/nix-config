@@ -104,28 +104,37 @@
 
   # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
-    cowsay
+    bat
     cmatrix
+    cowsay
+    dunst
     ffmpeg
     figlet
     fzf
     git
     gnome.gnome-tweaks
+    grim
     htop
     kitty
-    wev
-    rofi-wayland
-    ranger
-    waybar
+    libnotify
+    neofetch
     neovim
-    polkit_gnome    
     pipes
+    playerctl
+    polkit_gnome    
+    ranger
+    rofi-wayland
+    slurp
+    swaybg
     swaynotificationcenter
-    xdg-desktop-portal-hyprland
     tmux
     vim
     vlc
+    waybar
+    wev
     wget
+    wl-clipboard
+    xdg-desktop-portal-hyprland
     xsel
     zsh
   ];
