@@ -53,7 +53,6 @@
   # Enable fingerprint reader
   services.fprintd.enable = true;
 
-
   # Configure keymap in X11
   services.xserver = {
     enable = true;
@@ -116,6 +115,8 @@
     grim
     htop
     kitty
+    noto-fonts 
+    playerctl 
     libnotify
     neofetch
     neovim

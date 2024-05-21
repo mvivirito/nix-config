@@ -2,10 +2,6 @@
 
 {
 
-  home.packages = [ pkgs.noto-fonts pkgs.playerctl ];
-
-  services.playerctld.enable = true;
-
   programs.waybar = {
     enable = true;
     package = pkgs.waybar.overrideAttrs (oldAttrs: { mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ]; });
