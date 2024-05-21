@@ -13,6 +13,7 @@
     # inputs.nix-colors.homeManagerModule
     ./zsh.nix
     ./hyprland.nix
+    ./waybar.nix
   ];
 
   nixpkgs = {

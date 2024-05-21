@@ -1,7 +1,22 @@
-
-{ pkgs, ... }:
+{ lib, pkgs, config, inputs, ... }:
 
 {
+
+  imports = [
+    ./waybar.nix
+#    ../dunst.nix
+  ];
+
+  home.packages = with pkgs; [
+    playerctl
+    swaybg
+    wl-clipboard
+    grim
+    slurp
+    neofetch
+    libnotify
+  ];
+
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";
     bind =
@@ -47,11 +62,11 @@
         "[workspace 7 silent] kitty --title='kitty-journal'"
       ];
 
-      workspace = lib.lists.flatten (map
-        (m:
-          map (w: "${w}, monitor:${m.name}") (m.workspaces)
-        )
-        (config.monitors));
+#      workspace = lib.lists.flatten (map
+#        (m:
+#          map (w: "${w}, monitor:${m.name}") (m.workspaces)
+#        )
+#        (config.monitors));
 
       env = [ "XCURSOR_SIZE,24" ];
 
