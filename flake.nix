@@ -38,6 +38,7 @@
         modules = [
                   ./home-manager/home.nix
                   ./home-manager/zsh.nix
+                  ./home-manager/hyprland.nix
                   ];
       };
     };

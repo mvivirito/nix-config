@@ -12,6 +12,7 @@
     # If you want to use home-manager modules from other flakes (such as nix-colors):
     # inputs.nix-colors.homeManagerModule
     ./zsh.nix
+    ./hyprland.nix
   ];
 
   nixpkgs = {
@@ -48,6 +49,9 @@
   # Enable home-manager and git
   programs.home-manager.enable = true;
   programs.git.enable = true;
+
+  wayland.windowManager.hyprland.enable = true; 
+
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
