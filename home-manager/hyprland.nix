@@ -32,6 +32,98 @@
           )
           10)
       );
+
+
+      exec-once = [
+      #  "hyprctl setcursor Bibata-Modern-Ice 22"
+      #  "nm-applet"
+      #  "swaybg -i ~/wallpaper -m fill"
+        "waybar"
+      #  "[workspace 2 silent] floorp"
+      #  "[workspace special:term silent] kitty --title='kitty-scratch' --hold"
+        "kitty"
+        # "remind -z -k':notify-send -u critical \"Reminder!\" %s' ~/00-09-System/02-Logs/02.10-Journal/agenda.rem"
+      #  "[workspace 7 silent] morgen"
+        "[workspace 7 silent] kitty --title='kitty-journal'"
+      ];
+
+      workspace = lib.lists.flatten (map
+        (m:
+          map (w: "${w}, monitor:${m.name}") (m.workspaces)
+        )
+        (config.monitors));
+
+      env = [ "XCURSOR_SIZE,24" ];
+
+      general = {
+        gaps_in = 5;
+        gaps_out = 5;
+        border_size = 2;
+        "col.active_border" = "rgb(78A8FF) rgb(7676FF) 45deg";
+        "col.inactive_border" = "rgba(585272aa)";
+        layout = "dwindle";
+        resize_on_border = true;
+      };
+
+      dwindle = {
+        pseudotile = true;
+        preserve_split = true;
+      };
+
+      master = {
+        orientation = "left";
+      };
+
+      decoration = {
+        rounding = 0;
+        blur = {
+          enabled = true;
+          size = 3;
+          passes = 1;
+          new_optimizations = true;
+        };
+        drop_shadow = true;
+        shadow_range = 4;
+        shadow_render_power = 3;
+        "col.shadow" = "rgba(1a1a1aee)";
+      };
+
+      group = {
+        "col.border_active" = "rgba(63F2F1aa)";
+        "col.border_inactive" = "rgba(585272aa)";
+
+        groupbar = {
+          font_family = "Iosevka";
+          font_size = 13;
+          "col.active" = "rgba(63F2F1aa)";
+          "col.inactive" = "rgba(585272aa)";
+        };
+      };
+
+      misc = {
+        disable_hyprland_logo = true;
+        disable_splash_rendering = true;
+      };
+
+      xwayland = {
+        force_zero_scaling = true;
+      };
+
+      input = {
+        sensitivity = 0.15;
+        follow_mouse = 1;
+        touchpad = {
+          natural_scroll = true;
+          drag_lock = true;
+        };
+      };
+
+      gestures = {
+        workspace_swipe = true;
+        workspace_swipe_distance = 200;
+        workspace_swipe_forever = true;
+      };
+
   };
 }
 
