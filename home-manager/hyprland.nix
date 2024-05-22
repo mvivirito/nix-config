@@ -12,11 +12,11 @@
     bind =
       [
         "$mod, F, exec, firefox"
-	"$mod, Q, exec, kitty"
-	"$mod, C, killactive"
+	"$mod, return, exec, kitty"
+	"$mod SHIFT, Q, killactive"
 	"$mod, M, exit"
-	#$mod, E, exec, dolphin
-	#$mod, V, togglefloating, 
+	"$mod, R, exec, kitty -e ranger"
+	"$mod, V, togglefloating"
 	"$mod, space, exec, rofi -show drun"
 	#$mod, P, pseudo, # dwindle
 	#$mod, J, togglesplit, # dwindle
