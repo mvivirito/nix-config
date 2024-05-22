@@ -4,14 +4,14 @@
 
   programs.waybar = {
     enable = true;
-    package = pkgs.waybar.overrideAttrs (oldAttrs: { mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ]; });
+#    package = pkgs.waybar.overrideAttrs (oldAttrs: { mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ]; });
     settings = {
       mainBar = {
         margin = "0";
         layer = "top";
-        modules-left = [ "custom/nix" "hyprland/workspaces" "mpris" ];
+        modules-left = ["hyprland/workspaces" "mpris" ];
         modules-center = [ "wlr/taskbar" ];
-        modules-right = [ "custom/task-context" "network#interface" "network#speed" "cpu" "temperature" "backlight" "battery" "clock" "custom/notification" "tray" ];
+        modules-right = [ "network#interface" "network#speed" "cpu" "temperature" "backlight" "battery" "clock" "tray" ];
 
         persistent_workspaces = {
           "1" = [ ];
@@ -21,16 +21,8 @@
         };
 
         "hyprland/workspaces" = {
-          format = "{icon}";
           on-click = "activate";
           sort-by-number = true;
-          format-icons = {
-            "1" = "";
-            "2" = "󰈹";
-            "3" = "󰒱";
-            "4" = "󰴸";
-            "7" = "󰧑";
-          };
         };
 
         mpris = {
@@ -42,20 +34,9 @@
           };
         };
 
-        "custom/nix" = {
-          format = "󱄅 ";
-        };
-
         "wlr/taskbar" = {
           on-click = "activate";
         };
-
-#       "custom/task-context" = {
-#         exec = "~/.config/waybar/scripts/task-context.sh";
-#         tooltip = false;
-#         on-click = "task @ none";
-#         restart-interval = 1;
-#       };
 
         "network#interface" = {
           format-ethernet = "󰣶 {ifname}";
@@ -92,18 +73,6 @@
           format = " {:%H:%M}";
           format-alt = "󰃭 {:%Y-%m-%d}";
         };
-
- #       "custom/notification" = {
- #         exec = "~/.config/waybar/scripts/dunst.sh";
- #         tooltip = false;
- #         on-click = "dunstctl set-paused toggle";
- #         restart-interval = 1;
- #       };
-
-        tray = {
-          icon-size = 16;
-          spacing = 8;
-        };
       };
     };
 
@@ -121,10 +90,6 @@
         background: @unfocused_borders;
       }
 
-      #custom-nix {
-        padding: 0px 4px;
-      }
-
       #workspaces button {
         padding: 0px 4px;
         margin: 0 4px 0 0;
@@ -139,48 +104,8 @@
         padding: 0 4px;
       }
 
-      #custom-notification {
-        padding: 0 4px 0 4px;
-      }
-
-      #tray {
-        padding: 0 4px;
-      }
-      
-      #tray * {
-        padding: 0;
-        margin: 0;
-      }
     '';
   };
-
-#  xdg.configFile."waybar/scripts/dunst.sh" = {
-#    text = ''
-#      COUNT=$(dunstctl count waiting)
-#      ENABLED="󰂚 "
-#      DISABLED="󰂛 "
-#      if [ $COUNT != 0 ]; then DISABLED="󱅫 "; fi
-#      if dunstctl is-paused | grep -q "false"; then
-#        echo $ENABLED
-#      else
-#        echo $DISABLED
-#      fi
-#    '';
-#    executable = true;
-#  };
-
-#  xdg.configFile."waybar/scripts/task-context.sh" = {
-#    text = ''
-#      ICON=" "
-##      CONTEXT=$(task _get rc.context)
-#
-#      if [ -z "$CONTEXT" ]; then
-#        CONTEXT="NONE"
-#      fi
-#      echo "$ICON $CONTEXT"
-#    '';
-#    executable = true;
-#  };
 }
 
 

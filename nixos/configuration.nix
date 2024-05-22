@@ -125,6 +125,7 @@
     polkit_gnome    
     ranger
     rofi-wayland
+    rofimoji
     slurp
     swaybg
     swaynotificationcenter
