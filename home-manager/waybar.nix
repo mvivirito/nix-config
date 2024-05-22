@@ -50,12 +50,12 @@
           on-click = "activate";
         };
 
-        "custom/task-context" = {
-          exec = "~/.config/waybar/scripts/task-context.sh";
-          tooltip = false;
-          on-click = "task @ none";
-          restart-interval = 1;
-        };
+#       "custom/task-context" = {
+#         exec = "~/.config/waybar/scripts/task-context.sh";
+#         tooltip = false;
+#         on-click = "task @ none";
+#         restart-interval = 1;
+#       };
 
         "network#interface" = {
           format-ethernet = "󰣶 {ifname}";
@@ -93,12 +93,12 @@
           format-alt = "󰃭 {:%Y-%m-%d}";
         };
 
-        "custom/notification" = {
-          exec = "~/.config/waybar/scripts/dunst.sh";
-          tooltip = false;
-          on-click = "dunstctl set-paused toggle";
-          restart-interval = 1;
-        };
+ #       "custom/notification" = {
+ #         exec = "~/.config/waybar/scripts/dunst.sh";
+ #         tooltip = false;
+ #         on-click = "dunstctl set-paused toggle";
+ #         restart-interval = 1;
+ #       };
 
         tray = {
           icon-size = 16;
@@ -113,7 +113,7 @@
       }
 
       window#waybar {
-        font-family: 'Noto', 'RobotoMono Nerd Font';
+        font-family: 'Noto', 'Noto Sans';
         font-size: 12px;
       }
 
@@ -154,33 +154,33 @@
     '';
   };
 
-  xdg.configFile."waybar/scripts/dunst.sh" = {
-    text = ''
-      COUNT=$(dunstctl count waiting)
-      ENABLED="󰂚 "
-      DISABLED="󰂛 "
-      if [ $COUNT != 0 ]; then DISABLED="󱅫 "; fi
-      if dunstctl is-paused | grep -q "false"; then
-        echo $ENABLED
-      else
-        echo $DISABLED
-      fi
-    '';
-    executable = true;
-  };
+#  xdg.configFile."waybar/scripts/dunst.sh" = {
+#    text = ''
+#      COUNT=$(dunstctl count waiting)
+#      ENABLED="󰂚 "
+#      DISABLED="󰂛 "
+#      if [ $COUNT != 0 ]; then DISABLED="󱅫 "; fi
+#      if dunstctl is-paused | grep -q "false"; then
+#        echo $ENABLED
+#      else
+#        echo $DISABLED
+#      fi
+#    '';
+#    executable = true;
+#  };
 
-  xdg.configFile."waybar/scripts/task-context.sh" = {
-    text = ''
-      ICON=" "
-      CONTEXT=$(task _get rc.context)
-
-      if [ -z "$CONTEXT" ]; then
-        CONTEXT="NONE"
-      fi
-      echo "$ICON $CONTEXT"
-    '';
-    executable = true;
-  };
+#  xdg.configFile."waybar/scripts/task-context.sh" = {
+#    text = ''
+#      ICON=" "
+##      CONTEXT=$(task _get rc.context)
+#
+#      if [ -z "$CONTEXT" ]; then
+#        CONTEXT="NONE"
+#      fi
+#      echo "$ICON $CONTEXT"
+#    '';
+#    executable = true;
+#  };
 }
 
 

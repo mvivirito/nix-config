@@ -146,11 +146,21 @@
     noto-fonts-emoji
     liberation_ttf
     fira-code
+    open-sans
+    font-awesome
     fira-code-symbols
     mplus-outline-fonts.githubRelease
     dina-font
     proggyfonts
   ];
+
+  fonts.fontconfig.defaultFonts = {
+    serif = [ "Noto Serif" "Source Han Serif" ];
+    sansSerif = [ "Open Sans" "Source Han Sans" ];
+    emoji = [ "Noto Color Emoji" ];
+  };
+
+  fonts.enableDefaultPackages = true;
 
   system.stateVersion = "23.11";
 
