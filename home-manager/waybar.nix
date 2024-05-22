@@ -28,9 +28,9 @@
         mpris = {
           format = "{status_icon}<span weight='bold'>{artist}</span> | {title}";
           status-icons = {
-            playing = "󰎈 ";
-            paused = "󰏤 ";
-            stopped = "󰓛 ";
+            playing = "▶️  ";
+            paused = "⏸️ ";
+            stopped = "⏹️ ";
           };
         };
 
@@ -39,8 +39,8 @@
         };
 
         "network#interface" = {
-          format-ethernet = "󰣶 {ifname}";
-          format-wifi = "󰖩 {ifname}";
+          format-ethernet = "🖥️ {ifname}";
+          format-wifi = "🌎 {ifname}";
           tooltip = true;
           tooltip-format = "{ipaddr}";
         };
@@ -50,28 +50,28 @@
         };
 
         cpu = {
-          format = " {usage}% 󱐌{avg_frequency}";
+          format = "💻 {usage}% 📊{avg_frequency}";
         };
 
         temperature = {
           format = "{icon} {temperatureC} °C";
-          format-icons = [ "" "" "" "󰈸" ];
+          format-icons = [ "🧊" "🏔️" "🧿" "🥵" ];
         };
 
         backlight = {
           format = "{icon} {percent}%";
-          format-icons = [ "󰃜" "󰃛" "󰃚 " ];
+          format-icons = [ "🌑" "🌓" "🌞 " ];
         };
 
         battery = {
           format-critical = "{icon} {capacity}%";
           format = "{icon} {capacity}%";
-          format-icons = [ "󰁺" "󰁾" "󰂀" "󱟢" ];
+          format-icons = [ "🪫" "🔋" "🔋" "🔋" ];
         };
 
         clock = {
-          format = " {:%H:%M}";
-          format-alt = "󰃭 {:%Y-%m-%d}";
+          format = "⌚ {:%H:%M}";
+          format-alt = "🗓️ {:%Y-%m-%d}";
         };
       };
     };
