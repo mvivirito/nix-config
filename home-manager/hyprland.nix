@@ -17,7 +17,7 @@
 	"$mod, M, exit"
 	#$mod, E, exec, dolphin
 	#$mod, V, togglefloating, 
-	#$mod, R, exec, wofi --show drun
+	"$mod, space, exec, rofi -show drun"
 	#$mod, P, pseudo, # dwindle
 	#$mod, J, togglesplit, # dwindle
       ]
