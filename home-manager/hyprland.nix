@@ -17,6 +17,7 @@
 	"$mod, M, exit"
 	"$mod, R, exec, kitty -e ranger"
 	"$mod, E, exec, rofimoji"
+	"$mod SHIFT, L, exec, swaylock -f -c 000000" 
 	"$mod, V, togglefloating"
 	"$mod, space, exec, rofi -show drun"
 	#$mod, P, pseudo, # dwindle
