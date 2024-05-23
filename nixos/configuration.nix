@@ -26,7 +26,6 @@
 
   };
 
-  # Security Settings
   security.polkit.enable = true;
 
   security.pam.services.swaylock = {
@@ -112,7 +111,6 @@
     figlet
     fzf
     git
-    gnome.gnome-tweaks
     grim
     htop
     kitty
