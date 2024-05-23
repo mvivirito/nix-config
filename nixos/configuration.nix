@@ -69,8 +69,6 @@
 
   # Enable the gdm.
   services.xserver.displayManager.gdm.enable = true;
-  # Enable hyprland window manager
-  programs.hyprland.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -86,19 +84,15 @@
     pulse.enable = true;
   };
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.michael = {
     isNormalUser = true;
     description = "Michael Vivirito";
     extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [
-    #  callofduty
-    ];
   };
 
   users.defaultUserShell = pkgs.zsh;
 
-  # Install firefox.
+  programs.hyprland.enable = true;
   programs.firefox.enable = true;
   programs._1password.enable = true;
   programs._1password-gui = {
@@ -106,7 +100,6 @@
     polkitPolicyOwners = [ "michael" ];
   };
   programs.zsh.enable = true;
-#  programs.home-manager.enable = true;
   nixpkgs.config.allowUnfree = true;
 
   # List packages installed in system profile. To search, run:
