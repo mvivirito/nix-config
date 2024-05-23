@@ -128,6 +128,9 @@
     rofimoji
     slurp
     swaybg
+    swaylock
+    sway-audio-idle-inhibit
+    swayidle
     swaynotificationcenter
     tmux
     vim
