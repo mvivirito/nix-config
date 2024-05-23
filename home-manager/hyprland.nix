@@ -52,6 +52,9 @@
         # "remind -z -k':notify-send -u critical \"Reminder!\" %s' ~/00-09-System/02-Logs/02.10-Journal/agenda.rem"
       #  "[workspace 7 silent] morgen"
         "[workspace 7 silent] kitty --title='kitty-journal'"
+        "swaybg -i /home/michael/Pictures/background.jpg"
+#        "swayidle -w timeout 10 'if pgrep -x swaylock; then hyprctl dispatch dpms off; fi' resume 'hyprctl dispatch dpms on"
+#        "swayidle -w timeout 900 'swaylock -f -C ~/.config/swaylock/config' timeout 930 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' before-sleep 'swaylock -f -C ~/.config/swaylock/config' after-resume 'sleep .2; systemctl --user restart waybar"
       ];
 
 #      workspace = lib.lists.flatten (map
