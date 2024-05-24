@@ -5,6 +5,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./keyd
+      ./hibernate.nix
     ];
 
   # Bootloader.
@@ -12,7 +13,10 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.initrd.luks.devices."luks-77a6df21-58f4-4c91-84c0-7ac231e5208d".device = "/dev/disk/by-uuid/77a6df21-58f4-4c91-84c0-7ac231e5208d";
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "nixos";
+
+  # Power management.
+  boot.kernelParams = [ "button.lid_init_state=open" ];
 
   nix = let
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
@@ -35,6 +39,11 @@
       auth include login
     '';
   };
+
+  services.logind = {
+    extraConfig = "HandlePowerKey=suspend";
+    lidSwitch = "suspend";
+  }; 
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -66,8 +75,8 @@
     layout = "us";
   };
 
-  # Enable the gdm.
-  services.xserver.displayManager.gdm.enable = true;
+  # Enable the sddm.
+  services.xserver.displayManager.sddm.enable = true; 
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
