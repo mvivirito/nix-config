@@ -136,6 +136,7 @@
     discord
     spotify
     xfce.thunar
+    xfce.tumbler
     webcamoid
     pipes
     playerctl
