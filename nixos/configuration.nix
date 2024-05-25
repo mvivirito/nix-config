@@ -116,47 +116,47 @@
     bat
     cmatrix
     cowsay
-    dunst
+    discord
     ffmpeg
     figlet
+    floorp
     fzf
     git
     grim
     htop
     kitty
-    noto-fonts 
-    playerctl 
     libnotify
     neofetch
     neovim
-    floorp
-    youtube-dl
-    ytui-music
-    wl-color-picker
-    discord
-    spotify
-    xfce.thunar
-    xfce.tumbler
-    webcamoid
+    noto-fonts 
     pipes
     playerctl
+    playerctl 
     polkit_gnome    
     ranger
     rofi-wayland
     rofimoji
     slurp
+    spotify
     swaybg
-    swaylock
     swayidle
+    swaylock
+    swaynotificationcenter
     tmux
     vim
     vlc
     waybar
+    webcamoid
     wev
     wget
     wl-clipboard
+    wl-color-picker
     xdg-desktop-portal-hyprland
+    xfce.thunar
+    xfce.tumbler
     xsel
+    youtube-dl
+    ytui-music
     zsh
   ];
 
