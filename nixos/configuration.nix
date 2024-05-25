@@ -5,6 +5,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./keyd
+      ./theme.nix
       ./hibernate.nix
     ];
 

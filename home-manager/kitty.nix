@@ -64,6 +64,7 @@
     # Fix this by making a correct theme that can be used.
     # TODO aaaaaaaaaa
     extraConfig = lib.mkForce ''
+      background_opacity 0.7
       # Use nvim as scrollback pager
       scrollback_pager nvim -u NONE -c "set nonumber nolist showtabline=0 foldcolumn=0 laststatus=0" -c "autocmd TermOpen * normal G" -c "silent write! /tmp/kitty_scrollback_buffer | te head -c-1 /tmp/kitty_scrollback_buffer; rm /tmp/kitty_scrollback_buffer; cat"
     '';

@@ -22,6 +22,7 @@
     ];
     shellAliases = {
       v = "vim";
+      cat = "bat";
     };
     initExtra = ''
     '';
