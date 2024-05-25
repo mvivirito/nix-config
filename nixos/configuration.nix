@@ -124,6 +124,7 @@
     cowsay
     discord
     ffmpeg
+    wshowkeys
     figlet
     floorp
     fzf
@@ -162,7 +163,6 @@
     xfce.tumbler
     xsel
     youtube-dl
-    ytui-music
     zsh
   ];
 
