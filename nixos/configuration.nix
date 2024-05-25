@@ -129,6 +129,14 @@
     libnotify
     neofetch
     neovim
+    floorp
+    youtube-dl
+    ytui-music
+    wl-color-picker
+    discord
+    spotify
+    xfce.thunar
+    webcamoid
     pipes
     playerctl
     polkit_gnome    

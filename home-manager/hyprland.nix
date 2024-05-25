@@ -20,7 +20,7 @@
 	"$mod SHIFT, L, exec, swaylock -f -c 000000" 
 	"$mod, V, togglefloating"
 	"$mod, space, exec, rofi -show drun"
-	#$mod, P, pseudo, # dwindle
+	"$mod, P, exec, wl-color-picker"
 	#$mod, J, togglesplit, # dwindle
       ]
       ++ (
@@ -42,11 +42,11 @@
 
 
       exec-once = [
-      #  "hyprctl setcursor Bibata-Modern-Ice 22"
-      #  "nm-applet"
+       # "hyprctl setcursor Bibata-Modern-Ice 22"
+       # "nm-applet"
       #  "swaybg -i ~/wallpaper -m fill"
         "waybar"
-      #  "[workspace 2 silent] floorp"
+        "[workspace 2 silent] floorp"
       #  "[workspace special:term silent] kitty --title='kitty-scratch' --hold"
         "kitty"
         # "remind -z -k':notify-send -u critical \"Reminder!\" %s' ~/00-09-System/02-Logs/02.10-Journal/agenda.rem"
@@ -63,13 +63,13 @@
 #        )
 #        (config.monitors));
 
-      env = [ "XCURSOR_SIZE,24" ];
+      env = [ "XCURSOR_SIZE,40" ];
 
       general = {
         gaps_in = 5;
-        gaps_out = 5;
+        gaps_out = 8;
         border_size = 2;
-        "col.active_border" = "rgb(78A8FF) rgb(7676FF) 45deg";
+        "col.active_border" = "rgb(5CBABA) rgb(7676FF) 45deg";
         "col.inactive_border" = "rgba(585272aa)";
         layout = "dwindle";
         resize_on_border = true;
@@ -85,7 +85,7 @@
       };
 
       decoration = {
-        rounding = 0;
+        rounding = 9;
         blur = {
           enabled = true;
           size = 3;
@@ -93,7 +93,7 @@
           new_optimizations = true;
         };
         drop_shadow = true;
-        shadow_range = 4;
+        shadow_range = 7;
         shadow_render_power = 3;
         "col.shadow" = "rgba(1a1a1aee)";
       };
