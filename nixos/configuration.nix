@@ -99,10 +99,11 @@
     pulse.enable = true;
   };
 
+
   users.users.michael = {
     isNormalUser = true;
     description = "Michael Vivirito";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "keyd" "networkmanager" "wheel" ];
   };
 
   users.defaultUserShell = pkgs.zsh;

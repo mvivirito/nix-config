@@ -4,21 +4,21 @@
 
   imports = [
     ./waybar.nix
-#    ../dunst.nix
   ];
 
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";
     bind =
       [
-        "$mod, F, exec, firefox"
+        "$mod, B, exec, firefox"
+        "$mod, F, fullscreen"
 	"$mod, return, exec, kitty"
 	"$mod SHIFT, Q, killactive"
 	"$mod, M, exit"
 	"$mod, R, exec, kitty -e ranger"
 	"$mod SHIFT, R, exec, thunar"
 	"$mod, E, exec, rofimoji"
-	"$mod, L, exec, swaylock" 
+	"$mod, L, exec, swaylock -i /home/michael/Pictures/lock_background.jpg -f" 
 	"$mod SHIFT, N, exec, swaync-client -rs" 
 	"$mod, N, exec, swaync-client -op" 
 	"$mod, V, togglefloating"
