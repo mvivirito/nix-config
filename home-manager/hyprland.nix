@@ -18,7 +18,7 @@
 	"$mod, R, exec, kitty -e ranger"
 	"$mod SHIFT, R, exec, thunar"
 	"$mod, E, exec, rofimoji"
-	"$mod SHIFT, L, exec, swaylock -i /home/michael/Pictures/lock_background.jpg -Ff" 
+	"$mod, L, exec, swaylock" 
 	"$mod SHIFT, N, exec, swaync-client -rs" 
 	"$mod, N, exec, swaync-client -op" 
 	"$mod, V, togglefloating"
@@ -48,8 +48,8 @@
        # "hyprctl setcursor Bibata-Modern-Ice 22"
        # "nm-applet"
       #  "swaybg -i ~/wallpaper -m fill"
-        "killall -q swaync;sleep .5 && swaync"
-        "killall -q waybar;sleep .5 && waybar"
+        "swaync"
+        "waybar"
         "[workspace 2 silent] firefox"
       #  "[workspace special:term silent] kitty --title='kitty-scratch' --hold"
         "kitty"
@@ -89,18 +89,24 @@
       };
 
       decoration = {
-        rounding = 9;
+        rounding = 15;
         blur = {
           enabled = true;
-          size = 3;
-          passes = 1;
+          size = 10;
+          passes = 3;
           new_optimizations = true;
+	  ignore_opacity = true;
+          noise = 0;
+          brightness = 0.90;
         };
+        inactive_opacity = 0.40;
+        active_opacity = 0.90;
         drop_shadow = true;
         shadow_range = 7;
         shadow_render_power = 3;
         "col.shadow" = "rgba(1a1a1aee)";
       };
+
 
       group = {
         "col.border_active" = "rgba(63F2F1aa)";
