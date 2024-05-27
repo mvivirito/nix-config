@@ -18,7 +18,7 @@
 	"$mod, R, exec, kitty -e ranger"
 	"$mod SHIFT, R, exec, thunar"
 	"$mod, E, exec, rofimoji"
-	"$mod, L, exec, swaylock -i /home/michael/Pictures/lock_background.jpg -f" 
+	"$mod SHIFT, L, exec, swaylock -i /home/michael/Pictures/lock_background.jpg -f" 
 	"$mod SHIFT, N, exec, swaync-client -rs" 
 	"$mod, N, exec, swaync-client -op" 
 	"$mod, V, togglefloating"

@@ -3,7 +3,6 @@
 {
   environment.systemPackages = with pkgs; [ keyd ];
 
-#  users.groups.keyd = {};
 
   services.keyd = {
    enable = true;
