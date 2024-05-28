@@ -4,6 +4,7 @@
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    ags.url = "github:Aylur/ags";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-23.11";
@@ -35,11 +36,7 @@
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = {inherit inputs outputs;};
         # > Our main home-manager configuration file <
-        modules = [
-                  ./home-manager/home.nix
-                  ./home-manager/zsh.nix
-                  ./home-manager/hyprland.nix
-                  ];
+        modules = [./home-manager/home.nix];
       };
     };
   };
