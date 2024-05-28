@@ -15,6 +15,7 @@
     swww
 #    inputs.matugen.packages.${system}.default
     slurp
+    sutils
     wf-recorder
     wl-clipboard
     wayshot

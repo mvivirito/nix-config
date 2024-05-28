@@ -149,7 +149,7 @@
     swaybg
     swayidle
     swaylock
-    swaynotificationcenter
+    #swaynotificationcenter
     tmux
     vim
     vlc
@@ -189,6 +189,7 @@
 
   fonts.enableDefaultPackages = true;
 
+  services.upower.enable = true;
   services.auto-cpufreq.enable = true;
   services.auto-cpufreq.settings = {
      battery = {

@@ -19,8 +19,8 @@
 	"$mod SHIFT, R, exec, thunar"
 	"$mod, E, exec, rofimoji"
 	"$mod SHIFT, L, exec, swaylock -i /home/michael/Pictures/lock_background.jpg -f" 
-	"$mod SHIFT, N, exec, swaync-client -rs" 
-	"$mod, N, exec, swaync-client -op" 
+#	"$mod SHIFT, N, exec, swaync-client -rs" 
+#	"$mod, N, exec, swaync-client -op" 
 	"$mod, V, togglefloating"
 	"$mod, space, exec, rofi -show drun"
 	"$mod, P, exec, wl-color-picker"
@@ -46,19 +46,18 @@
 
       exec-once = [
        # "hyprctl setcursor Bibata-Modern-Ice 22"
-       # "nm-applet"
-      #  "swaybg -i ~/wallpaper -m fill"
-        "swaync"
-        "waybar"
+       # "swaync"
+       # "waybar"
+        "ags"
         "[workspace 2 silent] firefox"
-      #  "[workspace special:term silent] kitty --title='kitty-scratch' --hold"
+       #  "[workspace special:term silent] kitty --title='kitty-scratch' --hold"
         "kitty"
-        # "remind -z -k':notify-send -u critical \"Reminder!\" %s' ~/00-09-System/02-Logs/02.10-Journal/agenda.rem"
-      #  "[workspace 7 silent] morgen"
+       #  "remind -z -k':notify-send -u critical \"Reminder!\" %s' ~/00-09-System/02-Logs/02.10-Journal/agenda.rem"
+       #  "[workspace 7 silent] morgen"
         "[workspace 7 silent] kitty --title='kitty-journal'"
         "swaybg -i /home/michael/Pictures/background.jpg"
-#        "swayidle -w timeout 10 'if pgrep -x swaylock; then hyprctl dispatch dpms off; fi' resume 'hyprctl dispatch dpms on"
-#        "swayidle -w timeout 900 'swaylock -f -C ~/.config/swaylock/config' timeout 930 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' before-sleep 'swaylock -f -C ~/.config/swaylock/config' after-resume 'sleep .2; systemctl --user restart waybar"
+       # "swayidle -w timeout 10 'if pgrep -x swaylock; then hyprctl dispatch dpms off; fi' resume 'hyprctl dispatch dpms on"
+       # "swayidle -w timeout 900 'swaylock -f -C ~/.config/swaylock/config' timeout 930 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' before-sleep 'swaylock -f -C ~/.config/swaylock/config' after-resume 'sleep .2; systemctl --user restart waybar"
       ];
 
 #      workspace = lib.lists.flatten (map
