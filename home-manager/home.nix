@@ -16,6 +16,7 @@
     ./hyprland.nix
     ./waybar.nix
     ./kitty.nix
+    ./appearance.nix
   ];
 
   nixpkgs = {

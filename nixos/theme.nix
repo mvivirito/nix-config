@@ -40,10 +40,6 @@
       size = "standard";
       variant = "macchiato";
     };
-#    discord = pkgs.discord.override {
-#      withOpenASAR = true;
-#      withTTS = true;
-#    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -52,11 +48,5 @@
     catppuccin-gtk
     catppuccin-kvantum
     catppuccin-cursors.macchiatoTeal
-
-    # gnome.gnome-tweaks
-    # gnome.gnome-shell
-    # gnome.gnome-shell-extensions
-    # xsettingsd
-    # themechanger
   ];
 }

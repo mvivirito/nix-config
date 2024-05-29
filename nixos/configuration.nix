@@ -137,6 +137,8 @@
     neofetch
     neovim
     noto-fonts 
+    gnome.adwaita-icon-theme
+    ripgrep
     pipes
     playerctl
     playerctl 
@@ -149,7 +151,6 @@
     swaybg
     swayidle
     swaylock
-    #swaynotificationcenter
     tmux
     vim
     vlc
