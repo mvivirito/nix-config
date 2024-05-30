@@ -145,6 +145,8 @@
     polkit_gnome    
     ranger
     rofi-wayland
+    rofi-calc
+    libqalculate
     rofimoji
     slurp
     spotify
