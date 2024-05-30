@@ -4,7 +4,6 @@
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
-    ags.url = "github:Aylur/ags";
 
     # Home manager
     home-manager.url = "github:nix-community/home-manager/release-23.11";

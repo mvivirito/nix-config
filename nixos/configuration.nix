@@ -7,6 +7,7 @@
       ./keyd
       ./theme.nix
       ./hibernate.nix
+      ./hyprland.nix
     ];
 
   # Bootloader.
@@ -84,6 +85,7 @@
 
   # Enable the sddm.
   services.xserver.displayManager.sddm.enable = true; 
+  services.xserver.desktopManager.gnome.enable = true;
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -108,7 +110,6 @@
 
   users.defaultUserShell = pkgs.zsh;
 
-  programs.hyprland.enable = true;
   programs.firefox.enable = true;
   programs._1password.enable = true;
   programs._1password-gui = {
@@ -136,7 +137,6 @@
     libnotify
     neofetch
     neovim
-    noto-fonts 
     gnome.adwaita-icon-theme
     ripgrep
     pipes
@@ -151,6 +151,7 @@
     swaybg
     swayidle
     swaylock
+    swaynotificationcenter
     tmux
     vim
     vlc
@@ -160,9 +161,9 @@
     wget
     wl-clipboard
     wl-color-picker
-    xdg-desktop-portal-hyprland
     xfce.thunar
     xfce.tumbler
+    xdg-desktop-portal-hyprland
     xsel
     youtube-dl
     zsh

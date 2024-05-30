@@ -2,9 +2,7 @@
 
 {
 
-  imports = [
-    ./waybar.nix
-  ];
+  imports = [];
 
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";
@@ -19,12 +17,12 @@
 	"$mod SHIFT, R, exec, thunar"
 	"$mod, E, exec, rofimoji"
 	"$mod SHIFT, L, exec, swaylock -i /home/michael/Pictures/lock_background.jpg -f" 
-#	"$mod SHIFT, N, exec, swaync-client -rs" 
-#	"$mod, N, exec, swaync-client -op" 
+	"$mod SHIFT, N, exec, swaync-client -rs" 
+	"$mod, N, exec, swaync-client -op" 
 	"$mod, V, togglefloating"
 	"$mod, space, exec, rofi -show drun"
 	"$mod, P, exec, wl-color-picker"
-	#$mod, J, togglesplit, # dwindle
+	"$mod, J, togglesplit"
       ]
       ++ (
         # workspaces
@@ -45,10 +43,8 @@
 
 
       exec-once = [
-       # "hyprctl setcursor Bibata-Modern-Ice 22"
-       # "swaync"
-       # "waybar"
-        "ags"
+        "swaync"
+        "waybar"
         "[workspace 2 silent] firefox"
        #  "[workspace special:term silent] kitty --title='kitty-scratch' --hold"
         "kitty"
@@ -56,8 +52,6 @@
        #  "[workspace 7 silent] morgen"
         "[workspace 7 silent] kitty --title='kitty-journal'"
         "swaybg -i /home/michael/Pictures/background.jpg"
-       # "swayidle -w timeout 10 'if pgrep -x swaylock; then hyprctl dispatch dpms off; fi' resume 'hyprctl dispatch dpms on"
-       # "swayidle -w timeout 900 'swaylock -f -C ~/.config/swaylock/config' timeout 930 'hyprctl dispatch dpms off' resume 'hyprctl dispatch dpms on' before-sleep 'swaylock -f -C ~/.config/swaylock/config' after-resume 'sleep .2; systemctl --user restart waybar"
       ];
 
 #      workspace = lib.lists.flatten (map
@@ -65,8 +59,6 @@
 #          map (w: "${w}, monitor:${m.name}") (m.workspaces)
 #        )
 #        (config.monitors));
-
-      env = [ "XCURSOR_SIZE,40" ];
 
       general = {
         gaps_in = 5;
