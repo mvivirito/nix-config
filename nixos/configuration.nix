@@ -3,6 +3,7 @@
 {
   imports =
     [ # Include the results of the hardware scan.
+      ./greetd.nix
       ./hardware-configuration.nix
       ./keyd
       ./theme.nix
@@ -84,7 +85,7 @@
   };
 
   # Enable the sddm.
-  services.xserver.displayManager.sddm.enable = true; 
+  #services.xserver.displayManager.sddm.enable = true; 
   services.xserver.desktopManager.gnome.enable = true;
 
   # Enable CUPS to print documents.
