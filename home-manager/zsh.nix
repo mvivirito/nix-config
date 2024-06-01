@@ -33,6 +33,7 @@
       v = "vim";
       cat = "bat";
       gpom = "git push origin master";
+      cd = "z";
     };
     initExtra = ''
     '';

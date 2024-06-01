@@ -125,6 +125,7 @@
   environment.systemPackages = with pkgs; [
     bat
     cmatrix
+    clang
     cowsay
     discord
     ffmpeg

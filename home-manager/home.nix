@@ -46,6 +46,11 @@
     homeDirectory = "/home/michael";
   };
 
+  home.sessionVariables = {
+    EDITOR = "nvim";
+#    NIX_PATH = "nixpkgs=flake:nixpkgs$\{NIX_PATH:+:$NIX_PATH}";
+  };
+
   # Add stuff for your user as you see fit:
   # programs.neovim.enable = true;
   # home.packages = with pkgs; [ steam ];
@@ -53,6 +58,7 @@
   # Enable home-manager and git
   programs.home-manager.enable = true;
   programs.git.enable = true;
+  programs.neovim.enable = true;
 
   wayland.windowManager.hyprland.enable = true; 
   
