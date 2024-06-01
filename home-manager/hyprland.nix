@@ -12,7 +12,7 @@
         "$mod, F, fullscreen"
 	"$mod, return, exec, kitty"
 	"$mod SHIFT, Q, killactive"
-	"$mod, M, exit"
+	"$mod, M, exec, pkill Hyprland"
 	"$mod, R, exec, kitty -e ranger"
 	"$mod SHIFT, R, exec, thunar"
 	"$mod, E, exec, rofimoji"
