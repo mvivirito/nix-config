@@ -6,6 +6,10 @@
 
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";
+    bindm = [
+        "$mod, mouse:272, movewindow"
+        "$mod, mouse:273, resizewindow"
+    ];
     bind =
       [
         "$mod, B, exec, firefox"
@@ -16,13 +20,40 @@
 	"$mod, R, exec, kitty -e ranger"
 	"$mod SHIFT, R, exec, thunar"
 	"$mod, E, exec, rofimoji"
-	"$mod SHIFT, L, exec, swaylock -i /home/michael/Pictures/lock_background.jpg -f" 
+	"$mod SHIFT, X, exec, swaylock -i /home/michael/Pictures/lock_background.jpg -f" 
 	"$mod SHIFT, N, exec, swaync-client -rs" 
 	"$mod, N, exec, swaync-client -op" 
 	"$mod, V, togglefloating"
 	"$mod, space, exec, rofi -show drun"
 	"$mod, P, exec, wl-color-picker"
 	"$mod, J, togglesplit"
+        "$mod SHIFT, left, movewindow, l"
+        "$mod SHIFT, right, movewindow, r"
+        "$mod SHIFT, up, movewindow, u"
+        "$mod SHIFT, down, movewindow, d"
+        "$mod SHIFT, H, movewindow, l"
+        "$mod SHIFT, L, movewindow, r"
+        "$mod SHIFT, K, movewindow, u"
+        "$mod SHIFT, J, movewindow, d"
+        "$mod, left, movefocus, l"
+        "$mod, right, movefocus, r"
+        "$mod, up, movefocus, u"
+        "$mod, down, movefocus, d"
+        "$mod, H, movefocus, l"
+        "$mod, L, movefocus, r"
+        "$mod, K, movefocus, u"
+        "$mod, J, movefocus, d"
+        "ALT,Tab,cyclenext"
+        "ALT,Tab,bringactivetotop"
+        ",XF86AudioRaiseVolume,exec,wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+"
+        ",XF86AudioLowerVolume,exec,wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
+        ",XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+        ",XF86AudioPlay, exec, playerctl play-pause"
+        ",XF86AudioPause, exec, playerctl play-pause"
+        ",XF86AudioNext, exec, playerctl next"
+        ",XF86AudioPrev, exec, playerctl previous"
+        ",XF86MonBrightnessDown,exec,brightnessctl set 5%-"
+        ",XF86MonBrightnessUp,exec,brightnessctl set +5%"
       ]
       ++ (
         # workspaces
