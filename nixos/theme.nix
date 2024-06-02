@@ -2,7 +2,7 @@
 
 {
   # Enable Theme
-   environment.variables.GTK_THEME = "Catppuccin-Macchiato-Standard-Teal-Dark";
+  environment.variables.GTK_THEME = "Catppuccin-Macchiato-Standard-Teal-Dark";
   qt.enable = true;
   qt.platformTheme = "gtk2";
   qt.style = "gtk2";
