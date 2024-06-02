@@ -86,33 +86,10 @@ in {
         pkgs.vimPlugins.lazygit-nvim
         pkgs.vimPlugins.nvim-code-action-menu
         {
-          plugin = pkgs.vimPlugins.neorg;
-          config = builtins.readFile config/setup/neorg.lua;
-          type = "lua";
-        }
-        {
           plugin = fromGitHub "6218a401824c5733ac50b264991b62d064e85ab2" "main" "m-demare/hlargs.nvim";
           config = "require('hlargs').setup()";
           type = "lua";
         }
-        {
-          plugin = fromGitHub "4c3bc2cd46085b36b2873c1ae9086aee404b3d90" "main" "apple/pkl-neovim";
-        }
-        {
-          plugin = fromGitHub "1764a8d8c25d7f6de58953362e7de79d3b3d970e" "main" "epwalsh/obsidian.nvim";
-          config = ''
-            require("obsidian").setup({
-              workspaces = {
-                {
-                  name = "notes",
-                  path = "~/dev/notes",
-                },
-              },
-            })
-          '';
-          type = "lua";
-        }
-        (fromGitHub "f30f899c30d91bb35574ff5962103f00cc4ea23a" "main" "MattCairns/telescope-cargo-workspace.nvim")
         {
           plugin = pkgs.vimPlugins.oil-nvim;
           config = "require('oil').setup()";
@@ -185,49 +162,6 @@ in {
         {
           plugin = pkgs.vimPlugins.nvim-dap;
           config = builtins.readFile config/setup/dap.lua;
-          type = "lua";
-        }
-        {
-          plugin = pkgs.vimPlugins.rustaceanvim;
-          config = ''
-            vim.g.rustaceanvim = {
-              -- Plugin configuration
-              tools = {
-              },
-              -- LSP configuration
-              server = {
-                on_attach = function(client, bufnr)
-                  -- you can also put keymaps in here
-                end,
-                settings = {
-                  -- rust-analyzer language server configuration
-                  ['rust-analyzer'] = {
-                   cargo = {
-                      allFeatures = true,
-                      loadOutDirsFromCheck = true,
-                      runBuildScripts = true,
-                    },
-                    checkOnSave = {
-                      allFeatures = true,
-                      command = "clippy",
-                      extraArgs = { "--no-deps" },
-                    },
-                    procMacro = {
-                      enable = true,
-                      ignored = {
-                        ["async-trait"] = { "async_trait" },
-                        ["napi-derive"] = { "napi" },
-                        ["async-recursion"] = { "async_recursion" },
-                      },
-                    },
-                  },
-                },
-              },
-              -- DAP configuration
-              dap = {
-              },
-            }
-          '';
           type = "lua";
         }
       ];

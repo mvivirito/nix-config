@@ -1,3 +1,6 @@
+-- map leader key to space
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 -- lazygit
 vim.api.nvim_set_keymap('n', '<leader>lg', '<cmd>LazyGit<cr>', { noremap = true, silent = true })
 
