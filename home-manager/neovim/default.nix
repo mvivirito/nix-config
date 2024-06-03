@@ -157,13 +157,13 @@ in {
         }
 
         ## Debugging
-        pkgs.vimPlugins.nvim-dap-ui
-        pkgs.vimPlugins.nvim-dap-virtual-text
-        {
-          plugin = pkgs.vimPlugins.nvim-dap;
-          config = builtins.readFile config/setup/dap.lua;
-          type = "lua";
-        }
+#        pkgs.vimPlugins.nvim-dap-ui
+#        pkgs.vimPlugins.nvim-dap-virtual-text
+#        {
+#          plugin = pkgs.vimPlugins.nvim-dap;
+#          config = builtins.readFile config/setup/dap.lua;
+#          type = "lua";
+#        }
       ];
 
       extraLuaConfig = ''
