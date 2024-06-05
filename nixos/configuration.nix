@@ -149,7 +149,7 @@
     playerctl 
     polkit_gnome    
     ranger
-    rofi-wayland
+    tofi
     rofi-calc
     libqalculate
     rofimoji
