@@ -15,7 +15,7 @@
     ./rofi.nix
     ./zsh.nix
     ./hyprland.nix
-    ./waybar.nix
+    ./waybar
     ./kitty.nix
     ./appearance.nix
   ];
