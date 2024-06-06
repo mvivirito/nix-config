@@ -14,6 +14,8 @@
     bind =
       [
         "$mod SHIFT, N, exec, swaync-client -rs" 
+        "$mod SHIFT, G, exec, grim - | wl-copy"
+        "$mod, G, exec, grim -g \"$(slurp)\" - | wl-copy"
         "$mod SHIFT, P, exec, wl-color-picker"
         "$mod SHIFT, Q, killactive"
         "$mod SHIFT, R, exec, thunar"
