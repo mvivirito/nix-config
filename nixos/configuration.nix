@@ -125,8 +125,10 @@
   # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
     bat
+    wlr-randr
     cmatrix
     clang
+    nwg-displays
     cowsay
     discord
     ffmpeg
@@ -151,6 +153,7 @@
     ranger
     tofi
     rofi-calc
+    blueberry
     libqalculate
     rofimoji
     slurp
