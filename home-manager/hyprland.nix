@@ -32,6 +32,7 @@
         "$mod, V, togglefloating"
         "$mod, return, exec, kitty"
         "$mod, space, exec, tofi-drun --drun-launch=true"
+        "$mod SHIFT, space, exec, tofi-run --drun-launch=true"
         "$mod SHIFT, left, movewindow, l"
         "$mod SHIFT, right, movewindow, r"
         "$mod SHIFT, up, movewindow, u"

@@ -15,6 +15,7 @@
         "temperature",
         "battery",
         "clock",
+        "tray",
     ],
     "hyprland/workspaces": {
         "format": "{icon}",
