@@ -81,7 +81,7 @@
   # Configure keymap in X11
   services.xserver = {
     enable = true;
-    layout = "us";
+    xkb.layout = "us";
   };
 
   # Enable the sddm.
@@ -196,18 +196,18 @@
 
   fonts.enableDefaultPackages = true;
 
-  services.upower.enable = true;
-  services.auto-cpufreq.enable = true;
-  services.auto-cpufreq.settings = {
-     battery = {
-     governor = "powersave";
-     turbo = "never";
-    };
-     charger = {
-     governor = "performance";
-     turbo = "auto";
-    };
-  };
+  #services.upower.enable = true;
+  #services.auto-cpufreq.enable = true;
+  #services.auto-cpufreq.settings = {
+  #   battery = {
+  #   governor = "powersave";
+  #   turbo = "never";
+  #  };
+  #   charger = {
+  #   governor = "performance";
+  #   turbo = "auto";
+  #  };
+  #};
 
   system.stateVersion = "23.11";
 

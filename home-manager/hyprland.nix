@@ -28,6 +28,8 @@
         "$mod, N, exec, swaync-client -op" 
         "$mod, P, pin"
         "$mod, R, exec, kitty -e ranger"
+        "$mod, T, exec, hyprctl keyword general:layout 'master'"
+        "$mod SHIFT, T, exec, hyprctl keyword general:layout 'dwindle'"
         "$mod, S, togglesplit"
         "$mod, V, togglefloating"
         "$mod, return, exec, kitty"
@@ -113,7 +115,7 @@
       };
 
       master = {
-        orientation = "left";
+        orientation = "center";
       };
 
       decoration = {
@@ -175,7 +177,7 @@
       monitor = [
       # "eDP-1,preferred,auto,1.3"
       "DP-2,5120x1440@120.0,1661x0,1.0"
-      "eDP-1,2160x1350@59.743999,6781x166,1.300781"
+      "eDP-1,2160x1350@59.743999,6781x166,1.25"
       ];
 
 
