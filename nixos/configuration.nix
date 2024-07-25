@@ -175,7 +175,7 @@
     xfce.tumbler
     xdg-desktop-portal-hyprland
     xsel
-    youtube-dl
+    yt-dlp
     zsh
   ];
 
