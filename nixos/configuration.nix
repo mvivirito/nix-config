@@ -128,6 +128,7 @@
     wlr-randr
     cmatrix
     clang
+    cool-retro-term
     nwg-displays
     cowsay
     discord
