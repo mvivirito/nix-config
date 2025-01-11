@@ -1,13 +1,6 @@
 { pkgs, ... }:
 
 {
-  home.pointerCursor = {
-    package = pkgs.catppuccin-cursors.mochaBlue;
-    name = "Catppuccin-Mocha-Blue-Cursors";
-    size = 40;
-    gtk.enable = true;
-  };
-
   gtk = {
     enable = true;
     font = {
