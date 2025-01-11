@@ -10,11 +10,13 @@
         "hyprland/workspaces",
     ],
     "modules-right": [
+        "custom/power",
         "pulseaudio",
         "network",
         "temperature",
         "battery",
         "clock",
+        "power-profiles-daemon",
         "tray",
     ],
     "hyprland/workspaces": {
@@ -77,4 +79,9 @@
         },
         "on-click": "pavucontrol"
     },
+    "custom/power": {
+    "format": "",
+    "tooltip": "Power Menu",
+    "on-click": "~/.config/waybar/scripts/power_menu.sh",
+    }
 }

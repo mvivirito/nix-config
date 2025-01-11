@@ -62,9 +62,14 @@ button:hover {
 #memory,
 #temperature,
 #network,
-#pulseaudio
+#pulseaudio,
+#custom-power
 {
     padding: 0 10px;
+}
+
+#custom-power {
+    color: @maroon;
 }
 
 #pulseaudio {
