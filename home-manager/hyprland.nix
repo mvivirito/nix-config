@@ -131,10 +131,6 @@
         };
         inactive_opacity = 0.80;
         active_opacity = 0.90;
-        drop_shadow = true;
-        shadow_range = 7;
-        shadow_render_power = 3;
-        "col.shadow" = "rgba(1a1a1aee)";
       };
 
 
