@@ -87,7 +87,7 @@
   # Enable the sddm.
   #services.xserver.displayManager.sddm.enable = true; 
   services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
+  programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
   # Enable CUPS to print documents.
   services.printing.enable = true;
@@ -144,7 +144,7 @@
     neofetch
     neovim
     lazygit
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     ripgrep
     pipes
     playerctl

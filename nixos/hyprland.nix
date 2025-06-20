@@ -21,20 +21,24 @@
     environment.systemPackages = with pkgs;
     with gnome; [
       loupe
-      baobab
       gnome-text-editor
-      gnome-boxes
-      gnome-system-monitor
-      gnome-control-center
-      gnome-weather
-      gnome-calculator
-      gnome-clocks
       wl-gammactl
       wl-clipboard
       wayshot
       pavucontrol
       brightnessctl
       swww
+    ];
+
+    environment.systemPackages = with pkgs;
+    [
+      baobab
+      gnome-boxes
+      gnome-system-monitor
+      gnome-control-center
+      gnome-weather
+      gnome-calculator
+      gnome-clocks
     ];
 
     systemd = {
