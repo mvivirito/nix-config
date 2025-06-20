@@ -123,38 +123,42 @@
 
   # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
+    adwaita-icon-theme
+    baobab
     bat
-    wlr-randr
-    cmatrix
+    blueberry
     clang
+    cmatrix
     cool-retro-term
-    nwg-displays
     cowsay
     discord
     ffmpeg
-    wshowkeys
     figlet
     floorp
     fzf
     git
+    gnome-boxes
+    gnome-calculator
+    gnome-clocks
+    gnome-control-center
+    gnome-system-monitor
+    gnome-weather
     grim
     htop
     kitty
+    lazygit
     libnotify
+    libqalculate
     neofetch
     neovim
-    lazygit
-    adwaita-icon-theme
-    ripgrep
+    nwg-displays
     pipes
     playerctl
     playerctl 
     polkit_gnome    
     ranger
-    tofi
+    ripgrep
     rofi-calc
-    blueberry
-    libqalculate
     rofimoji
     slurp
     spotify
@@ -163,6 +167,7 @@
     swaylock
     swaynotificationcenter
     tmux
+    tofi
     vim
     vlc
     waybar
@@ -171,9 +176,11 @@
     wget
     wl-clipboard
     wl-color-picker
+    wlr-randr
+    wshowkeys
+    xdg-desktop-portal-hyprland
     xfce.thunar
     xfce.tumbler
-    xdg-desktop-portal-hyprland
     xsel
     yt-dlp
     zsh

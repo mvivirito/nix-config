@@ -30,17 +30,6 @@
       swww
     ];
 
-    environment.systemPackages = with pkgs;
-    [
-      baobab
-      gnome-boxes
-      gnome-system-monitor
-      gnome-control-center
-      gnome-weather
-      gnome-calculator
-      gnome-clocks
-    ];
-
     systemd = {
       user.services.polkit-gnome-authentication-agent-1 = {
         description = "polkit-gnome-authentication-agent-1";
