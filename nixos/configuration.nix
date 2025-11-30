@@ -170,6 +170,7 @@
     tofi
     vim
     vlc
+    vscode
     waybar
     webcamoid
     wev
