@@ -119,20 +119,36 @@
       };
 
       decoration = {
-        rounding = 15;
+        rounding = 5;
         blur = {
           enabled = true;
-          size = 10;
-          passes = 3;
+          size = 8;
+          passes = 2;
           new_optimizations = true;
-	  ignore_opacity = true;
+          ignore_opacity = true;
           noise = 0;
           brightness = 0.90;
         };
-        inactive_opacity = 0.80;
-        active_opacity = 0.90;
+        inactive_opacity = 0.85;
+        active_opacity = 1.0;
       };
 
+      animations = {
+        enabled = true;
+        bezier = [
+          "linear, 0, 0, 1, 1"
+          "smooth, 0.4, 0, 0.2, 1"
+        ];
+        animation = [
+          "windows, 1, 3, smooth, slide"
+          "windowsOut, 1, 3, smooth, slide"
+          "windowsMove, 1, 3, smooth, slide"
+          "fade, 1, 3, smooth"
+          "border, 1, 3, smooth"
+          "borderangle, 1, 5, linear, loop"
+          "workspaces, 1, 2, smooth"
+        ];
+      };
 
       group = {
         "col.border_active" = "rgba(63F2F1aa)";
@@ -166,7 +182,7 @@
 
       gestures = {
         workspace_swipe = true;
-        workspace_swipe_distance = 200;
+        workspace_swipe_distance = 800;
         workspace_swipe_forever = true;
       };
 
