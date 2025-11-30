@@ -34,7 +34,8 @@
     gc = {
       automatic = true;
       dates = "weekly";
-      options = "--delete-older-than 30d";
+      # Keep generations for 365 days to provide a larger safety net
+      options = "--delete-older-than 365d";
     };
   };
 
