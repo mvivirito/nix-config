@@ -28,6 +28,7 @@
         "$mod, N, exec, swaync-client -op" 
         "$mod, P, pin"
         "$mod, R, exec, kitty -e ranger"
+        "$mod, ?, exec, xdg-open /opt/hyprland-shortcuts/shortcuts.pdf"
         "$mod, T, exec, hyprctl keyword general:layout 'master'"
         "$mod SHIFT, T, exec, hyprctl keyword general:layout 'dwindle'"
         "$mod, S, togglesplit"

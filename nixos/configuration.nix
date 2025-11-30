@@ -126,6 +126,7 @@
   environment.systemPackages = with pkgs; [
     adwaita-icon-theme
     baobab
+    bash
     bat
     blueberry
     clang
@@ -167,6 +168,7 @@
     swayidle
     swaylock
     swaynotificationcenter
+    texlive.combined.scheme-full
     tmux
     tofi
     vim
