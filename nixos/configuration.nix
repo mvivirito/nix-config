@@ -192,7 +192,7 @@
     font-awesome
     powerline-fonts
     powerline-symbols
-    nerdfonts
+    nerd-fonts.mononoki
   ];  
 
 

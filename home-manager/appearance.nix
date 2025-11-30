@@ -4,7 +4,7 @@
   gtk = {
     enable = true;
     font = {
-      package = (pkgs.nerdfonts.override { fonts = [ "Mononoki" ]; });
+      package = pkgs.nerd-fonts.mononoki;
       name = "Mononoki Nerd Font Regular";
       size = 12;
     };
