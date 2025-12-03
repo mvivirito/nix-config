@@ -3,11 +3,11 @@
 {
   gtk = {
     enable = true;
-    font = {
-      package = pkgs.nerd-fonts.mononoki;
-      name = "Mononoki Nerd Font Regular";
-      size = 12;
-    };
+    #font = {
+    #  package = pkgs.nerd-fonts.mononoki;
+    #  name = "Mononoki Nerd Font Regular";
+    #  size = 12;
+    #};
     iconTheme = {
       package = (pkgs.catppuccin-papirus-folders.override { flavor = "mocha"; });
       name  = "Papirus-Dark";

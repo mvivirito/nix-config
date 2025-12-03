@@ -15,7 +15,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.efi.canTouchEfiVariables = true;
-
+  
   boot.initrd.luks.devices."luks-77a6df21-58f4-4c91-84c0-7ac231e5208d".device = "/dev/disk/by-uuid/77a6df21-58f4-4c91-84c0-7ac231e5208d";
   networking.hostName = "nixos";
 
@@ -94,7 +94,7 @@
   services.printing.enable = true;
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -196,27 +196,7 @@
     nerd-fonts.mononoki
   ];  
 
-
-# fonts.fontconfig.defaultFonts = {
-#   serif = [ "Noto Serif" "Source Han Serif" ];
-#   sansSerif = [ "Open Sans" "Source Han Sans" ];
-#   emoji = [ "Noto Color Emoji" ];
-# };
-
   fonts.enableDefaultPackages = true;
-
-  #services.upower.enable = true;
-  #services.auto-cpufreq.enable = true;
-  #services.auto-cpufreq.settings = {
-  #   battery = {
-  #   governor = "powersave";
-  #   turbo = "never";
-  #  };
-  #   charger = {
-  #   governor = "performance";
-  #   turbo = "auto";
-  #  };
-  #};
 
   system.stateVersion = "23.11";
 

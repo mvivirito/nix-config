@@ -30,13 +30,73 @@
       }
     ];
     shellAliases = {
-      v = "vim";
+      # Quick navigation
+      v = "nvim";
+      vi = "nvim";
       cat = "bat";
-      gpom = "git push origin master";
+      ls = "ls --color=auto";
+      la = "ls -la";
+      ll = "ls -lh";
+      mkdir = "mkdir -p";
       cd = "z";
       nm = "nmtui-connect";
+
+      # Git shortcuts
+      ga = "git add";
+      gaa = "git add .";
+      gst = "git status";
+      gco = "git checkout";
+      gcb = "git checkout -b";
+      gc = "git commit -m";
+      gca = "git commit --amend";
+      gcan = "git commit --amend --no-edit";
+      gpush = "git push";
+      gpop = "git pull";
+      gpom = "git push origin master";
+      gbr = "git branch";
+      glog = "git log --oneline -n 10";
+      gd = "git diff";
+      gds = "git diff --staged";
+      glf = "git log --oneline --follow";
+      greb = "git rebase -i";
+      grh = "git reset HEAD";
+      gsq = "git rebase -i HEAD~";
+
+      # Development/Build shortcuts  
+      ns = "nix-shell";
+      hm = "home-manager";
+      nr = "nix run";
+      nb = "nix build";
+      nd = "nix develop";
+
+      # System shortcuts
+      sx = "sudo systemctl";
+      jctl = "journalctl -e";
+      
+      # Common typos/variants
+      q = "exit";
+      cl = "clear";
     };
     initExtra = ''
+      # Command not found handler - suggests packages to install
+      command_not_found_handler() {
+        echo "zsh: command not found: $1"
+        echo "Did you mean one of these?"
+        ${pkgs.nix-index}/bin/nix-index -c "nix-shell -p $1 --run $1" 2>/dev/null || echo "Run 'nix search $1' to find packages"
+      }
+
+      # Enhanced prompt with git info
+      setopt PROMPT_SUBST
+      
+      # History options
+      setopt HIST_FIND_NO_DUPS
+      setopt HIST_SAVE_NO_DUPS
+      setopt INC_APPEND_HISTORY
+      
+      # Keybindings
+      bindkey '^[[A' history-search-backward
+      bindkey '^[[B' history-search-forward
+      bindkey '^[^?' backward-kill-word
     '';
   };
 }

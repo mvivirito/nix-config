@@ -62,6 +62,34 @@
         ",XF86AudioPrev, exec, playerctl previous"
         ",XF86MonBrightnessDown,exec,brightnessctl set 5%-"
         ",XF86MonBrightnessUp,exec,brightnessctl set +5%"
+
+        # Application Launchers
+        "$mod, D, exec, discord"
+        "$mod, O, exec, 1password --quick-access"
+        "$mod, Y, exec, kitty -e nvim"
+        "$mod, I, exec, code"
+        "$mod, Z, exec, vlc"
+
+        # System Tools
+        "$mod SHIFT, B, exec, pavucontrol"
+        "$mod SHIFT, M, exec, gnome-system-monitor"
+        "$mod SHIFT, Y, exec, kitty -e htop"
+
+        # Enhanced Screenshots with notifications
+        "$mod, Print, exec, grim - | wl-copy && notify-send 'Screenshot copied to clipboard'"
+        "$mod SHIFT, Print, exec, grim -g \"$(slurp)\" - | wl-copy && notify-send 'Selection screenshot copied'"
+
+        # Layout adjustments
+        "$mod, U, exec, hyprctl keyword general:layout 'master'"
+
+        # Display Management
+        "$mod ALT, L, exec, bash ~/.config/waybar/scripts/display_layout.sh extend"
+        "$mod ALT, M, exec, bash ~/.config/waybar/scripts/display_layout.sh mirror"
+        "$mod ALT, E, exec, bash ~/.config/waybar/scripts/display_layout.sh external"
+        "$mod ALT, K, exec, bash ~/.config/waybar/scripts/display_layout.sh laptop"
+
+        # PDF Viewer - launches most recent PDF or prompts for selection
+        "$mod SHIFT, D, exec, bash -c 'PDF=$(find ~/Documents ~/Downloads -name \"*.pdf\" -type f -printf \"%T@\\t%p\\n\" 2>/dev/null | sort -rn | head -1 | cut -f2); if [ -n \"$PDF\" ]; then xdg-open \"$PDF\"; else notify-send \"No PDF found\" \"Put PDFs in ~/Documents or ~/Downloads\"; fi'"
       ]
       ++ (
         # workspaces
@@ -85,19 +113,11 @@
         "swaync"
         "waybar"
         "[workspace 2 silent] firefox"
-       #  "[workspace special:term silent] kitty --title='kitty-scratch' --hold"
+        "[workspace special:scratchpad silent] kitty --title='kitty-scratchpad'"
         "kitty"
-       #  "remind -z -k':notify-send -u critical \"Reminder!\" %s' ~/00-09-System/02-Logs/02.10-Journal/agenda.rem"
-       #  "[workspace 7 silent] morgen"
         "[workspace 7 silent] kitty --title='kitty-journal'"
         "swaybg -i /home/michael/Pictures/background.jpg"
       ];
-
-#      workspace = lib.lists.flatten (map
-#        (m:
-#          map (w: "${w}, monitor:${m.name}") (m.workspaces)
-#        )
-#        (config.monitors));
 
       general = {
         gaps_in = 5;
@@ -195,9 +215,3 @@
 
   };
 }
-
-
-# Example special workspace (scratchpad)
-#bind = $mainMod, S, togglespecialworkspace, magic
-#bind = $mainMod SHIFT, S, movetoworkspace, special:magic
-

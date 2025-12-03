@@ -15,30 +15,30 @@
       # Only disable ligatures when the cursor is on them.
       disable_ligatures = "cursor";
 
-      # Modified onehalfdark color scheme
-      foreground = "#c9d3e5";
-      background = "#090a0c";
-      cursor = "#cccccc";
+      # Catppuccin Macchiato color scheme (matches GTK/appearance setup)
+      foreground = "#cad3f5";
+      background = "#24273a";
+      cursor = "#f5bde6";
 
-      color0 = "#090a0c";
-      color8 = "#393e48";
-      color1 = "#b2555d";
-      color9 = "#e06c75";
-      color2 = "#81a566";
-      color10 = "#98c379";
-      color3 = "#ccab6e";
-      color11 = "#e6c17c";
-      color4 = "#5395cc";
-      color12 = "#61afef";
-      color5 = "#9378de";
-      color13 = "#c678dd";
-      color6 = "#56b6c2";
-      color14 = "#56b6c2";
-      color7 = "#979eab";
-      color15 = "#abb2bf";
+      color0 = "#24273a";
+      color8 = "#5b6078";
+      color1 = "#ed8796";
+      color9 = "#ed8796";
+      color2 = "#a6da95";
+      color10 = "#a6da95";
+      color3 = "#eed49f";
+      color11 = "#eed49f";
+      color4 = "#8aadf4";
+      color12 = "#8aadf4";
+      color5 = "#f5bde6";
+      color13 = "#f5bde6";
+      color6 = "#8bd5ca";
+      color14 = "#8bd5ca";
+      color7 = "#a5adcb";
+      color15 = "#cad3f5";
 
-      selection_foreground = "#282c34";
-      selection_background = "#979eab";
+      selection_foreground = "#24273a";
+      selection_background = "#8bd5ca";
 
       # Disable cursor blinking
       cursor_blink_interval = "0";
