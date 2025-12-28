@@ -7,6 +7,9 @@
   # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";
+    # Minimal border theme variables
+    "$borderActive" = "0xff4a4a4a"; # monochrome active
+    "$borderInactive" = "0xff2f2f2f"; # monochrome inactive
     bindm = [
         "$mod, mouse:272, movewindow"
         "$mod, mouse:273, resizewindow"
@@ -116,15 +119,14 @@
         "[workspace special:scratchpad silent] kitty --title='kitty-scratchpad'"
         "kitty"
         "[workspace 7 silent] kitty --title='kitty-journal'"
-        "swaybg -i /home/michael/Pictures/background.jpg"
       ];
 
       general = {
         gaps_in = 5;
-        gaps_out = 8;
-        border_size = 2;
-        "col.active_border" = "rgb(5CBABA) rgb(7676FF) 45deg";
-        "col.inactive_border" = "rgba(585272aa)";
+        gaps_out = 10;
+        border_size = 1;
+        "col.active_border" = "$borderActive";
+        "col.inactive_border" = "$borderInactive";
         layout = "master";
         resize_on_border = true;
       };
@@ -139,9 +141,9 @@
       };
 
       decoration = {
-        rounding = 5;
+        rounding = 6;
         blur = {
-          enabled = true;
+          enabled = false;
           size = 8;
           passes = 2;
           new_optimizations = true;
@@ -149,30 +151,17 @@
           noise = 0;
           brightness = 0.90;
         };
-        inactive_opacity = 0.85;
+        inactive_opacity = 1.0;
         active_opacity = 1.0;
       };
 
       animations = {
-        enabled = true;
-        bezier = [
-          "linear, 0, 0, 1, 1"
-          "smooth, 0.4, 0, 0.2, 1"
-        ];
-        animation = [
-          "windows, 1, 3, smooth, slide"
-          "windowsOut, 1, 3, smooth, slide"
-          "windowsMove, 1, 3, smooth, slide"
-          "fade, 1, 3, smooth"
-          "border, 1, 3, smooth"
-          "borderangle, 1, 5, linear, loop"
-          "workspaces, 1, 2, smooth"
-        ];
+        enabled = false;
       };
 
       group = {
-        "col.border_active" = "rgba(63F2F1aa)";
-        "col.border_inactive" = "rgba(585272aa)";
+        "col.border_active" = "$borderActive";
+        "col.border_inactive" = "$borderInactive";
 
         groupbar = {
           font_family = "Iosevka";
@@ -185,6 +174,7 @@
       misc = {
         disable_hyprland_logo = true;
         disable_splash_rendering = true;
+        background_color = "0x0d1117"; # sleek GitHub-dark style color
       };
 
       xwayland = {
@@ -201,7 +191,9 @@
       };
 
       gestures = {
-        workspace_swipe = true;
+        gesture = [
+          "3, horizontal, workspace"
+        ];
         workspace_swipe_distance = 800;
         workspace_swipe_forever = true;
       };
@@ -213,5 +205,21 @@
       ];
 
 
+  };
+
+  # Use hyprpaper for wallpapers (per-monitor, fast reload)
+  services.hyprpaper = {
+    enable = false; # disable to show solid background color
+    settings = {
+      # Put your wallpaper at this path to take effect
+      preload = [
+        "$HOME/Pictures/wallpapers/modern.jpg"
+      ];
+      wallpaper = [
+        "DP-2,$HOME/Pictures/wallpapers/modern.jpg"
+        "eDP-1,$HOME/Pictures/wallpapers/modern.jpg"
+      ];
+      splash = false;
+    };
   };
 }
