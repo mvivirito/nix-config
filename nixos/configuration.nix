@@ -51,9 +51,13 @@
   };
 
   services.logind = {
-    extraConfig = "HandlePowerKey=suspend";
-    lidSwitch = "suspend";
-  }; 
+    settings = {
+      Login = {
+        HandlePowerKey = "suspend";
+        HandleLidSwitch = "suspend";
+      };
+    };
+  };
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -137,7 +141,7 @@
     discord
     ffmpeg
     figlet
-    floorp
+    floorp-bin
     fzf
     git
     gnome-boxes
