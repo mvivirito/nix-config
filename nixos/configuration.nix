@@ -124,6 +124,8 @@
 
   # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
+    xclip
+    aerc
     adwaita-icon-theme
     baobab
     bat
