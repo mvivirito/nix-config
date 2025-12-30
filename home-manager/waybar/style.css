@@ -1,61 +1,56 @@
-@import "macchiato.css";
-
+/* Minimal, monochrome Waybar theme */
 * {
-    font-family: "JetBrainsMono Nerd Font", Roboto, Helvetica, Arial, sans-serif;
-    font-size: 16px;
+  font-family: "JetBrainsMono Nerd Font", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
 }
 
 window#waybar {
-    background-color: rgba(0,0,0,0);
-    border-radius: 13px;
-    transition-property: background-color;
-    transition-duration: .5s;
+  background-color: transparent;
 }
 
-button {
-    /* Use box-shadow instead of border so the text isn't offset */
-    box-shadow: inset 0 -3px transparent;
-    /* Avoid rounded borders under each button name */
-    border: none;
-    border-radius: 0;
+.modules-left,
+.modules-center,
+.modules-right {
+  background-color: #0d1117; /* match Hyprland background */
+  color: #c9d1d9;
+  border: none;
+  border-radius: 0;
 }
 
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
-button:hover {
-    background: inherit;
-    box-shadow: inset 0 -3px #ffffff;
+.modules-left { padding: 0 12px; }
+.modules-center { padding: 0 10px; }
+.modules-right { padding: 0 10px; }
+
+/* Subtle separators between modules */
+.modules-right > *:not(:first-child),
+.modules-left > *:not(:first-child),
+.modules-center > *:not(:first-child) {
+  margin-left: 8px;
+  padding-left: 8px;
 }
 
-/* you can set a style on hover for any module like this */
-#pulseaudio:hover {
-    background-color: @surface2;
-}
-
+/* Workspaces */
 #workspaces button {
-    padding: 0 5px;
-    background-color: transparent;
-    color: #ffffff;
+  padding: 0 6px;
+  background-color: transparent;
+  color: #c9d1d9;
 }
-
 
 #workspaces button:hover {
-    background: rgba(0, 0, 0, 0.2);
+  background-color: #1f2329;
 }
 
 #workspaces button.focused {
-    background-color: @lavender;
-    box-shadow: inset 0 -3px #ffffff;
+  background-color: #1f2329;
+  color: #ffffff;
 }
 
 #workspaces button.urgent {
-    background-color: #eb4d4b;
+  background-color: #3d1f1f;
+  color: #ffffff;
 }
 
-#mode {
-    background-color: #64727D;
-    box-shadow: inset 0 -3px #ffffff;
-}
-
+/* Module paddings */
 #clock,
 #battery,
 #cpu,
@@ -63,80 +58,20 @@ button:hover {
 #temperature,
 #network,
 #pulseaudio,
-#custom-power
-{
-    padding: 0 10px;
-}
+#custom-power,
+#tray { padding: 0 8px; }
 
-#custom-power {
-    color: @maroon;
-}
-
-#pulseaudio {
-    color: @maroon;
-}
-
-#network {
-    color: @yellow;
-}
-
-#temperature {
-    color: @sky;
-}
-
-#battery {
-    color: @green;
-}
-
-#clock {
-    color: @flamingo;
-}
-
-#window {
-    color: @rosewater;
-}
-
-.modules-right,.modules-left,.modules-center {
-    background-color: @base;
-    border-radius: 15px;
-}
-.modules-right {
-    padding: 0 10px;
-}
-
-.modules-left {
-    padding: 0 20px;
-}
-
-.modules-center {
-    padding: 0 10px;
-}
-#battery.charging, #battery.plugged {
-    color: @sapphire;
-}
-
-@keyframes blink {
-    to {
-        color: #000000;
-    }
-}
-
-/* Using steps() instead of linear as a timing function to limit cpu usage */
+/* States */
+#pulseaudio.muted { color: #8b949e; }
+#battery.charging, #battery.plugged { color: #8b949e; }
 #battery.critical:not(.charging) {
-    background-color: #f53c3c;
-    color: #ffffff;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: steps(12);
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
+  color: #ffffff;
+  background-color: #7a2121;
 }
 
-label:focus {
-    background-color: #000000;
-}
-
-#pulseaudio.muted {
-    color: @text;
+/* Buttons */
+button {
+  border: none;
+  border-radius: 6px;
 }
 

@@ -1,47 +1,51 @@
 {
-    "margin-top" : 5,
+    "margin-top" : 3,
     "margin-left": 10,
     "margin-right": 10,
-    "height" : 35,
+    "height" : 30,
+    "style": "~/.config/waybar/style.css",
+    "spacing": 8,
     "modules-left": [
         "hyprland/window"
     ],
     "modules-center": [
-        "hyprland/workspaces",
+        "hyprland/workspaces"
     ],
     "modules-right": [
-        "custom/power",
-        "pulseaudio",
         "network",
-        "temperature",
+        "pulseaudio",
         "battery",
-        "clock",
-        "power-profiles-daemon",
         "tray",
+        "clock",
+        "custom/power"
     ],
     "hyprland/workspaces": {
         "format": "{icon}",
         "on-click": "activate",
         "format-icons": {
-            "active": " ",
+            "active": " "
         },
         "sort-by-number": true
     },
     "clock": {
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
+        "format-alt": "{:%Y-%m-%d}",
+        "on-click": "gnome-calendar",
+        "on-click-right": "gnome-clocks"
     },
     "cpu": {
         "format": "  {usage}%",
         "tooltip": false
     },
     "memory": {
-        "format": "{}%  "
+        "format": "{}%  ",
+        "tooltip": false
     },
     "temperature": {
-        "critical-threshold": 80,
+        "critical-threshold": 85,
         "format": "{icon} {temperatureC}°C",
-        "format-icons": ["", "", ""]
+        "format-icons": ["", "", ""],
+        "tooltip": false
     },
     "battery": {
         "states": {
@@ -53,15 +57,18 @@
         "format-charging": "  {capacity}%",
         "format-plugged": "  {capacity}%",
         "format-alt": "{time} {icon}",
-        "format-icons": ["", "", "", "", ""]
+        "format-icons": ["", "", "", "", ""],
+        "tooltip": false
     },
     "network": {
-        "format-wifi": "  {signalStrength}%",
+        "format-wifi": "  {signalStrength}% {ipaddr}/{cidr}",
         "format-ethernet": "{ipaddr}/{cidr} ",
         "tooltip-format": "{ifname} via {gwaddr} ",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": " ⚠ ",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "tooltip": false,
+        "on-click": "kitty -e nmtui connect"
     },
     "pulseaudio": {
         "format": "{icon}  {volume}%",
@@ -77,11 +84,13 @@
             "car": "",
             "default": ["", "", ""]
         },
-        "on-click": "pavucontrol"
+        "on-click": "pavucontrol",
+        "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+",
+        "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
     },
     "custom/power": {
-    "format": "",
-    "tooltip": "Power Menu",
-    "on-click": "~/.config/waybar/scripts/power_menu.sh",
+        "format": "",
+        "tooltip": "Power Menu",
+        "on-click": "~/.config/waybar/scripts/power_menu.sh"
     }
 }
