@@ -30,8 +30,12 @@ inputbar {
   border-radius: 8px;
 }
 
+inputbar {
+  children: [ "entry" ];
+}
+
 prompt {
-  text-color: @fg-muted;
+  enabled: false;
 }
 
 listview {

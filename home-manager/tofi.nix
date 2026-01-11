@@ -1,9 +1,9 @@
-{ ... }:
+{ config, ... }:
 
 {
   xdg.configFile."tofi/config".text = ''
     font = Mononoki Nerd Font 12
-    prompt-text = "Run"
+    prompt-text = ""
     width = 1100
     height = 420
     corner-radius = 10
@@ -22,5 +22,23 @@
     padding-right = 16
     outline-width = 0
     result-spacing = 6
+  '';
+
+  xdg.configFile."tofi/clipboard".text = ''
+    include = ${config.xdg.configHome}/tofi/config
+    prompt-text = ""
+    prompt-padding = 0
+    prompt-background = #00000000
+    prompt-background-padding = 0
+    prompt-background-corner-radius = 0
+    input-background = #181825
+    input-background-padding = 10,12
+    input-background-corner-radius = 8
+    text-cursor = true
+    padding-top = 12
+    padding-bottom = 12
+    padding-left = 12
+    padding-right = 12
+    result-spacing = 4
   '';
 }
