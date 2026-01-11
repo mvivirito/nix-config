@@ -13,6 +13,8 @@
     # inputs.nix-colors.homeManagerModule
     ./neovim
     ./rofi.nix
+    ./tofi.nix
+    ./ranger.nix
     ./zsh.nix
     ./hyprland.nix
     ./waybar
@@ -50,6 +52,16 @@
   home.sessionVariables = {
     EDITOR = "nvim";
 #    NIX_PATH = "nixpkgs=flake:nixpkgs$\{NIX_PATH:+:$NIX_PATH}";
+    XCURSOR_SIZE = "32";
+    HYPRCURSOR_SIZE = "32";
+  };
+
+  home.pointerCursor = {
+    name = "Adwaita";
+    package = pkgs.adwaita-icon-theme;
+    size = 32;
+    gtk.enable = true;
+    x11.enable = true;
   };
 
   # Add stuff for your user as you see fit:

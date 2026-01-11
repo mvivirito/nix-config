@@ -1,12 +1,22 @@
 { lib, pkgs, config, inputs, ... }:
 
-{
+let
+  cliphist = "${pkgs.cliphist}/bin/cliphist";
+  tofi = "${pkgs.tofi}/bin/tofi";
+  wlCopy = "${pkgs.wl-clipboard}/bin/wl-copy";
+  wlPaste = "${pkgs.wl-clipboard}/bin/wl-paste";
+  wlClipPersist = "${pkgs.wl-clip-persist}/bin/wl-clip-persist";
+in {
 
   imports = [];
 
   # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";
+    env = [
+      "XCURSOR_SIZE,32"
+      "HYPRCURSOR_SIZE,32"
+    ];
     # Minimal border theme variables
     "$borderActive" = "0xff4a4a4a"; # monochrome active
     "$borderInactive" = "0xff2f2f2f"; # monochrome inactive
@@ -17,8 +27,8 @@
     bind =
       [
         "$mod SHIFT, N, exec, swaync-client -rs" 
-        "$mod SHIFT, G, exec, grim - | wl-copy"
-        "$mod, G, exec, grim -g \"$(slurp)\" - | wl-copy"
+        "$mod, G, exec, bash -c 'pkill -x slurp >/dev/null 2>&1; grim -g \"$(slurp)\" - | wl-copy; notify-send \"Selection copied\"'"
+        "$mod SHIFT, G, exec, bash -c 'pkill -x slurp >/dev/null 2>&1; grim - | wl-copy; notify-send \"Screenshot copied\"'"
         "$mod SHIFT, P, exec, wl-color-picker"
         "$mod SHIFT, Q, killactive"
         "$mod SHIFT, R, exec, thunar"
@@ -35,6 +45,7 @@
         "$mod SHIFT, T, exec, hyprctl keyword general:layout 'dwindle'"
         "$mod, S, togglesplit"
         "$mod, V, togglefloating"
+        "$mod SHIFT, V, exec, bash -c 'items=$(${cliphist} list); display=$(printf \"%s\\n\" \"$items\" | awk \"{line=\\$0; id=\\$1; \\$1=\\\"\\\"; sub(/^ /,\\\"\\\"); text=\\$0; if (match(text, /^\\\\[\\\\[ binary data ([0-9.]+ [KMG]iB) ([^ ]+)/, m)) { text=\\\"[image \\\" m[2] \\\" \\\" m[1] \\\"]\\\" } if (length(text)>140) text=substr(text,1,137)\\\"...\\\"; print text }\"); selection=$(printf \"%s\\n\" \"$display\" | ${tofi} --prompt-text \"Clipboard\"); [ -z \"$selection\" ] && exit 0; line=$(printf \"%s\\n\" \"$items\" | awk -v sel=\"$selection\" \"{line=\\$0; id=\\$1; \\$1=\\\"\\\"; sub(/^ /,\\\"\\\"); text=\\$0; if (match(text, /^\\\\[\\\\[ binary data ([0-9.]+ [KMG]iB) ([^ ]+)/, m)) { text=\\\"[image \\\" m[2] \\\" \\\" m[1] \\\"]\\\" } if (length(text)>140) text=substr(text,1,137)\\\"...\\\"; if (text==sel) { print line; exit } }\"); [ -z \"$line\" ] && exit 0; printf \"%s\\n\" \"$line\" | ${cliphist} decode | ${wlCopy}'"
         "$mod, return, exec, kitty"
         "$mod, space, exec, tofi-drun --drun-launch=true"
         "$mod SHIFT, space, exec, tofi-run --drun-launch=true"
@@ -79,8 +90,8 @@
         "$mod SHIFT, Y, exec, kitty -e htop"
 
         # Enhanced Screenshots with notifications
-        "$mod, Print, exec, grim - | wl-copy && notify-send 'Screenshot copied to clipboard'"
-        "$mod SHIFT, Print, exec, grim -g \"$(slurp)\" - | wl-copy && notify-send 'Selection screenshot copied'"
+        "$mod, Print, exec, bash -c 'dir=\"$HOME/Pictures/Screenshots\"; mkdir -p \"$dir\"; file=\"$dir/$(date +%Y-%m-%d_%H-%M-%S).png\"; pkill -x slurp >/dev/null 2>&1; grim -g \"$(slurp)\" \"$file\"; notify-send \"Selection saved\" \"$file\"'"
+        "$mod SHIFT, Print, exec, bash -c 'dir=\"$HOME/Pictures/Screenshots\"; mkdir -p \"$dir\"; file=\"$dir/$(date +%Y-%m-%d_%H-%M-%S).png\"; pkill -x slurp >/dev/null 2>&1; grim \"$file\"; notify-send \"Screenshot saved\" \"$file\"'"
 
         # Layout adjustments
         "$mod, U, exec, hyprctl keyword general:layout 'master'"
@@ -114,6 +125,9 @@
 
       exec-once = [
         "swaync"
+        "${wlClipPersist} --clipboard --primary"
+        "${wlPaste} --type text --watch ${cliphist} store"
+        "${wlPaste} --type image --watch ${cliphist} store"
         "waybar"
         "[workspace 2 silent] firefox"
         "[workspace special:scratchpad silent] kitty --title='kitty-scratchpad'"

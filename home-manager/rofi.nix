@@ -4,7 +4,7 @@
 {
   programs.rofi = {
     enable = true;
-    theme = "glue_pro_blue";
+    theme = ./rofi-theme.rasi;
     terminal = "${pkgs.kitty}/bin/kitty";
     plugins = [ pkgs.rofi-calc ];
     extraConfig = {
@@ -12,5 +12,4 @@
 	};
   };
 }
-
 

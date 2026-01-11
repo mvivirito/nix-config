@@ -48,8 +48,9 @@
       # Set scrollback buffer for pager in MB
       scrollback_pager_history_size = "256";
 
-      # Don't copy on select
-      copy_on_select = "no";
+      # Make selection copy to clipboard/primary for easy cross-terminal paste
+      copy_on_select = "yes";
+      clipboard_control = "write-clipboard write-primary";
 
       # Set program to open urls with
       open_url_with = "xdg-open";
@@ -68,4 +69,3 @@
     '';
   };
 }
-

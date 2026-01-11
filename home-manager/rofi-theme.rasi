@@ -1,0 +1,68 @@
+* {
+  bg: #1e1e2e;
+  bg-alt: #181825;
+  fg: #cdd6f4;
+  fg-muted: #a6adc8;
+  accent: #89b4fa;
+  border: #313244;
+  highlight: #45475a;
+  font: "Mononoki Nerd Font 12";
+}
+
+window {
+  location: center;
+  width: 720px;
+  border: 2px;
+  border-color: @border;
+  background-color: @bg;
+  padding: 18px;
+}
+
+mainbox {
+  background-color: transparent;
+}
+
+inputbar {
+  spacing: 10px;
+  background-color: @bg-alt;
+  text-color: @fg;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+prompt {
+  text-color: @fg-muted;
+}
+
+listview {
+  background-color: transparent;
+  padding: 10px 0 0 0;
+  spacing: 6px;
+  scrollbar: false;
+}
+
+element {
+  background-color: transparent;
+  text-color: @fg;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+element selected {
+  background-color: @highlight;
+  text-color: @fg;
+  border: 1px;
+  border-color: @accent;
+}
+
+element-text {
+  background-color: transparent;
+  text-color: inherit;
+}
+
+message {
+  background-color: @bg-alt;
+  text-color: @fg;
+  padding: 10px 12px;
+  border-radius: 8px;
+}

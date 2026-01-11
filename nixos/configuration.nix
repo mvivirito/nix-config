@@ -138,6 +138,7 @@
     cmatrix
     cool-retro-term
     cowsay
+    cliphist
     discord
     ffmpeg
     figlet
@@ -153,6 +154,7 @@
     grim
     htop
     kitty
+    ghostty
     lazygit
     libnotify
     libqalculate
@@ -192,6 +194,7 @@
     xsel
     yt-dlp
     zsh
+    wl-clip-persist
   ];
 
 
@@ -207,4 +210,3 @@
   system.stateVersion = "23.11";
 
 }
-
