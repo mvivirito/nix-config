@@ -128,6 +128,7 @@
 
   # List packages installed in system profile. To search, run:
   environment.systemPackages = with pkgs; [
+    claude-code
     xclip
     zathura
     aerc
