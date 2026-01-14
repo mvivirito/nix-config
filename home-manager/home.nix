@@ -77,6 +77,13 @@
   
   services.playerctld.enable = true;
 
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "application/pdf" = [ "org.pwmt.zathura.desktop" ];
+    };
+  };
+
   services.swayidle = {
     enable = true;
     systemdTarget = "hyprland-session.target";

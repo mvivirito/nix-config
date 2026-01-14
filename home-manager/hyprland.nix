@@ -103,7 +103,7 @@ in {
         "$mod ALT, K, exec, bash ~/.config/waybar/scripts/display_layout.sh laptop"
 
         # PDF Viewer - launches most recent PDF or prompts for selection
-        "$mod SHIFT, D, exec, bash -c 'PDF=$(find ~/Documents ~/Downloads -name \"*.pdf\" -type f -printf \"%T@\\t%p\\n\" 2>/dev/null | sort -rn | head -1 | cut -f2); if [ -n \"$PDF\" ]; then xdg-open \"$PDF\"; else notify-send \"No PDF found\" \"Put PDFs in ~/Documents or ~/Downloads\"; fi'"
+        "$mod SHIFT, D, exec, bash -c 'PDF=$(find ~/Documents ~/Downloads -name \"*.pdf\" -type f -printf \"%T@\\t%p\\n\" 2>/dev/null | sort -rn | head -1 | cut -f2); if [ -n \"$PDF\" ]; then zathura \"$PDF\"; else notify-send \"No PDF found\" \"Put PDFs in ~/Documents or ~/Downloads\"; fi'"
       ]
       ++ (
         # workspaces
