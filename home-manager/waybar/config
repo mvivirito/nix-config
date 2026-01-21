@@ -12,6 +12,7 @@
         "hyprland/workspaces"
     ],
     "modules-right": [
+        "custom/tailscale",
         "network",
         "pulseaudio",
         "battery",
@@ -23,7 +24,7 @@
         "format": "{icon}",
         "on-click": "activate",
         "format-icons": {
-            "active": " "
+            "active": "󰮯 "
         },
         "sort-by-number": true
     },
@@ -34,17 +35,17 @@
         "on-click-right": "gnome-clocks"
     },
     "cpu": {
-        "format": "  {usage}%",
+        "format": "󰻠  {usage}%",
         "tooltip": false
     },
     "memory": {
-        "format": "{}%  ",
+        "format": "{}%  󰍛",
         "tooltip": false
     },
     "temperature": {
         "critical-threshold": 85,
         "format": "{icon} {temperatureC}°C",
-        "format-icons": ["", "", ""],
+        "format-icons": ["󰔐", "󱃃", "󰸁"],
         "tooltip": false
     },
     "battery": {
@@ -54,43 +55,51 @@
         },
         "format": "{icon}  {capacity}%",
         "format-full": "{icon}  {capacity}%",
-        "format-charging": "  {capacity}%",
-        "format-plugged": "  {capacity}%",
+        "format-charging": "󰂄  {capacity}%",
+        "format-plugged": "󰚥  {capacity}%",
         "format-alt": "{time} {icon}",
-        "format-icons": ["", "", "", "", ""],
+        "format-icons": ["󰂎", "󰁺", "󰁽", "󰁿", "󰂂"],
         "tooltip": false
     },
     "network": {
-        "format-wifi": "  {signalStrength}% {ipaddr}/{cidr}",
-        "format-ethernet": "{ipaddr}/{cidr} ",
-        "tooltip-format": "{ifname} via {gwaddr} ",
-        "format-linked": "{ifname} (No IP) ",
-        "format-disconnected": " ⚠ ",
+        "format-wifi": "󰖩  {signalStrength}% {ipaddr}/{cidr}",
+        "format-ethernet": "{ipaddr}/{cidr} 󰈀",
+        "tooltip-format": "{ifname} via {gwaddr} 󰈀",
+        "format-linked": "{ifname} (No IP) 󰈀",
+        "format-disconnected": "󰖪 ⚠ ",
         "format-alt": "{ifname}: {ipaddr}/{cidr}",
         "tooltip": false,
         "on-click": "kitty -e nmtui connect"
     },
     "pulseaudio": {
         "format": "{icon}  {volume}%",
-        "format-bluetooth": "{volume}% {icon} {format_source}",
-        "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
+        "format-bluetooth": "{volume}% {icon} {format_source}",
+        "format-bluetooth-muted": "󰝟 {icon} {format_source}",
+        "format-muted": "󰝟 {format_source}",
         "format-icons": {
-            "headphone": "",
-            "hands-free": "",
-            "headset": "",
-            "phone": "",
-            "portable": "",
-            "car": "",
-            "default": ["", "", ""]
+            "headphone": "󰋋",
+            "hands-free": "󰋎",
+            "headset": "󰋎",
+            "phone": "󰏲",
+            "portable": "󰏲",
+            "car": "󰄋",
+            "default": ["󰕿", "󰖀", "󰕾"]
         },
         "on-click": "pavucontrol",
         "on-scroll-up": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+",
         "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
     },
     "custom/power": {
-        "format": "",
+        "format": "󰐥",
         "tooltip": "Power Menu",
         "on-click": "~/.config/waybar/scripts/power_menu.sh"
+    },
+    "custom/tailscale": {
+        "exec": "~/.config/waybar/scripts/tailscale_status.sh",
+        "return-type": "json",
+        "interval": 5,
+        "format": "{}",
+        "on-click": "kitty -e bash -c 'tailscale status; echo; echo \"Press Enter to close...\"; read'",
+        "tooltip": true
     }
 }

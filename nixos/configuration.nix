@@ -62,6 +62,12 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
+  # Enable Tailscale
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "client";
+  };
+
   # Set your time zone.
   time.timeZone = "America/Los_Angeles";
 
@@ -90,8 +96,8 @@
   };
 
   # Enable the sddm.
-  #services.xserver.displayManager.sddm.enable = true; 
-  services.xserver.desktopManager.gnome.enable = true;
+  #services.xserver.displayManager.sddm.enable = true;
+  services.desktopManager.gnome.enable = true;
   programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
   # Enable CUPS to print documents.
@@ -205,9 +211,24 @@
     powerline-fonts
     powerline-symbols
     nerd-fonts.mononoki
-  ];  
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.symbols-only
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-color-emoji
+  ];
 
   fonts.enableDefaultPackages = true;
+
+  fonts.fontconfig = {
+    enable = true;
+    defaultFonts = {
+      serif = [ "Noto Serif" "Noto Color Emoji" ];
+      sansSerif = [ "Noto Sans" "Noto Color Emoji" ];
+      monospace = [ "JetBrainsMono Nerd Font" "Noto Color Emoji" ];
+      emoji = [ "Noto Color Emoji" ];
+    };
+  };
 
   system.stateVersion = "23.11";
 

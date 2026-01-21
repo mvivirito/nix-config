@@ -59,6 +59,7 @@ window#waybar {
 #network,
 #pulseaudio,
 #custom-power,
+#custom-tailscale,
 #tray { padding: 0 8px; }
 
 /* States */
@@ -68,6 +69,12 @@ window#waybar {
   color: #ffffff;
   background-color: #7a2121;
 }
+
+/* Tailscale states */
+#custom-tailscale.connected { color: #7dd3fc; }
+#custom-tailscale.disconnected { color: #8b949e; }
+#custom-tailscale.warning { color: #fbbf24; }
+#custom-tailscale.unknown { color: #8b949e; }
 
 /* Buttons */
 button {
