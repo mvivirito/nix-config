@@ -37,13 +37,15 @@ in {
         "$mod, E, exec, rofimoji"
         "$mod, C, exec, rofi -show calc"
         "$mod, F, fullscreen"
-        "$mod, M, exec, pkill Hyprland"
+        "$mod SHIFT, E, exec, pkill Hyprland"
         "$mod, N, exec, swaync-client -op" 
         "$mod, P, pin"
         "$mod, R, exec, kitty -e ranger"
-        "$mod, T, exec, hyprctl keyword general:layout 'master'"
-        "$mod SHIFT, T, exec, hyprctl keyword general:layout 'dwindle'"
+        "$mod, M, layoutmsg, swapwithmaster master"
+        "$mod, TAB, exec, bash -c 'current=$(hyprctl getoption general:layout | grep \"str:\" | awk \"{print \\$2}\"); if [ \"$current\" = \"master\" ]; then hyprctl keyword general:layout dwindle; else hyprctl keyword general:layout master; fi'"
         "$mod, S, togglesplit"
+        "$mod CTRL, J, swapnext"
+        "$mod CTRL, K, swapnext, prev"
         "$mod, V, togglefloating"
         "$mod SHIFT, V, exec, bash -c 'items=$(${cliphist} list); display=$(printf \"%s\\n\" \"$items\" | awk \"{line=\\$0; id=\\$1; \\$1=\\\"\\\"; sub(/^ /,\\\"\\\"); text=\\$0; if (match(text, /^\\\\[\\\\[ binary data ([0-9.]+ [KMG]iB) ([^ ]+)/, m)) { text=\\\"[image \\\" m[2] \\\" \\\" m[1] \\\"]\\\" } if (length(text)>140) text=substr(text,1,137)\\\"...\\\"; print text }\"); selection=$(printf \"%s\\n\" \"$display\" | ${tofi} --config ${config.xdg.configHome}/tofi/clipboard); [ -z \"$selection\" ] && exit 0; line=$(printf \"%s\\n\" \"$items\" | awk -v sel=\"$selection\" \"{line=\\$0; id=\\$1; \\$1=\\\"\\\"; sub(/^ /,\\\"\\\"); text=\\$0; if (match(text, /^\\\\[\\\\[ binary data ([0-9.]+ [KMG]iB) ([^ ]+)/, m)) { text=\\\"[image \\\" m[2] \\\" \\\" m[1] \\\"]\\\" } if (length(text)>140) text=substr(text,1,137)\\\"...\\\"; if (text==sel) { print line; exit } }\"); [ -z \"$line\" ] && exit 0; printf \"%s\\n\" \"$line\" | ${cliphist} decode | ${wlCopy}'"
         "$mod, return, exec, kitty"
@@ -92,9 +94,6 @@ in {
         # Enhanced Screenshots with notifications
         "$mod, Print, exec, bash -c 'dir=\"$HOME/Pictures/Screenshots\"; mkdir -p \"$dir\"; file=\"$dir/$(date +%Y-%m-%d_%H-%M-%S).png\"; pkill -x slurp >/dev/null 2>&1; grim -g \"$(slurp)\" \"$file\"; notify-send \"Selection saved\" \"$file\"'"
         "$mod SHIFT, Print, exec, bash -c 'dir=\"$HOME/Pictures/Screenshots\"; mkdir -p \"$dir\"; file=\"$dir/$(date +%Y-%m-%d_%H-%M-%S).png\"; pkill -x slurp >/dev/null 2>&1; grim \"$file\"; notify-send \"Screenshot saved\" \"$file\"'"
-
-        # Layout adjustments
-        "$mod, U, exec, hyprctl keyword general:layout 'master'"
 
         # Display Management
         "$mod ALT, L, exec, bash ~/.config/waybar/scripts/display_layout.sh extend"
@@ -151,7 +150,7 @@ in {
       };
 
       master = {
-        orientation = "center";
+        orientation = "left";
       };
 
       decoration = {
