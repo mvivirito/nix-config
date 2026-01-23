@@ -3,16 +3,16 @@
 {
   imports = [
     # Host-specific configuration
-    ../hosts/nixos-laptop/hardware.nix
-    ../hosts/nixos-laptop/default.nix
+    ../hosts/nixos/laptop/hardware.nix
+    ../hosts/nixos/laptop/default.nix
 
-    # Shared system modules
-    ../hosts/shared/boot.nix
-    ../hosts/shared/locale.nix
-    ../hosts/shared/networking.nix
-    ../hosts/shared/audio.nix
-    ../hosts/shared/fonts.nix
-    ../hosts/shared/users.nix
+    # Shared NixOS system modules
+    ../hosts/nixos/shared/boot.nix
+    ../hosts/nixos/shared/locale.nix
+    ../hosts/nixos/shared/networking.nix
+    ../hosts/nixos/shared/audio.nix
+    ../hosts/nixos/shared/fonts.nix
+    ../hosts/nixos/shared/users.nix
 
     # System-specific modules
     ./greetd.nix
