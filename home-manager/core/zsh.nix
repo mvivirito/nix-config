@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   programs.zoxide = {
     enable = true;
@@ -39,7 +39,6 @@
       ll = "ls -lh";
       mkdir = "mkdir -p";
       cd = "z";
-      nm = "nmtui-connect";
 
       # Git shortcuts
       ga = "git add";
@@ -62,22 +61,29 @@
       grh = "git reset HEAD";
       gsq = "git rebase -i HEAD~";
 
-      # Development/Build shortcuts  
+      # Development/Build shortcuts
       ns = "nix-shell";
       hm = "home-manager";
       nr = "nix run";
       nb = "nix build";
       nd = "nix develop";
 
-      # System shortcuts
-      sx = "sudo systemctl";
-      jctl = "journalctl -e";
-      
       # Common typos/variants
       q = "exit";
       cl = "clear";
+    } // lib.optionalAttrs pkgs.stdenv.isLinux {
+      # Linux-specific aliases
+      nm = "nmtui-connect";
+      sx = "sudo systemctl";
+      jctl = "journalctl -e";
+    } // lib.optionalAttrs pkgs.stdenv.isDarwin {
+      # macOS-specific aliases
+      flush-dns = "sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder";
+      showfiles = "defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder";
+      hidefiles = "defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder";
+      brewup = "brew update && brew upgrade && brew cleanup";
     };
-    initExtra = ''
+    initContent = ''
       # Command not found handler - suggests packages to install
       command_not_found_handler() {
         echo "zsh: command not found: $1"

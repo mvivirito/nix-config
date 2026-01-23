@@ -52,8 +52,8 @@
       copy_on_select = "yes";
       clipboard_control = "write-clipboard write-primary";
 
-      # Set program to open urls with
-      open_url_with = "xdg-open";
+      # Set program to open urls with (platform-aware)
+      open_url_with = if pkgs.stdenv.isDarwin then "open" else "xdg-open";
 
       # Fuck the bell
       enable_audio_bell = "no";

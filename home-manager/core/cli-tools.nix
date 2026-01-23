@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   # Cross-platform CLI tools that work on Linux, macOS, and any Unix-like system
@@ -29,9 +29,10 @@
 
     # Fun terminal programs
     cmatrix          # Matrix rain
-    cool-retro-term  # Retro terminal emulator
     cowsay           # ASCII cow
     figlet           # ASCII art text
     pipes            # Animated pipes screensaver
+  ] ++ lib.optionals stdenv.isLinux [
+    cool-retro-term  # Retro terminal emulator (Linux only)
   ];
 }
