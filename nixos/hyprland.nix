@@ -11,8 +11,10 @@
     services.xserver.displayManager.startx.enable = true;
 
     # Enable Hyprland compositor system-wide
+    # withUWSM enables the start-hyprland wrapper for proper systemd session services
     programs.hyprland = {
       enable = true;
+      withUWSM = true;
       xwayland.enable = true;
     };
 
@@ -30,6 +32,7 @@
       upower.enable = true;          # Power management (battery status)
       power-profiles-daemon.enable = true;  # Power profiles
       accounts-daemon.enable = true;  # User account information
+      thermald.enable = true;        # Intel thermal management daemon
     };
 }
 

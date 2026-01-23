@@ -12,9 +12,4 @@
     pulse.enable = true;
   };
 
-  # Enable CUPS for printing
-  services.printing.enable = true;
-
-  # Enable fingerprint reader
-  services.fprintd.enable = true;
 }

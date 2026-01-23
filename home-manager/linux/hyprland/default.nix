@@ -9,7 +9,11 @@
   ];
 
   # Enable Hyprland window manager
-  wayland.windowManager.hyprland.enable = true;
+  # systemd.enable = false because UWSM handles systemd integration now
+  wayland.windowManager.hyprland = {
+    enable = true;
+    systemd.enable = false;
+  };
 
   # Hyprpaper wallpaper service
   services.hyprpaper = {

@@ -44,8 +44,20 @@ in {
     before = [ "systemd-suspend.service" ];  # Runs BEFORE actual suspend
     environment = hibernateEnvironment;
     script = ''
-      # Only schedule wake-up if on battery (AC offline = 0)
-      if [ $(cat /sys/class/power_supply/AC/online) -eq 0 ]; then
+      # Check any available AC adapter (some laptops use different names than "AC")
+      ac_online=0
+      for supply in /sys/class/power_supply/*/type; do
+        if [ "$(cat "$supply" 2>/dev/null)" = "Mains" ]; then
+          online_file="''${supply%/type}/online"
+          if [ "$(cat "$online_file" 2>/dev/null)" = "1" ]; then
+            ac_online=1
+            break
+          fi
+        fi
+      done
+
+      # Only schedule wake-up if on battery (no AC adapter online)
+      if [ "$ac_online" -eq 0 ]; then
         curtime=$(date +%s)
         echo "$curtime $1" >> /tmp/autohibernate.log
         echo "$curtime" > $HIBERNATE_LOCK         # Record suspend time

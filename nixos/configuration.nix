@@ -13,12 +13,13 @@
     ../hosts/nixos/shared/audio.nix
     ../hosts/nixos/shared/fonts.nix
     ../hosts/nixos/shared/users.nix
+    ../hosts/nixos/shared/power.nix
+    ../hosts/nixos/shared/hibernate.nix
 
     # System-specific modules
     ./greetd.nix
     ./keyd
     ./theme.nix
-    ./hibernate.nix
     ./hyprland.nix
   ];
 

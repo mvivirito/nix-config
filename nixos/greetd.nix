@@ -19,8 +19,10 @@ in {
         # --time: shows clock
         # --remember: remembers last username
         # --remember-session: remembers last session (Hyprland)
-        # --sessions: available sessions from /usr/share/wayland-sessions/
-        command = "${tuigreet} --time --remember --remember-session --sessions Hyprland";
+        # --sessions: session name (tuigreet finds it in standard paths)
+        # Use start-hyprland (UWSM wrapper) instead of Hyprland directly
+        # This provides proper systemd session integration
+        command = "${tuigreet} --time --remember --cmd start-hyprland";
         user = "greeter";  # Runs as unprivileged 'greeter' user (security)
       };
     };

@@ -9,14 +9,4 @@
     enable = true;
     useRoutingFeatures = "client";
   };
-
-  # Logind power management
-  services.logind = {
-    settings = {
-      Login = {
-        HandlePowerKey = "suspend";
-        HandleLidSwitch = "suspend";
-      };
-    };
-  };
 }

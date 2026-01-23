@@ -38,6 +38,11 @@ in {
       "$mod, mouse:273, resizewindow"
     ];
 
+    # Lid switch - lock immediately on lid close
+    bindl = [
+      ", switch:on:Lid Switch, exec, swaylock -i /home/michael/Pictures/lock_background.jpg -fF"
+    ];
+
     # Keyboard binds
     bind = [
       # Window management
