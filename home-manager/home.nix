@@ -26,7 +26,7 @@
     # Linux-specific configuration (Wayland, X11, desktop environment)
     # Imported unconditionally, will use mkIf inside modules if needed for cross-platform
     ./linux/gui-apps.nix
-    ./linux/hyprland.nix
+    ./linux/hyprland
     ./linux/waybar
     ./linux/rofi.nix
     ./linux/tofi.nix
