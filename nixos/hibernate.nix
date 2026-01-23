@@ -74,7 +74,7 @@ in {
       else
         # User woke manually before timeout → cancel hibernation
         # Set 1-second dummy timer to clear RTC wake alarm
-        ${pkgs.utillinux}/bin/rtcwake -m no -s 1
+        ${pkgs.util-linux}/bin/rtcwake -m no -s 1
       fi
     '';
     serviceConfig.Type = "simple";
