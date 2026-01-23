@@ -5,9 +5,8 @@
   # These packages are Wayland/X11 dependent and won't work on macOS
 
   home.packages = with pkgs; [
-    # Browsers
-    firefox
-    floorp-bin
+    # Browsers - testing multiple options
+    floorp-bin       # Firefox fork with vertical tabs (experimental)
 
     # Communication
     discord
@@ -15,56 +14,50 @@
     # Media
     spotify
     vlc
-    webcamoid        # Webcam application
 
     # Productivity
-    vscode           # Code editor (has macOS version but configured here)
-    zathura          # PDF viewer
-    aerc             # Email client
+    vscode           # Primary code editor (alongside neovim)
+    zathura          # Lightweight PDF viewer (SUPER+SHIFT+D keybind)
 
-    # File managers and utilities
-    xfce.thunar      # File manager
-    xfce.tumbler     # Thumbnail generator for Thunar
-    ranger           # Terminal file manager (configured separately)
+    # File managers
+    xfce.thunar      # GUI file manager (SUPER+SHIFT+R keybind)
+    xfce.tumbler     # Thumbnail support for Thunar
+    # Note: ranger configured in core/ranger.nix
 
     # System utilities
-    blueberry             # Bluetooth manager
-    nwg-displays          # Display configuration tool
+    blueberry        # Bluetooth manager GUI
 
-    # Wayland/X11 tools
-    xclip            # X11 clipboard
-    xsel             # X11 selection
-    wl-clipboard     # Wayland clipboard
-    wl-color-picker  # Color picker for Wayland
-    wl-clip-persist  # Clipboard persistence
+    # X11/Wayland clipboard tools
+    xclip            # X11 clipboard (legacy compatibility)
+    xsel             # X11 selection (legacy compatibility)
+    wl-color-picker  # Wayland color picker (SUPER+SHIFT+P keybind)
+    wl-clip-persist  # Clipboard persistence across app closes
 
-    # Screenshot and screen tools
-    grim             # Screenshot utility
-    slurp            # Region selector
-    wev              # Wayland event viewer
-    wshowkeys        # Show keypresses on screen
+    # Screenshot tools
+    grim             # Wayland screenshot capture (SUPER+Print keybind)
+    slurp            # Region selector for grim
 
     # Wayland desktop components
-    swaybg                      # Wallpaper setter
-    swayidle                    # Idle manager
-    swaylock                    # Screen locker
-    swaynotificationcenter      # Notification daemon
-    waybar                      # Status bar
-    tofi                        # Application launcher
-    rofi-calc                   # Calculator for rofi
-    rofimoji                    # Emoji picker
-    wlr-randr                   # Display configuration
+    swaybg           # Wallpaper setter (alternative to hyprpaper)
+    swayidle         # Idle manager (lock/sleep automation)
+    swaylock         # Screen locker (SUPER+SHIFT+X keybind)
+    swaynotificationcenter  # Notification daemon (SUPER+N keybind)
+    waybar           # Status bar
+    tofi             # Application launcher (SUPER+Space keybind)
+    rofi-calc        # Calculator (SUPER+C keybind)
+    rofimoji         # Emoji picker (SUPER+E keybind)
+    wlr-randr        # Display configuration tool (used in display_layout.sh)
 
-    # Desktop portal
-    xdg-desktop-portal-hyprland
+    # Desktop integration
+    xdg-desktop-portal-hyprland  # File picker, screensharing support
 
     # Audio/media control
-    playerctl        # Media player controller
-    libnotify        # Notification library
-    libqalculate     # Calculator library
+    playerctl        # Media player controller (XF86Audio* keybinds)
+    libnotify        # Send desktop notifications
+    libqalculate     # Calculator backend for rofi-calc
 
-    # Additional utilities
-    cliphist         # Clipboard history manager
-    polkit_gnome     # Authentication agent
+    # Clipboard management
+    cliphist         # Clipboard history (SUPER+SHIFT+V keybind)
+    polkit_gnome     # Authentication prompts for privileged actions
   ];
 }

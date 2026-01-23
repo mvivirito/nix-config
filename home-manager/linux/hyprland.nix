@@ -12,14 +12,11 @@ in {
 
   # Hyprland-related packages (user-level)
   home.packages = with pkgs; with pkgs.gnome; [
-    loupe
-    gnome-text-editor
-    wl-gammactl
-    wl-clipboard
-    wayshot
-    pavucontrol
-    brightnessctl
-    swww
+    loupe              # Image viewer (GNOME but works on Hyprland)
+    gnome-text-editor  # Text editor (GNOME but works on Hyprland)
+    wl-clipboard       # Wayland clipboard utilities (used in keybinds)
+    pavucontrol        # Audio control GUI (SUPER+SHIFT+B keybind)
+    brightnessctl      # Backlight control (XF86MonBrightness* keybinds)
   ];
 
   # Polkit authentication agent (user service)
