@@ -95,9 +95,8 @@
     xkb.layout = "us";
   };
 
-  # Enable the sddm.
-  #services.xserver.displayManager.sddm.enable = true;
-  services.desktopManager.gnome.enable = true;
+  # GNOME desktop disabled - using Hyprland instead
+  # Keep gdk-pixbuf for image rendering support
   programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
   # Enable CUPS to print documents.
@@ -132,77 +131,12 @@
   
   nixpkgs.config.allowUnfree = true;
 
-  # List packages installed in system profile. To search, run:
+  # Minimal system packages - only essentials for system administration
+  # All user applications are now in home-manager for better portability
   environment.systemPackages = with pkgs; [
-    claude-code
-    xclip
-    zathura
-    aerc
-    adwaita-icon-theme
-    baobab
-    bat
-    blueberry
-    clang
-    cmatrix
-    cool-retro-term
-    cowsay
-    cliphist
-    discord
-    ffmpeg
-    figlet
-    floorp-bin
-    fzf
-    git
-    gnome-boxes
-    gnome-calculator
-    gnome-clocks
-    gnome-control-center
-    gnome-system-monitor
-    gnome-weather
-    grim
-    htop
-    kitty
-    ghostty
-    lazygit
-    libnotify
-    libqalculate
-    neofetch
-    neovim
-    nwg-displays
-    pipes
-    playerctl
-    playerctl 
-    polkit_gnome    
-    ranger
-    ripgrep
-    rofi-calc
-    rofimoji
-    slurp
-    spotify
-    swaybg
-    swayidle
-    swaylock
-    swaynotificationcenter
-    tmux
-    tofi
-    vim
-    vlc
-    vscode
-    waybar
-    webcamoid
-    wev
-    wget
-    wl-clipboard
-    wl-color-picker
-    wlr-randr
-    wshowkeys
-    xdg-desktop-portal-hyprland
-    xfce.thunar
-    xfce.tumbler
-    xsel
-    yt-dlp
-    zsh
-    wl-clip-persist
+    vim              # Emergency editor if home-manager breaks
+    git              # To clone/update this config repository
+    claude-code      # System-level claude-code installation
   ];
 
 

@@ -10,6 +10,37 @@ in {
 
   imports = [];
 
+  # Hyprland-related packages (user-level)
+  home.packages = with pkgs; with pkgs.gnome; [
+    loupe
+    gnome-text-editor
+    wl-gammactl
+    wl-clipboard
+    wayshot
+    pavucontrol
+    brightnessctl
+    swww
+  ];
+
+  # Polkit authentication agent (user service)
+  systemd.user.services.polkit-gnome-authentication-agent-1 = {
+    Unit = {
+      Description = "polkit-gnome-authentication-agent-1";
+      Wants = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
+
   # Example binds, see https://wiki.hyprland.org/Configuring/Binds/ for more
   wayland.windowManager.hyprland.settings = {
     "$mod" = "SUPER";

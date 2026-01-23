@@ -5,59 +5,31 @@
   lib,
   ...
 }: {
+    # System-level Hyprland configuration
+    # User-level config (keybinds, settings, packages) is in home-manager/hyprland.nix
 
     services.xserver.displayManager.startx.enable = true;
 
+    # Enable Hyprland compositor system-wide
     programs.hyprland = {
       enable = true;
       xwayland.enable = true;
     };
 
+    # System-level security and authentication
     security = {
       polkit.enable = true;
       pam.services.ags = {};
     };
 
-    environment.systemPackages = with pkgs;
-    with gnome; [
-      loupe
-      gnome-text-editor
-      wl-gammactl
-      wl-clipboard
-      wayshot
-      pavucontrol
-      brightnessctl
-      swww
-    ];
-
-    systemd = {
-      user.services.polkit-gnome-authentication-agent-1 = {
-        description = "polkit-gnome-authentication-agent-1";
-        wantedBy = ["graphical-session.target"];
-        wants = ["graphical-session.target"];
-        after = ["graphical-session.target"];
-        serviceConfig = {
-          Type = "simple";
-          ExecStart = "${pkgs.polkit_gnome}/libexec/polkit-gnome-authentication-agent-1";
-          Restart = "on-failure";
-          RestartSec = 1;
-          TimeoutStopSec = 10;
-        };
-      };
-    };
-
+    # System services required for desktop functionality
     services = {
-      gvfs.enable = true;
-      devmon.enable = true;
-      udisks2.enable = true;
-      upower.enable = true;
-      power-profiles-daemon.enable = true;
-      accounts-daemon.enable = true;
-      gnome = {
-        glib-networking.enable = true;
-        gnome-keyring.enable = true;
-        gnome-online-accounts.enable = true;
-      };
+      gvfs.enable = true;           # Virtual filesystem (USB, network shares, MTP)
+      devmon.enable = true;          # Device mounting daemon
+      udisks2.enable = true;         # Disk management (automount)
+      upower.enable = true;          # Power management (battery status)
+      power-profiles-daemon.enable = true;  # Power profiles
+      accounts-daemon.enable = true;  # User account information
     };
 }
 

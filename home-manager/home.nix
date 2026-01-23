@@ -11,38 +11,36 @@
   imports = [
     # If you want to use home-manager modules from other flakes (such as nix-colors):
     # inputs.nix-colors.homeManagerModule
-    ./neovim
-    ./rofi.nix
-    ./tofi.nix
-    ./ranger.nix
-    ./zsh.nix
-    ./hyprland.nix
-    ./waybar
-    ./kitty.nix
+
+    # Cross-platform core configuration (works on Linux, macOS, BSD, etc.)
+    ./core/cli-tools.nix
+    ./core/terminals.nix
+    ./core/neovim
+    ./core/zsh.nix
+    ./core/kitty.nix
+    ./core/ranger.nix
+
+    # Platform-agnostic but currently only used on Linux
     ./appearance.nix
+
+    # Linux-specific configuration (Wayland, X11, desktop environment)
+    # Imported unconditionally, will use mkIf inside modules if needed for cross-platform
+    ./linux/gui-apps.nix
+    ./linux/hyprland.nix
+    ./linux/waybar
+    ./linux/rofi.nix
+    ./linux/tofi.nix
   ];
 
-  nixpkgs = {
-    # You can add overlays here
-    overlays = [
-      # If you want to use overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-    # Configure your nixpkgs instance
-    config = {
-      # Disable if you don't want unfree packages
-      allowUnfree = true;
-      # Workaround for https://github.com/nix-community/home-manager/issues/2942
-      allowUnfreePredicate = _: true;
-    };
-  };
+  # Note: nixpkgs config is disabled when using home-manager as NixOS module with useGlobalPkgs
+  # The system nixpkgs config (in nixos/configuration.nix) is used instead
+  # nixpkgs = {
+  #   overlays = [ ];
+  #   config = {
+  #     allowUnfree = true;
+  #     allowUnfreePredicate = _: true;
+  #   };
+  # };
 
   home = {
     username = "michael";
