@@ -82,21 +82,50 @@
     };
   };
 
+  # Idle management with swayidle
+  # Handles automatic screen locking and DPMS (display power management)
+  #
+  # Timeout 1 (10 seconds): Turn off display IF already locked
+  # - Prevents screen burn-in when locked
+  # - Only runs if swaylock is active (pgrep check)
+  # - Resume turns display back on
+  #
+  # Timeout 2 (930 seconds = 15.5 min): Lock screen
+  # - Runs swaylock with background image
+  # - -f: fork to background, -F: show even if no password yet
+  # - Same timeout as hibernate (coordinated behavior)
+  #
+  # Timeout 3 (930 seconds): Turn off display when locked
+  # - Runs simultaneously with Timeout 2
+  # - Saves power after locking
+  # - Resume turns display back on
+  #
+  # Why two 930-second timeouts?
+  # - Timeout 2: triggers lock
+  # - Timeout 3: triggers DPMS after lock
+  # - They race, but lock completes first (milliseconds)
+  # - Result: Screen locks, then immediately powers off
+  #
+  # Coordination with hibernate.nix:
+  # - 930 seconds matches HIBERNATE_SECONDS
+  # - After 15.5 min: lock + DPMS + hibernate (if on battery)
+  # - User sees: idle → lock → screen off → (RTC wake) → hibernate
+
   services.swayidle = {
     enable = true;
     systemdTarget = "hyprland-session.target";
     timeouts = [
       {
-        timeout = 10;
+        timeout = 10;  # 10 seconds
         command = "if pgrep -x swaylock; then hyprctl dispatch dpms off; fi";
         resumeCommand = "hyprctl dispatch dpms on";
       }
       {
-        timeout = 930;
+        timeout = 930;  # 15.5 minutes - lock screen
         command = "${pkgs.swaylock}/bin/swaylock -i /home/michael/Pictures/lock_background.jpg -fF";
       }
       {
-        timeout = 930;
+        timeout = 930;  # 15.5 minutes - power off display
         command = "hyprctl dispatch dpms off";
         resumeCommand = "hyprctl dispatch dpms on";
       }
