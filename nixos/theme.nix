@@ -1,39 +1,44 @@
 { pkgs, ... }:
 
 {
-  # Enable Theme
-  environment.variables.GTK_THEME = "Catppuccin-Macchiato-Standard-Teal-Dark";
+  # Catppuccin Mocha theme - darker, higher contrast than Macchiato
+  environment.variables.GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
   qt.enable = true;
   qt.platformTheme = "gtk2";
   qt.style = "gtk2";
+
+  # Console colors (Catppuccin Mocha palette)
   console = {
     earlySetup = true;
     colors = [
-      "24273a"
-      "ed8796"
-      "a6da95"
-      "eed49f"
-      "8aadf4"
-      "f5bde6"
-      "8bd5ca"
-      "cad3f5"
-      "5b6078"
-      "ed8796"
-      "a6da95"
-      "eed49f"
-      "8aadf4"
-      "f5bde6"
-      "8bd5ca"
-      "a5adcb"
+      # Normal colors
+      "1e1e2e"  # base (background)
+      "f38ba8"  # red
+      "a6e3a1"  # green
+      "f9e2af"  # yellow
+      "89b4fa"  # blue
+      "f5c2e7"  # pink
+      "94e2d5"  # teal
+      "cdd6f4"  # text
+
+      # Bright colors
+      "585b70"  # surface1 (bright black)
+      "f38ba8"  # bright red
+      "a6e3a1"  # bright green
+      "f9e2af"  # bright yellow
+      "89b4fa"  # bright blue
+      "f5c2e7"  # bright pink
+      "94e2d5"  # bright teal
+      "bac2de"  # subtext0 (bright white)
     ];
   };
 
-  # Override packages
+  # Override packages for Mocha variant with Blue accent
   nixpkgs.config.packageOverrides = pkgs: {
     catppuccin-gtk = pkgs.catppuccin-gtk.override {
-      accents = [ "teal" ]; # You can specify multiple accents here to output multiple themes 
+      accents = [ "blue" ];
       size = "standard";
-      variant = "macchiato";
+      variant = "mocha";
     };
   };
 
