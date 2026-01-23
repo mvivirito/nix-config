@@ -20,6 +20,10 @@
         "clock",
         "custom/power"
     ],
+    "hyprland/window": {
+        "max-length": 50,
+        "separate-outputs": true
+    },
     "hyprland/workspaces": {
         "format": "{icon}",
         "on-click": "activate",

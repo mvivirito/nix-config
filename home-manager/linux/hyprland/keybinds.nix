@@ -8,9 +8,13 @@ let
   wlPaste = "${pkgs.wl-clipboard}/bin/wl-paste";
   wlClipPersist = "${pkgs.wl-clip-persist}/bin/wl-clip-persist";
 in {
-  # Install clipboard picker script
+  # Install clipboard scripts
   home.file.".config/hyprland/scripts/clipboard-picker.sh" = {
     source = ./scripts/clipboard-picker.sh;
+    executable = true;
+  };
+  home.file.".config/hyprland/scripts/clipboard-init.sh" = {
+    source = ./scripts/clipboard-init.sh;
     executable = true;
   };
 
@@ -20,9 +24,7 @@ in {
     # Exec-once: Run at Hyprland startup
     exec-once = [
       "swaync"                                              # Notification daemon
-      "${wlClipPersist} --clipboard --primary"              # Persist clipboard after app closes
-      "${wlPaste} --type text --watch ${cliphist} store"    # Store text in clipboard history
-      "${wlPaste} --type image --watch ${cliphist} store"   # Store images in clipboard history
+      "~/.config/hyprland/scripts/clipboard-init.sh"        # Initialize clipboard (persist + history)
       "waybar"                                              # Status bar
       "[workspace 2 silent] firefox"                        # Start Firefox on workspace 2
       "[workspace special:scratchpad silent] kitty --title='kitty-scratchpad'"  # Scratchpad terminal
@@ -89,7 +91,7 @@ in {
 
       # System tools
       "$mod SHIFT, B, exec, pavucontrol"
-      "$mod SHIFT, M, exec, gnome-system-monitor"
+      "$mod SHIFT, M, exec, missioncenter"
       "$mod SHIFT, Y, exec, kitty -e htop"
       "$mod SHIFT, R, exec, thunar"
       "$mod SHIFT, X, exec, swaylock -i /home/michael/Pictures/lock_background.jpg -f"
@@ -105,7 +107,7 @@ in {
       # Clipboard & utilities
       "$mod SHIFT, V, exec, ~/.config/hyprland/scripts/clipboard-picker.sh"
       "$mod SHIFT, P, exec, wl-color-picker"
-      "$mod, E, exec, rofimoji"
+      "$mod, E, exec, rofimoji --action copy --clipboarder wl-copy"
       "$mod, C, exec, rofi -show calc"
 
       # Notifications

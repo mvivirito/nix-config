@@ -26,6 +26,7 @@
 
     # System utilities
     blueberry        # Bluetooth manager GUI
+    mission-center   # Modern GTK4 system monitor (SUPER+SHIFT+M keybind)
 
     # X11/Wayland clipboard tools
     xclip            # X11 clipboard (legacy compatibility)

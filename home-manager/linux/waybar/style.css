@@ -60,7 +60,8 @@ window#waybar {
 #pulseaudio,
 #custom-power,
 #custom-tailscale,
-#tray { padding: 0 8px; }
+#tray,
+#window { padding: 0 8px; }
 
 /* States */
 #pulseaudio.muted { color: #8b949e; }
