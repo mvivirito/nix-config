@@ -1,27 +1,28 @@
 { inputs, outputs, lib, config, pkgs, ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./greetd.nix
-      ./hardware-configuration.nix
-      ./keyd
-      ./theme.nix
-      ./hibernate.nix
-      ./hyprland.nix
-    ];
+  imports = [
+    # Host-specific configuration
+    ../hosts/nixos-laptop/hardware.nix
+    ../hosts/nixos-laptop/default.nix
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 10;
-  boot.loader.efi.canTouchEfiVariables = true;
-  
-  boot.initrd.luks.devices."luks-77a6df21-58f4-4c91-84c0-7ac231e5208d".device = "/dev/disk/by-uuid/77a6df21-58f4-4c91-84c0-7ac231e5208d";
-  networking.hostName = "nixos";
+    # Shared system modules
+    ../hosts/shared/boot.nix
+    ../hosts/shared/locale.nix
+    ../hosts/shared/networking.nix
+    ../hosts/shared/audio.nix
+    ../hosts/shared/fonts.nix
+    ../hosts/shared/users.nix
 
-  # Power management.
-  boot.kernelParams = [ "button.lid_init_state=open" ];
+    # System-specific modules
+    ./greetd.nix
+    ./keyd
+    ./theme.nix
+    ./hibernate.nix
+    ./hyprland.nix
+  ];
 
+  # Nix configuration
   nix = let
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
   in {
@@ -39,96 +40,7 @@
     };
   };
 
-
-  security.polkit.enable = true;
-
-  security.pam.services.swaylock = {
-    text = ''
-      auth sufficient pam_unix.so try_first_pass likeauth nullok
-      auth sufficient pam_fprintd.so
-      auth include login
-    '';
-  };
-
-  services.logind = {
-    settings = {
-      Login = {
-        HandlePowerKey = "suspend";
-        HandleLidSwitch = "suspend";
-      };
-    };
-  };
-
-  # Enable networking
-  networking.networkmanager.enable = true;
-
-  # Enable Tailscale
-  services.tailscale = {
-    enable = true;
-    useRoutingFeatures = "client";
-  };
-
-  # Set your time zone.
-  time.timeZone = "America/Los_Angeles";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_US.UTF-8";
-    LC_IDENTIFICATION = "en_US.UTF-8";
-    LC_MEASUREMENT = "en_US.UTF-8";
-    LC_MONETARY = "en_US.UTF-8";
-    LC_NAME = "en_US.UTF-8";
-    LC_NUMERIC = "en_US.UTF-8";
-    LC_PAPER = "en_US.UTF-8";
-    LC_TELEPHONE = "en_US.UTF-8";
-    LC_TIME = "en_US.UTF-8";
-  };
-
-  # Enable fingerprint reader
-  services.fprintd.enable = true;
-
-  # Configure keymap in X11
-  services.xserver = {
-    enable = true;
-    xkb.layout = "us";
-  };
-
-  # GNOME desktop disabled - using Hyprland instead
-  # Keep gdk-pixbuf for image rendering support
-  programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
-
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable sound with pipewire.
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
-
-  users.users.michael = {
-    isNormalUser = true;
-    description = "Michael Vivirito";
-    extraGroups = [ "keyd" "networkmanager" "wheel" ];
-  };
-
-  users.defaultUserShell = pkgs.zsh;
-
-  programs.firefox.enable = true;
-  programs._1password.enable = true;
-  programs._1password-gui = {
-    enable = true;
-    polkitPolicyOwners = [ "michael" ];
-  };
-  programs.zsh.enable = true;
-  
+  # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
   # Minimal system packages - only essentials for system administration
@@ -139,31 +51,7 @@
     claude-code      # System-level claude-code installation
   ];
 
-
-  fonts.packages = with pkgs; [
-    font-awesome
-    powerline-fonts
-    powerline-symbols
-    nerd-fonts.mononoki
-    nerd-fonts.jetbrains-mono
-    nerd-fonts.symbols-only
-    noto-fonts
-    noto-fonts-cjk-sans
-    noto-fonts-color-emoji
-  ];
-
-  fonts.enableDefaultPackages = true;
-
-  fonts.fontconfig = {
-    enable = true;
-    defaultFonts = {
-      serif = [ "Noto Serif" "Noto Color Emoji" ];
-      sansSerif = [ "Noto Sans" "Noto Color Emoji" ];
-      monospace = [ "JetBrainsMono Nerd Font" "Noto Color Emoji" ];
-      emoji = [ "Noto Color Emoji" ];
-    };
-  };
-
+  # NixOS state version - DO NOT CHANGE
+  # This is NOT the NixOS version, it's a state compatibility marker
   system.stateVersion = "23.11";
-
 }

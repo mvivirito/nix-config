@@ -21,8 +21,11 @@
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
-      nixos = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
+      nixos-laptop = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit inputs outputs;
+          hostname = "nixos-laptop";
+        };
         # > Our main nixos configuration file <
         modules = [
           ./nixos/configuration.nix
@@ -37,17 +40,22 @@
           }
         ];
       };
+      # Future hosts prepared:
+      # desktop = nixpkgs.lib.nixosSystem { ... };
+      # macbook = nixpkgs.lib.nixosSystem { ... };
     };
 
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'
     homeConfigurations = {
-      "michael@nixos" = home-manager.lib.homeManagerConfiguration {
+      "michael@nixos-laptop" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = {inherit inputs outputs;};
         # > Our main home-manager configuration file <
         modules = [./home-manager/home.nix];
       };
+      # Future hosts prepared:
+      # "michael@desktop" = home-manager.lib.homeManagerConfiguration { ... };
     };
   };
 }
