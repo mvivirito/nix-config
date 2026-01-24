@@ -19,6 +19,7 @@
     ./core/zsh.nix
     ./core/kitty.nix
     ./core/ranger.nix
+    ./core/tmux.nix
 
     # Platform-agnostic but currently only used on Linux
     ./appearance.nix
@@ -49,6 +50,7 @@
 
   home.sessionVariables = {
     EDITOR = "nvim";
+    BROWSER = "firefox";
 #    NIX_PATH = "nixpkgs=flake:nixpkgs$\{NIX_PATH:+:$NIX_PATH}";
     XCURSOR_SIZE = "32";
     HYPRCURSOR_SIZE = "32";
@@ -79,6 +81,12 @@
     enable = true;
     defaultApplications = {
       "application/pdf" = [ "org.pwmt.zathura.desktop" ];
+      "text/html" = [ "firefox.desktop" ];
+      "x-scheme-handler/http" = [ "firefox.desktop" ];
+      "x-scheme-handler/https" = [ "firefox.desktop" ];
+      "x-scheme-handler/about" = [ "firefox.desktop" ];
+      "x-scheme-handler/unknown" = [ "firefox.desktop" ];
+      "application/xhtml+xml" = [ "firefox.desktop" ];
     };
   };
 

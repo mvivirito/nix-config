@@ -71,6 +71,9 @@
       # Common typos/variants
       q = "exit";
       cl = "clear";
+
+      # Claude Code
+      c = "claude";
     } // lib.optionalAttrs pkgs.stdenv.isLinux {
       # Linux-specific aliases
       nm = "nmtui-connect";

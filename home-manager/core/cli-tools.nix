@@ -17,7 +17,6 @@
     # System utilities
     htop             # Process viewer
     neofetch         # System info display
-    tmux             # Terminal multiplexer
     wget             # Download utility
 
     # Development tools
