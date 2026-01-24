@@ -60,10 +60,8 @@
       # Recommended utilities
       "stats"            # System monitor in menu bar
       "alt-tab"          # Windows-style alt-tab
-      "maccy"            # Clipboard manager
       "the-unarchiver"   # Archive extraction
       "appcleaner"       # Clean app removal
-      "shottr"           # Screenshot tool with annotations
       "monitorcontrol"   # External monitor brightness/volume
     ];
 

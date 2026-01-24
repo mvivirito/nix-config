@@ -19,6 +19,7 @@
 
     # Darwin-specific configuration
     ./darwin/gui-apps.nix
+    ./darwin/karabiner
   ];
 
   home = {
