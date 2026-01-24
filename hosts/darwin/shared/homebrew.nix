@@ -14,6 +14,7 @@
 
     # Homebrew taps (add additional taps here if needed)
     taps = [
+      "nikitabobko/tap"  # AeroSpace tiling window manager
     ];
 
     # CLI tools from Homebrew (prefer nixpkgs when possible)
@@ -24,6 +25,7 @@
     # GUI applications via Homebrew Casks
     casks = [
       # Window management and productivity
+      "nikitabobko/tap/aerospace"  # Tiling window manager
       "bettertouchtool"
       "alfred"
 
@@ -31,7 +33,7 @@
       "1password"
 
       # Development
-      "docker"
+      "docker-desktop"
       "ghostty"
       "thonny"           # Python IDE for beginners
 
@@ -59,7 +61,6 @@
 
       # Recommended utilities
       "stats"            # System monitor in menu bar
-      "alt-tab"          # Windows-style alt-tab
       "the-unarchiver"   # Archive extraction
       "appcleaner"       # Clean app removal
       "monitorcontrol"   # External monitor brightness/volume

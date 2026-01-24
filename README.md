@@ -49,6 +49,7 @@ nix-config/
 - **System**: Dock, Finder, keyboard, trackpad, screenshots
 - **Homebrew**: GUI apps (see `hosts/darwin/shared/homebrew.nix`)
 - **Fonts**: Nerd Fonts, Noto, Font Awesome
+- **Window Management**: Aerospace tiling WM + Karabiner key remapping
 
 ### Cross-Platform (home-manager)
 - **Shell**: zsh + oh-my-zsh + zoxide
@@ -72,6 +73,8 @@ nix-config/
 | `home-manager/core/zsh.nix` | Shell config + aliases |
 | `home-manager/core/neovim/` | Neovim plugins + config |
 | `home-manager/core/kitty.nix` | Terminal settings |
+| `home-manager/darwin/aerospace.nix` | Aerospace tiling WM bindings |
+| `home-manager/darwin/karabiner/karabiner.json` | Karabiner key remapping |
 
 ## Common Tasks
 
@@ -122,6 +125,42 @@ sx             → sudo systemctl
 jctl           → journalctl -e
 ```
 
+## Aerospace Keybindings (macOS)
+
+Caps Lock and Left Command both trigger Aerospace via Karabiner (Right Command remains normal for macOS shortcuts).
+
+```bash
+# Window Focus
+Caps + H/J/K/L     → Focus left/down/up/right
+
+# Move Windows
+Caps + Shift + H/J/K/L → Move window left/down/up/right
+
+# Workspaces
+Caps + 1-9         → Switch to workspace
+Caps + Shift + 1-9 → Move window to workspace
+
+# Window Operations
+Caps + F           → Toggle fullscreen
+Caps + Space       → Toggle floating/tiling
+Caps + \           → Toggle tiles/accordion layout
+Caps + R           → Resize mode (then hjkl)
+
+# App Launchers
+Caps + Enter       → Open Ghostty (new window)
+Caps + B           → Open Chrome (new window)
+Caps + O           → Focus 1Password
+Caps + Y           → Open Neovim in Ghostty
+
+# Karabiner-only
+Caps tap           → Escape
+Caps + A           → Toggle actual Caps Lock
+; + H/J/K/L        → Arrow keys
+; + U              → ~ (tilde)
+; + I              → | (pipe)
+Right Option       → Control
+```
+
 ## Troubleshooting
 
 ### Homebrew won't remove a package
@@ -137,4 +176,14 @@ nix-store --verify --check-contents --repair
 ### Reset to clean state
 ```bash
 darwin-rebuild switch --flake .#macbook --recreate-lock-file
+```
+
+### Reload Aerospace config
+```bash
+aerospace reload-config
+```
+
+### Restart Aerospace
+```bash
+killall AeroSpace && open -a AeroSpace
 ```
