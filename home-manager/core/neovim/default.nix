@@ -82,7 +82,6 @@ in {
         pkgs.vimPlugins.lspkind-nvim
         pkgs.vimPlugins.rainbow
         pkgs.vimPlugins.nvim-web-devicons
-        pkgs.vimPlugins.surround-nvim
         pkgs.vimPlugins.lazygit-nvim
         pkgs.vimPlugins.nvim-code-action-menu
         {
@@ -156,6 +155,78 @@ in {
           type = "lua";
         }
 
+        ## which-key for discoverability
+        {
+          plugin = pkgs.vimPlugins.which-key-nvim;
+          config = ''
+            local wk = require("which-key")
+            wk.setup({
+              plugins = {
+                marks = true,
+                registers = true,
+                spelling = { enabled = false },
+              },
+              win = {
+                border = "single",
+              },
+            })
+            wk.add({
+              { "<leader>f", group = "Find (Telescope)" },
+              { "<leader>t", group = "Trouble" },
+              { "<leader>d", group = "Diagnostics" },
+              { "<leader>l", group = "LSP" },
+              { "<leader>g", group = "Git" },
+              { "<leader>q", group = "Quickfix" },
+              { "<leader>w", group = "Workspace" },
+              { "<leader>o", group = "Oil" },
+              { "<leader>n", group = "Neorg" },
+              { "<leader>c", group = "Code Action" },
+              { "<leader>r", group = "Rename" },
+              { "<leader>h", group = "Header" },
+              { "<leader>s", group = "Harpoon mark" },
+            })
+          '';
+          type = "lua";
+        }
+
+        ## Additional QoL plugins
+        {
+          plugin = pkgs.vimPlugins.indent-blankline-nvim;
+          config = ''
+            require("ibl").setup({
+              indent = { char = "│" },
+              scope = { enabled = true },
+            })
+          '';
+          type = "lua";
+        }
+        {
+          plugin = pkgs.vimPlugins.nvim-autopairs;
+          config = ''
+            require("nvim-autopairs").setup({
+              check_ts = true,
+            })
+            -- integrate with cmp
+            local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+            local cmp = require("cmp")
+            cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+          '';
+          type = "lua";
+        }
+        {
+          plugin = pkgs.vimPlugins.toggleterm-nvim;
+          config = ''
+            require("toggleterm").setup({
+              open_mapping = [[<C-\>]],
+              direction = "float",
+              float_opts = {
+                border = "curved",
+              },
+            })
+          '';
+          type = "lua";
+        }
+
         ## Debugging
 #        pkgs.vimPlugins.nvim-dap-ui
 #        pkgs.vimPlugins.nvim-dap-virtual-text
@@ -169,10 +240,23 @@ in {
       initLua = ''
         ${builtins.readFile config/mappings.lua}
         ${builtins.readFile config/options.lua}
+        ${builtins.readFile config/setup/diagnostic.lua}
       '';
       enable = true;
       viAlias = true;
       vimAlias = true;
+
+      extraPackages = with pkgs; [
+        # LSP servers
+        nodePackages.typescript-language-server
+        lua-language-server
+        nil # Already have nil_ls configured
+        pyright
+        clang-tools # For clangd
+        cmake-language-server
+        dockerfile-language-server-nodejs
+        vimPlugins.vim-vsnip # For snippets
+      ];
     };
   };
 }
