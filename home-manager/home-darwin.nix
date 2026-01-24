@@ -15,6 +15,7 @@
     ./core/zsh.nix
     ./core/kitty.nix
     ./core/ranger.nix
+    ./core/tmux.nix
 
     # Darwin-specific configuration
     ./darwin/gui-apps.nix
