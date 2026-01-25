@@ -20,8 +20,8 @@
     zathura          # Lightweight PDF viewer (SUPER+SHIFT+D keybind)
 
     # File managers
-    xfce.thunar      # GUI file manager (SUPER+SHIFT+R keybind)
-    xfce.tumbler     # Thumbnail support for Thunar
+    thunar           # GUI file manager (SUPER+SHIFT+R keybind)
+    tumbler          # Thumbnail support for Thunar
     # Note: ranger configured in core/ranger.nix
 
     # System utilities

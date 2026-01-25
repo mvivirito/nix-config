@@ -141,12 +141,9 @@
     # Events for suspend/resume - these use systemd's inhibitor locks
     # before-sleep: Lock screen BEFORE system suspends (security)
     # Uses -w flag via extraArgs to wait for lock before releasing inhibitor
-    events = [
-      {
-        event = "before-sleep";
-        command = "${pkgs.swaylock}/bin/swaylock -i /home/michael/Pictures/lock_background.jpg -fF";
-      }
-    ];
+    events = {
+      before-sleep = "${pkgs.swaylock}/bin/swaylock -i /home/michael/Pictures/lock_background.jpg -fF";
+    };
     extraArgs = [ "-w" ];  # Wait for commands to finish before sleep
   };
 

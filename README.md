@@ -5,11 +5,14 @@ Multi-platform Nix configuration for NixOS (laptop) and macOS (MacBook via nix-d
 ## Quick Start
 
 ```bash
-# macOS rebuild
+# macOS - system rebuild
 darwin-rebuild switch --flake ~/repos/nix-config#macbook
 
-# NixOS rebuild
-sudo nixos-rebuild switch --flake ~/repos/nix-config#nixos-laptop
+# NixOS - system rebuild (boot, kernel, services)
+sudo nixos-rebuild switch --flake .#nixos-laptop
+
+# NixOS - user config rebuild (packages, dotfiles, apps)
+home-manager switch --flake .#michael@nixos-laptop
 
 # Update all flake inputs
 nix flake update
@@ -17,6 +20,9 @@ nix flake update
 # Garbage collect old generations
 nix-collect-garbage -d
 ```
+
+> **Note:** On NixOS, use `home-manager switch` for user-level changes (no sudo, faster).
+> The system-level home-manager integration only activates on boot, not on `nixos-rebuild`.
 
 ## Structure
 
@@ -162,6 +168,12 @@ Right Option       → Control
 ```
 
 ## Troubleshooting
+
+### Home-manager changes not applying (NixOS)
+```bash
+# Run home-manager directly instead of relying on nixos-rebuild
+home-manager switch --flake .#michael@nixos-laptop
+```
 
 ### Homebrew won't remove a package
 ```bash

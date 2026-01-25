@@ -20,6 +20,18 @@
       # Enable RGB color support
       set -ag terminal-overrides ",xterm-256color:RGB"
 
+      # Vim-style pane navigation
+      bind h select-pane -L
+      bind j select-pane -D
+      bind k select-pane -U
+      bind l select-pane -R
+
+      # Vim-style pane resizing (5 cells at a time)
+      bind -r H resize-pane -L 5
+      bind -r J resize-pane -D 5
+      bind -r K resize-pane -U 5
+      bind -r L resize-pane -R 5
+
       # Catppuccin Mocha status bar theme
       set -g status-style "bg=#1e1e2e,fg=#cdd6f4"
       set -g status-left-style "bg=#89b4fa,fg=#1e1e2e,bold"

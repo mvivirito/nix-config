@@ -254,7 +254,7 @@ in {
         pyright
         clang-tools # For clangd
         cmake-language-server
-        dockerfile-language-server-nodejs
+        dockerfile-language-server
         vimPlugins.vim-vsnip # For snippets
       ];
     };
