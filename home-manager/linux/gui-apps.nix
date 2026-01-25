@@ -59,6 +59,6 @@
 
     # Clipboard management
     cliphist         # Clipboard history (SUPER+SHIFT+V keybind)
-    polkit_gnome     # Authentication prompts for privileged actions
+    # Note: polkit agent is provided by DMS
   ];
 }

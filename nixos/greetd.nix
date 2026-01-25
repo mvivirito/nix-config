@@ -18,11 +18,10 @@ in {
         # Flags:
         # --time: shows clock
         # --remember: remembers last username
-        # --remember-session: remembers last session (Hyprland)
+        # --remember-session: remembers last session
         # --sessions: session name (tuigreet finds it in standard paths)
-        # Use start-hyprland (UWSM wrapper) instead of Hyprland directly
-        # This provides proper systemd session integration
-        command = "${tuigreet} --time --remember --cmd start-hyprland";
+        # Start niri compositor directly
+        command = "${tuigreet} --time --remember --cmd niri-session";
         user = "greeter";  # Runs as unprivileged 'greeter' user (security)
       };
     };

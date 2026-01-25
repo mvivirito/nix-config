@@ -20,7 +20,7 @@
     ./greetd.nix
     ./keyd
     ./theme.nix
-    ./hyprland.nix
+    ./niri.nix
   ];
 
   # Nix configuration

@@ -12,6 +12,14 @@
     # nix-darwin (macOS system configuration)
     nix-darwin.url = "github:LnL7/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Niri scrolling tiling Wayland compositor
+    niri.url = "github:sodiboo/niri-flake";
+    niri.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Dank Material Shell (desktop shell: bar, launcher, notifications, lock screen)
+    dms.url = "github:AvengeMedia/DankMaterialShell/stable";
+    dms.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -19,6 +27,8 @@
     nixpkgs,
     home-manager,
     nix-darwin,
+    niri,
+    dms,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -34,6 +44,12 @@
         # > Our main nixos configuration file <
         modules = [
           ./nixos/configuration.nix
+
+          # Niri compositor NixOS module
+          niri.nixosModules.niri
+
+          # Dank Material Shell (bar, launcher, notifications, lock)
+          dms.nixosModules.dank-material-shell
 
           # Integrate home-manager as NixOS module
           home-manager.nixosModules.home-manager
@@ -83,7 +99,10 @@
         };
         extraSpecialArgs = {inherit inputs outputs;};
         # > Our main home-manager configuration file <
-        modules = [./home-manager/home.nix];
+        modules = [
+          niri.homeModules.niri
+          ./home-manager/home.nix
+        ];
       };
       # Future hosts prepared:
       # "michael@desktop" = home-manager.lib.homeManagerConfiguration { ... };
