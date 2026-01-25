@@ -2,24 +2,25 @@
 
 {
   # Ghostty - fast GPU-accelerated terminal emulator
-  # Replaces kitty as default terminal
   #
-  # Features over kitty:
+  # Features:
   # - 4x faster plain text rendering
   # - Native platform UI (GTK on Linux, Metal on macOS)
   # - Kitty graphics protocol support (images in terminal)
   # - Kitty keyboard protocol (better key handling for neovim)
   # - Zero-config sensible defaults
+  #
+  # On macOS: package = null (Homebrew handles installation)
+  # On Linux: package from nixpkgs
 
   programs.ghostty = {
     enable = true;
     enableZshIntegration = true;
 
-    settings = {
-      # Theme - let DMS matugen handle dynamic theming
-      # Can set a fallback theme here if needed
-      # theme = "catppuccin-mocha";
+    # Skip package installation on macOS (use Homebrew cask instead)
+    package = lib.mkIf pkgs.stdenv.isDarwin null;
 
+    settings = {
       # Transparency (matches old kitty config)
       background-opacity = 0.6;
 
