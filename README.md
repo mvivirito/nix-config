@@ -121,7 +121,7 @@ Both NixOS (keyd) and macOS (Karabiner) share consistent low-level keyboard rema
 | Caps Lock | Escape | Super (NixOS) / Ctrl+Alt (macOS) |
 | Semicolon | ; | Navigation layer |
 | Right Alt (NixOS) | Escape | Super |
-| Right Command (macOS) | - | Ctrl+Alt |
+| Left Command (macOS) | - | Ctrl+Alt |
 | Right Option (macOS) | - | Control |
 | Apostrophe (NixOS) | ' | Control |
 
@@ -207,7 +207,7 @@ Standard XF86 media keys for volume, brightness, and playback control.
 
 ### macOS Keybindings (Aerospace + Karabiner)
 
-**Modifier = Ctrl+Alt (triggered by Caps Lock or Right Command)**
+**Modifier = Ctrl+Alt (triggered by Caps Lock or Left Command)**
 
 #### Window Management
 | Keybind | Action |
