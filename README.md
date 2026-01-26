@@ -123,7 +123,7 @@ Both NixOS (keyd) and macOS (Karabiner) share consistent low-level keyboard rema
 | Right Alt (NixOS) | Escape | Super |
 | Left Command (macOS) | - | Ctrl+Alt |
 | Right Option (macOS) | - | Control |
-| Apostrophe (NixOS) | ' | Control |
+| Apostrophe | ' | Control |
 
 **Navigation Layer** (hold Semicolon):
 | Key | Action |
@@ -134,11 +134,6 @@ Both NixOS (keyd) and macOS (Karabiner) share consistent low-level keyboard rema
 | L | Right Arrow |
 | U | ~ (tilde) |
 | I | \| (pipe) |
-
-**Additional (macOS)**:
-| Combo | Action |
-|-------|--------|
-| Caps + A | Toggle actual Caps Lock |
 
 ---
 
@@ -214,12 +209,13 @@ Standard XF86 media keys for volume, brightness, and playback control.
 |---------|--------|
 | Caps + H/J/K/L | Focus left/down/up/right |
 | Caps + Shift + H/J/K/L | Move window left/down/up/right |
-| Caps + Shift + Q | Close window |
+| Caps + Shift + Q | Quit application (Cmd+Q) |
 | Caps + F | Toggle fullscreen |
-| Caps + Space | Toggle floating/tiling |
+| Caps + T | Toggle floating/tiling |
 | Caps + \\ | Toggle tiles/accordion layout |
 | Caps + = | Cycle layout modes |
 | Caps + R | Enter resize mode |
+| Caps + Shift + T | Enter service mode |
 
 **Resize Mode** (after Caps + R):
 | Key | Action |
@@ -227,6 +223,13 @@ Standard XF86 media keys for volume, brightness, and playback control.
 | H/L | Width -/+ 50 |
 | J/K | Height +/- 50 |
 | Esc/Enter | Exit resize mode |
+
+**Service Mode** (after Caps + Shift + T):
+| Key | Action |
+|-----|--------|
+| R | Flatten workspace tree |
+| F | Toggle floating/tiling |
+| Caps + Shift + T | Exit service mode |
 
 #### Workspaces
 | Keybind | Action |
