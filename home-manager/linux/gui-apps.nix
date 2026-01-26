@@ -17,48 +17,30 @@
 
     # Productivity
     vscode           # Primary code editor (alongside neovim)
-    zathura          # Lightweight PDF viewer (SUPER+SHIFT+D keybind)
+    zathura          # Lightweight PDF viewer (Mod+Shift+D keybind)
 
     # File managers
-    thunar           # GUI file manager (SUPER+SHIFT+R keybind)
-    tumbler          # Thumbnail support for Thunar
-    # Note: ranger configured in core/ranger.nix
+    yazi             # Modern terminal file manager (Mod+Shift+R keybind)
 
     # System utilities
     blueberry        # Bluetooth manager GUI
-    mission-center   # Modern GTK4 system monitor (SUPER+SHIFT+M keybind)
+    mission-center   # Modern GTK4 system monitor (Mod+Shift+M keybind)
 
-    # X11/Wayland clipboard tools
-    xclip            # X11 clipboard (legacy compatibility)
-    xsel             # X11 selection (legacy compatibility)
-    wl-color-picker  # Wayland color picker (SUPER+SHIFT+P keybind)
+    # Wayland clipboard tools
+    wl-color-picker  # Wayland color picker utility
     wl-clip-persist  # Clipboard persistence across app closes
 
-    # Screenshot tools
-    grim             # Wayland screenshot capture (SUPER+Print keybind)
-    slurp            # Region selector for grim
-
     # Wayland desktop components
-    swaybg           # Wallpaper setter (alternative to hyprpaper)
-    swayidle         # Idle manager (lock/sleep automation)
-    swaylock         # Screen locker (SUPER+SHIFT+X keybind)
-    swaynotificationcenter  # Notification daemon (SUPER+N keybind)
-    waybar           # Status bar
-    tofi             # Application launcher (SUPER+Space keybind)
-    rofi-calc        # Calculator (SUPER+C keybind)
-    rofimoji         # Emoji picker (SUPER+E keybind)
-    wlr-randr        # Display configuration tool (used in display_layout.sh)
+    wlr-randr        # Display configuration tool
 
     # Desktop integration
-    xdg-desktop-portal-hyprland  # File picker, screensharing support
+    xdg-desktop-portal-wlr  # File picker, screensharing for wlroots compositors (Niri)
 
     # Audio/media control
     playerctl        # Media player controller (XF86Audio* keybinds)
-    libnotify        # Send desktop notifications
-    libqalculate     # Calculator backend for rofi-calc
+    libqalculate     # Calculator backend
 
-    # Clipboard management
-    cliphist         # Clipboard history (SUPER+SHIFT+V keybind)
-    # Note: polkit agent is provided by DMS
+    # Note: Bar, launcher, notifications, lock screen, clipboard, and screenshots
+    # are all provided by DMS (Dank Material Shell) - see linux/dms.nix
   ];
 }

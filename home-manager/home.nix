@@ -18,7 +18,6 @@
     ./core/neovim
     ./core/zsh.nix
     ./core/kitty.nix
-    ./core/ranger.nix
     ./core/tmux.nix
 
     # Platform-agnostic but currently only used on Linux

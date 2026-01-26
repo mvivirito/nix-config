@@ -2,13 +2,9 @@
 
 let
   # Package paths for keybind commands
-  grim = "${pkgs.grim}/bin/grim";
-  slurp = "${pkgs.slurp}/bin/slurp";
-  wlCopy = "${pkgs.wl-clipboard}/bin/wl-copy";
   wpctl = "${pkgs.wireplumber}/bin/wpctl";
   playerctl = "${pkgs.playerctl}/bin/playerctl";
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
-  notifySend = "${pkgs.libnotify}/bin/notify-send";
 in {
   # Note: niri is enabled at the system level in nixos/niri.nix
   # The niri NixOS module auto-imports homeModules.config for settings
@@ -116,9 +112,7 @@ in {
       # Spawn at startup
       spawn-at-startup = [
         # DMS starts via systemd (systemd.enable = true in dms.nix)
-        # Other startup items:
-        { command = [ "firefox" ]; }
-        { command = [ "ghostty" ]; }
+        # No automatic app launches - user manually starts apps as needed
       ];
 
       # Keybinds
@@ -222,31 +216,39 @@ in {
         # ==========================================
         "Mod+Return".action.spawn = [ "ghostty" ];
         # DMS spotlight (app launcher)
-        "Mod+Space".action.spawn = [ "dms" "spotlight" ];
+        "Mod+Space".action.spawn = [ "dms" "ipc" "call" "spotlight" "toggle" ];
         "Mod+B".action.spawn = [ "firefox" ];
         "Mod+D".action.spawn = [ "discord" ];
         "Mod+O".action.spawn = [ "1password" "--quick-access" ];
         "Mod+Y".action.spawn = [ "ghostty" "-e" "nvim" ];
         "Mod+I".action.spawn = [ "code" ];
         "Mod+Z".action.spawn = [ "vlc" ];
-        # ranger in terminal
-        "Mod+Shift+R".action.spawn = [ "thunar" ];
+        # Yazi file manager in terminal
+        "Mod+Shift+R".action.spawn = [ "ghostty" "-e" "yazi" ];
 
         # ==========================================
         # System tools
         # ==========================================
-        "Mod+Shift+B".action.spawn = [ "pavucontrol" ];
         "Mod+Shift+M".action.spawn = [ "missioncenter" ];
         "Mod+Shift+Y".action.spawn = [ "ghostty" "-e" "htop" ];
         "Mod+Shift+E".action.quit = [];  # Exit niri
 
+        # DMS power menu (shutdown, reboot, sleep, logout)
+        "Mod+Shift+P".action.spawn = [ "dms" "ipc" "call" "powermenu" "toggle" ];
+
+        # Open latest PDF from Downloads with Zathura
+        "Mod+Shift+D".action.spawn = [
+          "bash" "-c"
+          "latest=$(ls -t ~/Downloads/*.pdf 2>/dev/null | head -1); [ -n \"$latest\" ] && zathura \"$latest\""
+        ];
+
         # ==========================================
-        # Screenshots
+        # Screenshots (DMS native)
         # ==========================================
-        "Mod+G".action.spawn = [ "bash" "-c" "pkill -x slurp 2>/dev/null; ${grim} -g \"$(${slurp})\" - | ${wlCopy}; ${notifySend} 'Selection copied'" ];
-        "Mod+Shift+G".action.spawn = [ "bash" "-c" "${grim} - | ${wlCopy}; ${notifySend} 'Screenshot copied'" ];
-        "Mod+Print".action.spawn = [ "bash" "-c" "dir=\"$HOME/Pictures/Screenshots\"; mkdir -p \"$dir\"; file=\"$dir/$(date +%Y-%m-%d_%H-%M-%S).png\"; pkill -x slurp 2>/dev/null; ${grim} -g \"$(${slurp})\" \"$file\"; ${notifySend} 'Selection saved' \"$file\"" ];
-        "Mod+Shift+Print".action.spawn = [ "bash" "-c" "dir=\"$HOME/Pictures/Screenshots\"; mkdir -p \"$dir\"; file=\"$dir/$(date +%Y-%m-%d_%H-%M-%S).png\"; ${grim} \"$file\"; ${notifySend} 'Screenshot saved' \"$file\"" ];
+        "Mod+G".action.spawn = [ "dms" "screenshot" "--no-file" ];
+        "Mod+Shift+G".action.spawn = [ "dms" "screenshot" "full" "--no-file" ];
+        "Mod+Print".action.spawn = [ "dms" "screenshot" "--no-clipboard" ];
+        "Mod+Shift+Print".action.spawn = [ "dms" "screenshot" "full" "--no-clipboard" ];
 
         # ==========================================
         # Media keys
@@ -292,12 +294,8 @@ in {
 
   # Required packages for niri keybinds
   home.packages = [
-    pkgs.grim        # Screenshot tool
-    pkgs.slurp       # Region selection
-    pkgs.wl-clipboard
     pkgs.brightnessctl
     pkgs.playerctl
-    pkgs.libnotify
     pkgs.wireplumber  # For wpctl
   ];
 }
