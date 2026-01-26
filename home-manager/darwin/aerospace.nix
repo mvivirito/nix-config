@@ -3,8 +3,14 @@
 { config, lib, pkgs, ... }: {
   programs.aerospace = {
     enable = true;
+    launchd.enable = true;
 
     settings = {
+      # Tiling defaults
+      default-root-container-layout = "tiles";
+      default-root-container-orientation = "auto";
+      start-at-login = false;  # managed by launchd instead
+
       gaps = {
         outer = { left = 8; bottom = 8; top = 8; right = 8; };
         inner = { horizontal = 8; vertical = 8; };
@@ -47,10 +53,10 @@
 
         # Window operations
         "ctrl-alt-f" = "fullscreen";
-        "ctrl-alt-space" = "layout floating tiling";
+        "ctrl-alt-t" = "layout floating tiling";
         "ctrl-alt-backslash" = "layout tiles accordion";
         "ctrl-alt-equal" = "layout h_tiles v_tiles h_accordion v_accordion";
-        "ctrl-alt-shift-q" = "close";
+        "ctrl-alt-shift-q" = "exec-and-forget osascript -e 'tell application \"System Events\" to keystroke \"q\" using command down'";
         "ctrl-alt-r" = "mode resize";
         "ctrl-alt-shift-t" = "mode service";
 
