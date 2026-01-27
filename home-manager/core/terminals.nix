@@ -22,7 +22,7 @@
 
     settings = {
       # Transparency (matches old kitty config)
-      background-opacity = 0.6;
+      background-opacity = 0.8;
 
       # Cursor
       cursor-style = "block";
@@ -35,7 +35,7 @@
       copy-on-select = "clipboard";
 
       # Window - let compositor handle decorations
-      window-decoration = false;
+      window-decoration = true;
 
       # Font (optional - ghostty has good defaults)
       # font-family = "JetBrainsMono Nerd Font";
