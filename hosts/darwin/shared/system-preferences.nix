@@ -62,7 +62,7 @@
     trackpad = {
       Clicking = true;  # Tap to click
       TrackpadRightClick = true;  # Two finger right click
-      TrackpadThreeFingerDrag = true;  # Three finger drag
+      TrackpadThreeFingerDrag = false;  # Three finger drag
     };
 
     # Screenshots
