@@ -88,7 +88,7 @@
     initContent = ''
       # fix for ghostty term not recognized on remote servers
       if [[ "$TERM" == "xterm-ghostty" ]]; then
-        alias ssh="TERM=xterm-256color ssh"
+        ssh() { TERM=xterm-256color command ssh "$@"; }
       fi
       # Command not found handler - suggests packages to install
       command_not_found_handler() {
