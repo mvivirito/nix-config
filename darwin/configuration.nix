@@ -46,11 +46,13 @@
   environment.systemPackages = with pkgs; [
     vim
     git
-    claude-code
   ];
 
   # Create /etc/zshrc that loads the nix-darwin environment
   programs.zsh.enable = true;
+
+  # Add Homebrew to PATH for Apple Silicon Macs
+  environment.systemPath = [ "/opt/homebrew/bin" "/opt/homebrew/sbin" ];
 
   # Used for backwards compatibility, read the changelog before changing
   # $ darwin-rebuild changelog
