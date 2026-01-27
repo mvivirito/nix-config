@@ -5,6 +5,7 @@
   outputs,
   pkgs,
   hostname,
+  username ? "mvivirito",
   ...
 }: {
   imports = [
@@ -18,7 +19,7 @@
   ];
 
   # Primary user for system defaults and homebrew
-  system.primaryUser = "mvivirito";
+  system.primaryUser = username;
 
   # Nix settings
   nix = {

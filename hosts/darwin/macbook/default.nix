@@ -7,6 +7,16 @@
   networking.hostName = hostname;
   networking.computerName = hostname;
 
-  # MacBook-specific settings can go here
-  # For example, different power management, specific hardware configs, etc.
+  # Personal machine apps (not installed on work machine)
+  homebrew.casks = [
+    # Communication
+    "discord"
+    "spotify"
+    "claude"
+
+    # Browsers
+    "google-chrome"
+    "firefox"
+    "brave-browser"
+  ];
 }

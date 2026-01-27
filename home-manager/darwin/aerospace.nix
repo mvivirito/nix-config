@@ -65,6 +65,9 @@
         "ctrl-alt-b" = "exec-and-forget open -na 'Google Chrome'";
         "ctrl-alt-o" = "exec-and-forget open -a '1Password'";  # 1Password should just focus
         "ctrl-alt-y" = "exec-and-forget /Applications/Ghostty.app/Contents/MacOS/ghostty -e /bin/zsh -lc nvim";
+
+        # Toggle aerospace on/off
+        "ctrl-alt-shift-e" = "enable toggle";
       };
 
       mode.resize.binding = {

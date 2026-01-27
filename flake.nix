@@ -73,6 +73,7 @@
         specialArgs = {
           inherit inputs outputs;
           hostname = "macbook";
+          username = "mvivirito";
         };
         modules = [
           ./darwin/configuration.nix
@@ -82,8 +83,37 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = {inherit inputs outputs;};
+            home-manager.backupFileExtension = "backup";
+            home-manager.extraSpecialArgs = {
+              inherit inputs outputs;
+              username = "mvivirito";
+            };
             home-manager.users.mvivirito = ./home-manager/home-darwin.nix;
+          }
+        ];
+      };
+
+      michaelvivirito-mbp = nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = {
+          inherit inputs outputs;
+          hostname = "michaelvivirito-mbp";
+          username = "michaelvivirito";
+        };
+        modules = [
+          ./darwin/configuration.nix
+
+          # Integrate home-manager as darwin module
+          home-manager.darwinModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.extraSpecialArgs = {
+              inherit inputs outputs;
+              username = "michaelvivirito";
+            };
+            home-manager.users.michaelvivirito = ./home-manager/home-darwin.nix;
           }
         ];
       };

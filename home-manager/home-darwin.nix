@@ -5,6 +5,7 @@
   lib,
   config,
   pkgs,
+  username ? "mvivirito",
   ...
 }: {
   imports = [
@@ -14,7 +15,6 @@
     ./core/neovim
     ./core/zsh.nix
     ./core/kitty.nix
-    ./core/ranger.nix
     ./core/tmux.nix
 
     # Darwin-specific configuration
@@ -24,8 +24,8 @@
   ];
 
   home = {
-    username = "mvivirito";
-    homeDirectory = lib.mkForce "/Users/mvivirito";
+    username = username;
+    homeDirectory = lib.mkForce "/Users/${username}";
   };
 
   home.sessionVariables = {

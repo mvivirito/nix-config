@@ -41,21 +41,14 @@
 
       # Media
       "vlc"
-      "spotify"
-
-      # Communication
-      "discord"
-      "claude"
-
-      # Browsers
-      "google-chrome"
-      "firefox"
-      "brave-browser"
 
       # Utilities (existing)
       "obsidian"         # Note-taking
-      "vnc-viewer"       # Remote desktop
       "balenaetcher"     # USB image writer
+
+      # Additional utilities
+      "gimp"             # Image editor
+      "notunes"          # Prevents Music app from launching
 
       # Recommended utilities
       "stats"            # System monitor in menu bar
