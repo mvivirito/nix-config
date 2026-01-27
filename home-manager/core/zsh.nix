@@ -33,7 +33,6 @@
       # Quick navigation
       v = "nvim";
       vi = "nvim";
-      cat = "bat";
       ls = "ls --color=auto";
       la = "ls -la";
       ll = "ls -lh";
@@ -87,6 +86,10 @@
       brewup = "brew update && brew upgrade && brew cleanup";
     };
     initContent = ''
+      # fix for ghostty term not recognized on remote servers
+      if [[ "$TERM" == "xterm-ghostty" ]]; then
+        alias ssh="TERM=xterm-256color ssh"
+      fi
       # Command not found handler - suggests packages to install
       command_not_found_handler() {
         echo "zsh: command not found: $1"
