@@ -125,6 +125,13 @@ Both NixOS (keyd) and macOS (Karabiner) share consistent low-level keyboard rema
 | Right Option (macOS) | - | Control |
 | Apostrophe | ' | Control |
 
+**Oneshot Modifiers (NixOS only):**
+Tap-release-press instead of hold. Reduces RSI from holding modifiers.
+| Key | Behavior |
+|-----|----------|
+| Control | Tap Control, release, then press target key |
+| Shift | Tap Shift, release, then press target key |
+
 **Navigation Layer** (hold Semicolon):
 | Key | Action |
 |-----|--------|
