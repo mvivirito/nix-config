@@ -32,7 +32,7 @@
 
       # Development
       "docker-desktop"
-      "ghostty"
+      "alacritty"
       "thonny"           # Python IDE for beginners
 
       # Keyboard customization

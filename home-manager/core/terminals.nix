@@ -1,45 +1,54 @@
 { pkgs, lib, ... }:
 
 {
-  # Ghostty - fast GPU-accelerated terminal emulator
+  # Alacritty - fast GPU-accelerated terminal emulator
   #
   # Features:
-  # - 4x faster plain text rendering
-  # - Native platform UI (GTK on Linux, Metal on macOS)
-  # - Kitty graphics protocol support (images in terminal)
-  # - Kitty keyboard protocol (better key handling for neovim)
-  # - Zero-config sensible defaults
-  #
-  # On macOS: package = null (Homebrew handles installation)
-  # On Linux: package from nixpkgs
+  # - GPU-accelerated rendering for high performance
+  # - Cross-platform (Linux, macOS, Windows, BSD)
+  # - Minimal resource usage
+  # - Extensive configuration via TOML
+  # - Vi mode for keyboard selection
+  # - Active development and maintenance
 
-  programs.ghostty = {
+  programs.alacritty = {
     enable = true;
-    enableZshIntegration = true;
-
-    # Skip package installation on macOS (use Homebrew cask instead)
-    package = lib.mkIf pkgs.stdenv.isDarwin null;
 
     settings = {
-      # Transparency (matches old kitty config)
-      background-opacity = 0.8;
+      # Window configuration
+      window = {
+        # Transparency (matches previous ghostty config)
+        opacity = 0.8;
 
-      # Cursor
-      cursor-style = "block";
-      cursor-style-blink = false;
+        # Window decorations
+        decorations = "full";
+      };
+
+      # Cursor configuration
+      cursor = {
+        style = {
+          shape = "Block";
+          blinking = "Never";
+        };
+      };
 
       # Scrollback
-      scrollback-limit = 100000;
+      scrolling = {
+        history = 100000;
+      };
 
       # Clipboard
-      copy-on-select = "clipboard";
+      selection = {
+        save_to_clipboard = true;
+      };
 
-      # Window - let compositor handle decorations
-      window-decoration = true;
-
-      # Font (optional - ghostty has good defaults)
-      # font-family = "JetBrainsMono Nerd Font";
-      # font-size = 12;
+      # Font (optional - alacritty has good defaults)
+      # font = {
+      #   normal = {
+      #     family = "JetBrainsMono Nerd Font";
+      #   };
+      #   size = 12.0;
+      # };
     };
   };
 }

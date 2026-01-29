@@ -86,8 +86,8 @@
       brewup = "brew update && brew upgrade && brew cleanup";
     };
     initContent = ''
-      # fix for ghostty term not recognized on remote servers
-      if [[ "$TERM" == "xterm-ghostty" ]]; then
+      # fix for alacritty term not recognized on remote servers
+      if [[ "$TERM" == "alacritty" ]]; then
         ssh() { TERM=xterm-256color command ssh "$@"; }
       fi
       # Command not found handler - suggests packages to install

@@ -212,25 +212,25 @@ in {
 
         # ==========================================
         # Application launchers
-        # Changed kitty to ghostty
+        # Alacritty terminal
         # ==========================================
-        "Mod+Return".action.spawn = [ "ghostty" ];
+        "Mod+Return".action.spawn = [ "alacritty" ];
         # DMS spotlight (app launcher)
         "Mod+Space".action.spawn = [ "dms" "ipc" "call" "spotlight" "toggle" ];
         "Mod+B".action.spawn = [ "firefox" ];
         "Mod+D".action.spawn = [ "discord" ];
         "Mod+O".action.spawn = [ "1password" "--quick-access" ];
-        "Mod+Y".action.spawn = [ "ghostty" "-e" "nvim" ];
+        "Mod+Y".action.spawn = [ "alacritty" "-e" "nvim" ];
         "Mod+I".action.spawn = [ "code" ];
         "Mod+Z".action.spawn = [ "vlc" ];
         # Yazi file manager in terminal
-        "Mod+Shift+R".action.spawn = [ "ghostty" "-e" "yazi" ];
+        "Mod+Shift+R".action.spawn = [ "alacritty" "-e" "yazi" ];
 
         # ==========================================
         # System tools
         # ==========================================
         "Mod+Shift+M".action.spawn = [ "missioncenter" ];
-        "Mod+Shift+Y".action.spawn = [ "ghostty" "-e" "htop" ];
+        "Mod+Shift+Y".action.spawn = [ "alacritty" "-e" "htop" ];
         "Mod+Shift+E".action.quit = [];  # Exit niri
 
         # DMS power menu (shutdown, reboot, sleep, logout)
