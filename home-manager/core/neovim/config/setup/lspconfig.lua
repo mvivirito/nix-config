@@ -13,7 +13,16 @@ require'lspconfig'.cmake.setup{capabilities=capabilities}
 require'lspconfig'.dockerls.setup{capabilities=capabilities}
 
 -- Nix
-require'lspconfig'.nil_ls.setup{capabilities=capabilities}
+require'lspconfig'.nixd.setup{
+  capabilities=capabilities,
+  settings = {
+    nixd = {
+      nixpkgs = {
+        expr = "import <nixpkgs> { }",
+      },
+    },
+  },
+}
 
 -- Protobuf
 require'lspconfig'.bufls.setup{capabilities=capabilities}

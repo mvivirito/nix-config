@@ -250,7 +250,7 @@ in {
         # LSP servers
         nodePackages.typescript-language-server
         lua-language-server
-        nil # Already have nil_ls configured
+        nixd
         pyright
         clang-tools # For clangd
         cmake-language-server

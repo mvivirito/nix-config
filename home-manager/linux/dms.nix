@@ -31,6 +31,9 @@
     # DMS settings (written to ~/.config/DankMaterialShell/settings.json)
     # These are the main DMS configuration options
     settings = {
+      # Lock screen before suspend (lid close, power button, etc.)
+      lockBeforeSuspend = true;
+
       # Lock screen timeout (in seconds)
       lockTimeout = 900;  # 15 minutes
 
