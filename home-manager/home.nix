@@ -49,6 +49,7 @@
     EDITOR = "nvim";
     BROWSER = "firefox";
     XCURSOR_SIZE = "32";
+    GTK_THEME = "catppuccin-mocha-blue-standard";
   };
 
   home.pointerCursor = {
@@ -66,6 +67,7 @@
   # Enable home-manager and git
   programs.home-manager.enable = true;
   programs.git.enable = true;
+  dconf.enable = true;
   programs.neovim.enable = true;
 
   services.playerctld.enable = true;

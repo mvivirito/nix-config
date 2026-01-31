@@ -42,6 +42,9 @@
 
       # Bar position
       barPosition = "top";
+
+      # Show system tray in bar (ensure tray icons like trayscale are visible)
+      showSystemTray = true;
     };
 
     # Clipboard settings
@@ -60,6 +63,27 @@
     # This will be prepended to the wrapper's QT_PLUGIN_PATH
     "QT_PLUGIN_PATH=${pkgs.kdePackages.qtbase}/lib/qt-6/plugins"
   ];
+
+  # Trayscale systemd service - starts after DMS so the SNI tray host is ready
+  # Note: Cannot use Requires=dms.service as it creates an ordering cycle:
+  # graphical-session.target → trayscale → dms → graphical-session.target
+  systemd.user.services.trayscale = {
+    Unit = {
+      Description = "Trayscale Tailscale tray icon";
+      After = [ "dms.service" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";
+      ExecStart = "${pkgs.trayscale}/bin/trayscale --hide-window";
+      Restart = "on-failure";
+      RestartSec = 5;
+      RestartMaxDelaySec = "30";
+    };
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
 
   # Required packages for DMS/quickshell
   home.packages = with pkgs; [

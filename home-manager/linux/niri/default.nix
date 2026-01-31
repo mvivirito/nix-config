@@ -111,8 +111,6 @@ in {
 
       # Spawn at startup
       spawn-at-startup = [
-        # DMS starts via systemd (systemd.enable = true in dms.nix)
-        # No automatic app launches - user manually starts apps as needed
       ];
 
       # Keybinds
@@ -235,6 +233,9 @@ in {
 
         # DMS power menu (shutdown, reboot, sleep, logout)
         "Mod+Shift+P".action.spawn = [ "dms" "ipc" "call" "powermenu" "toggle" ];
+
+        # DMS clipboard history
+        "Mod+Shift+V".action.spawn = [ "dms" "ipc" "call" "clipboard" "toggle" ];
 
         # Open latest PDF from Downloads with Zathura
         "Mod+Shift+D".action.spawn = [

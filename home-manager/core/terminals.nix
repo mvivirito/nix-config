@@ -21,7 +21,7 @@
         opacity = 0.8;
 
         # Window decorations
-        decorations = "full";
+        decorations = if pkgs.stdenv.isDarwin then "full" else "none";
       };
 
       # Cursor configuration

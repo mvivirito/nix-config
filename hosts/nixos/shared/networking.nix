@@ -8,5 +8,6 @@
   services.tailscale = {
     enable = true;
     useRoutingFeatures = "client";
+    extraSetFlags = [ "--operator=michael" ];
   };
 }
