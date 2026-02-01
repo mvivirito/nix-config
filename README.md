@@ -151,10 +151,24 @@ support with center-column and width presets. Native overview mode.
 - **Shell**: zsh + oh-my-zsh (fishy theme) + zoxide
 - **Shell Plugins**: git, sudo, vi-mode, fzf, zsh-nix-shell
 - **Editor**: Neovim (LSP, Treesitter, Telescope, completion, 40+ plugins)
-- **Terminals**: Ghostty (primary), Kitty (fallback)
 - **Multiplexer**: tmux (vim-style navigation, Catppuccin Mocha status)
 - **File Manager**: ranger (with Kitty image previews)
 - **CLI Tools**: bat, ripgrep, fzf, lazygit, htop, neofetch, wget, clang, ffmpeg, yt-dlp, figlet, cowsay, cmatrix, pipes
+
+### Terminals
+
+**Ghostty** (primary) — `home-manager/core/terminals.nix`
+- Fast GPU-accelerated terminal (4x faster plain text rendering)
+- Native platform UI (GTK on Linux, Metal on macOS)
+- Kitty graphics protocol (images in terminal) and keyboard protocol (better neovim keys)
+- On macOS: installed via Homebrew cask, config managed by home-manager
+- On NixOS: installed via nixpkgs
+- Settings: 60% opacity, block cursor (no blink), 100k scrollback, copy-on-select, no window decorations
+
+**Kitty** (fallback) — `home-manager/core/kitty.nix`
+- Catppuccin Macchiato color scheme
+- 60% opacity, 100k scrollback, copy-on-select
+- Used for: ranger image previews, SSH sessions, fallback if Ghostty has issues
 
 ---
 
