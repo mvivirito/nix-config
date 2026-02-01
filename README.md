@@ -83,6 +83,34 @@ nix-config/
 | niri | sodiboo/niri-flake | Wayland compositor |
 | dms | AvengeMedia/DankMaterialShell | Bar, launcher, notifications, lock |
 
+## Migration: Hyprland → Niri + DMS
+
+The NixOS desktop was migrated from Hyprland to **Niri** (compositor) + **DMS** (shell).
+
+**Why Niri?** Scrollable tiling compositor designed for column-based workflows. Better ultrawide
+support with center-column and width presets. Native overview mode.
+
+**What DMS replaces** (single integrated shell instead of separate tools):
+
+| Before (Hyprland stack) | After (DMS) |
+|--------------------------|-------------|
+| Waybar | DMS bar (top, with system monitoring) |
+| Rofi / Tofi | DMS spotlight (app launcher) |
+| Swaylock + Swayidle | DMS lock screen (15min timeout) |
+| Swaync | DMS notifications |
+| Separate polkit agent | DMS built-in polkit |
+
+**DMS configuration**: `home-manager/linux/dms.nix`
+- Uses matugen for dynamic wallpaper-based theming
+- Starts via systemd (more reliable with greetd than spawn-at-startup)
+- System monitoring enabled (CPU, RAM in bar)
+- Lock: 15min, DPMS: 15.5min
+
+> **Note:** Some legacy Hyprland references remain in comments and packages
+> (e.g., `xdg-desktop-portal-hyprland` for file picker/screensharing support).
+
+---
+
 ## What's Managed
 
 ### NixOS System
