@@ -94,19 +94,39 @@ nix-config/
 - **Audio**: PipeWire + ALSA
 - **Networking**: NetworkManager + Tailscale
 - **Power**: Auto-hibernation after 15min suspended on battery
+- **Monitors**: 5120x1440 ultrawide (DP-2, 120Hz) + 2160x1350 laptop (eDP-1, scaled 1.25x)
 
 ### macOS System
-- **Window Management**: Aerospace tiling WM
-- **Keyboard**: Karabiner-Elements (Caps/Cmd remapping)
+- **Window Management**: Aerospace tiling WM (managed via launchd)
+- **Keyboard**: Karabiner-Elements (Caps/Left Cmd → Ctrl+Alt)
 - **System**: Dock, Finder, keyboard, trackpad preferences
 - **Apps**: Managed via Homebrew casks (see `hosts/darwin/shared/homebrew.nix`)
 - **Fonts**: Nerd Fonts, Noto, Font Awesome
 
+> **Warning:** Homebrew is configured with `cleanup = "zap"`. Any cask not listed in
+> `homebrew.nix` will be **removed** on rebuild. Always add new casks to the config first.
+
+### Homebrew Casks (macOS)
+
+| Category | Apps |
+|----------|------|
+| Productivity | Alfred, BetterTouchTool, Obsidian |
+| Security | 1Password |
+| Development | Docker Desktop, Ghostty, Thonny |
+| Keyboard | Karabiner-Elements, KeyCastr |
+| Browsers | Google Chrome, Firefox, Brave |
+| Media | VLC, Spotify |
+| Communication | Discord, Claude |
+| Utilities | Stats, The Unarchiver, AppCleaner, MonitorControl, VNC Viewer, balenaEtcher |
+
 ### Cross-Platform (home-manager)
 - **Shell**: zsh + oh-my-zsh (fishy theme) + zoxide
-- **Editor**: Neovim (LSP, Treesitter, Telescope, completion)
-- **Terminal**: Ghostty (primary), Kitty (fallback)
-- **CLI**: bat, ripgrep, fzf, lazygit, htop, tmux, ffmpeg, yt-dlp
+- **Shell Plugins**: git, sudo, vi-mode, fzf, zsh-nix-shell
+- **Editor**: Neovim (LSP, Treesitter, Telescope, completion, 40+ plugins)
+- **Terminals**: Ghostty (primary), Kitty (fallback)
+- **Multiplexer**: tmux (vim-style navigation, Catppuccin Mocha status)
+- **File Manager**: ranger (with Kitty image previews)
+- **CLI Tools**: bat, ripgrep, fzf, lazygit, htop, neofetch, wget, clang, ffmpeg, yt-dlp, figlet, cowsay, cmatrix, pipes
 
 ---
 
@@ -220,7 +240,7 @@ Standard XF86 media keys for volume, brightness, and playback control.
 | Caps + F | Toggle fullscreen |
 | Caps + T | Toggle floating/tiling |
 | Caps + \\ | Toggle tiles/accordion layout |
-| Caps + = | Cycle layout modes |
+| Caps + = | Cycle layout modes (h_tiles, v_tiles, h_accordion, v_accordion) |
 | Caps + R | Enter resize mode |
 | Caps + Shift + T | Enter service mode |
 
@@ -264,6 +284,8 @@ Standard XF86 media keys for volume, brightness, and playback control.
 | cd | zoxide (z) |
 | ls, ll, la | List variants |
 | mkdir | mkdir -p |
+| q | exit |
+| cl | clear |
 
 ### Git
 | Alias | Command |
@@ -273,11 +295,14 @@ Standard XF86 media keys for volume, brightness, and playback control.
 | gco, gcb | git checkout / checkout -b |
 | gc "msg" | git commit -m |
 | gca, gcan | git commit --amend (with/without edit) |
-| gpush, gpop | git push / pull |
+| gpush, gpop | git push / git pull |
+| gpom | git push origin master |
 | gbr | git branch |
 | glog | git log --oneline -n 10 |
+| glf | git log --oneline --follow |
 | gd, gds | git diff / diff --staged |
 | greb | git rebase -i |
+| gsq | git rebase -i HEAD~ (squash) |
 | grh | git reset HEAD |
 
 ### Nix
@@ -315,6 +340,7 @@ Standard XF86 media keys for volume, brightness, and playback control.
 
 ### Add a Homebrew cask (macOS)
 Edit `hosts/darwin/shared/homebrew.nix`, add to `casks` list, rebuild.
+**Important:** `cleanup = "zap"` means unlisted casks are removed on rebuild.
 
 ### Add a CLI tool
 Edit `home-manager/core/cli-tools.nix`, add to `home.packages`, rebuild.
@@ -348,6 +374,7 @@ Edit `home-manager/darwin/aerospace.nix`, add to `mode.main.binding`, rebuild.
 | `hosts/darwin/shared/homebrew.nix` | Managed Homebrew casks |
 | `hosts/darwin/shared/system-preferences.nix` | macOS defaults |
 | `home-manager/core/zsh.nix` | Shell config + aliases |
+| `home-manager/core/cli-tools.nix` | Cross-platform CLI packages |
 | `home-manager/core/neovim/` | Neovim plugins + config |
 | `home-manager/linux/niri/default.nix` | Niri keybinds + layout |
 | `home-manager/darwin/aerospace.nix` | Aerospace tiling WM bindings |
@@ -363,19 +390,12 @@ Edit `home-manager/darwin/aerospace.nix`, add to `mode.main.binding`, rebuild.
 home-manager switch --flake .#michael@nixos-laptop
 ```
 
-### Homebrew won't remove a package
-```bash
-brew uninstall --ignore-dependencies <package>
-```
+### Homebrew removing apps unexpectedly
+`cleanup = "zap"` removes any cask not in `homebrew.nix`. Add the cask to the config before rebuilding.
 
 ### Nix store corruption
 ```bash
 nix-store --verify --check-contents --repair
-```
-
-### Reset to clean state
-```bash
-darwin-rebuild switch --flake .#macbook --recreate-lock-file
 ```
 
 ### Reload Aerospace config (macOS)
