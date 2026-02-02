@@ -15,8 +15,9 @@
     };
 in {
   home.packages = with pkgs; [
-    vscode-extensions.ms-vscode.cpptools
     vscode-extensions.vadimcn.vscode-lldb
+  ] ++ lib.optionals pkgs.stdenv.isLinux [
+    vscode-extensions.ms-vscode.cpptools
   ];
   programs = {
     neovim = {
