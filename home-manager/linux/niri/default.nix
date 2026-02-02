@@ -5,6 +5,49 @@ let
   wpctl = "${pkgs.wireplumber}/bin/wpctl";
   playerctl = "${pkgs.playerctl}/bin/playerctl";
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
+
+  # Dictation toggle script: first press starts recording, second press stops and transcribes
+  notify = "${pkgs.libnotify}/bin/notify-send";
+
+  dictation-toggle = pkgs.writeShellScript "dictation-toggle" ''
+    export YDOTOOL_SOCKET="$XDG_RUNTIME_DIR/.ydotool_socket"
+    PIDFILE="$XDG_RUNTIME_DIR/dictation-stream.pid"
+    MODEL="$HOME/.local/share/whisper-cpp/ggml-base.en.bin"
+
+    if [ -f "$PIDFILE" ]; then
+      # Kill the whole process group (whisper-stream + pipe)
+      kill -- -"$(cat "$PIDFILE")" 2>/dev/null
+      rm "$PIDFILE"
+      ${notify} -u low -t 2000 -a Dictation "Dictation" "Stopped"
+    else
+      # Download model on first use
+      if [ ! -f "$MODEL" ]; then
+        mkdir -p "$(dirname "$MODEL")"
+        ${notify} -u low -t 0 -a Dictation "Dictation" "Downloading model..."
+        ${pkgs.whisper-cpp}/bin/whisper-cpp-download-ggml-model base.en
+        mv ggml-base.en.bin "$MODEL"
+      fi
+      ${notify} -u low -t 2000 -a Dictation "Dictation" "Listening..."
+      # Run in a new process group so we can kill everything on stop
+      setsid bash -c '
+        ${pkgs.whisper-cpp}/bin/whisper-stream \
+          -m "'"$MODEL"'" \
+          --step 3000 \
+          --length 5000 \
+          -t 4 \
+          --no-fallback \
+          2>/dev/null | \
+        sed -u "s/\x1b\[[0-9;]*[a-zA-Z]//g; s/\r//g; s/^ *//; s/ *$//" | \
+        grep -v --line-buffered -E "^\[|^$" | \
+        while IFS= read -r line; do
+          if [ -n "$line" ]; then
+            ${pkgs.ydotool}/bin/ydotool type -- "$line"
+          fi
+        done
+      ' &
+      echo $! > "$PIDFILE"
+    fi
+  '';
 in {
   # Note: niri is enabled at the system level in nixos/niri.nix
   # The niri NixOS module auto-imports homeModules.config for settings
@@ -244,6 +287,11 @@ in {
         ];
 
         # ==========================================
+        # Dictation (whisper-cpp)
+        # ==========================================
+        "Mod+N".action.spawn = [ "${dictation-toggle}" ];
+
+        # ==========================================
         # Screenshots (DMS native)
         # ==========================================
         "Mod+G".action.spawn = [ "dms" "screenshot" "--no-file" ];
@@ -292,6 +340,13 @@ in {
         screenshot-ui-open.enable = false;
       };
     };
+
+  # ydotool daemon (required for dictation text input)
+  systemd.user.services.ydotoold = {
+    Unit.Description = "ydotool daemon";
+    Service.ExecStart = "${pkgs.ydotool}/bin/ydotoold";
+    Install.WantedBy = [ "default.target" ];
+  };
 
   # Required packages for niri keybinds
   home.packages = [

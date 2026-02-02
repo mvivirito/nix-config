@@ -70,6 +70,10 @@
     playerctl        # Media player controller (XF86Audio* keybinds)
     libqalculate     # Calculator backend
 
+    # Dictation
+    whisper-cpp      # Speech-to-text via whisper model
+    ydotool          # Virtual keyboard input for typing transcriptions
+
     # Note: Bar, launcher, notifications, lock screen, clipboard, and screenshots
     # are all provided by DMS (Dank Material Shell) - see linux/dms.nix
   ];

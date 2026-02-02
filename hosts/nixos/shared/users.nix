@@ -5,7 +5,7 @@
   users.users.michael = {
     isNormalUser = true;
     description = "Michael Vivirito";
-    extraGroups = [ "keyd" "networkmanager" "wheel" ];
+    extraGroups = [ "input" "keyd" "networkmanager" "uinput" "wheel" ];
   };
 
   users.defaultUserShell = pkgs.zsh;
@@ -73,4 +73,7 @@
   services.fwupd.enable = true;
 
   security.polkit.enable = true;
+
+  # uinput access for ydotool (used by dictation)
+  hardware.uinput.enable = true;
 }
