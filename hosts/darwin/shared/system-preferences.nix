@@ -1,6 +1,6 @@
 # macOS System Preferences
 # Configures Dock, Finder, keyboard, trackpad, and other system settings
-{ ... }: {
+{ username, ... }: {
   system.defaults = {
     # Dock settings
     dock = {
@@ -95,15 +95,15 @@
     nvram SystemAudioVolume=" " || true
 
     # Save to disk (not to iCloud) by default
-    sudo -u mvivirito defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+    sudo -u ${username} defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
     # Disable Resume system-wide
-    sudo -u mvivirito defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
+    sudo -u ${username} defaults write com.apple.systempreferences NSQuitAlwaysKeepsWindows -bool false
 
     # Show the ~/Library folder
-    chflags nohidden /Users/mvivirito/Library || true
+    chflags nohidden /Users/${username}/Library || true
 
     # Create Screenshots folder if it doesn't exist
-    sudo -u mvivirito mkdir -p /Users/mvivirito/Pictures/Screenshots
+    sudo -u ${username} mkdir -p /Users/${username}/Pictures/Screenshots
   '';
 }

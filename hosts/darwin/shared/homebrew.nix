@@ -26,6 +26,7 @@
       # Window management and productivity
       "bettertouchtool"
       "alfred"
+      "hammerspoon"
 
       # Security
       "1password"

@@ -21,6 +21,7 @@
     ./darwin/gui-apps.nix
     ./darwin/karabiner
     ./darwin/aerospace.nix
+    ./darwin/hammerspoon.nix
   ];
 
   home = {
