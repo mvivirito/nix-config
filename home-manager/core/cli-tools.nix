@@ -8,6 +8,7 @@
     # File and text processing
     bat              # Better cat with syntax highlighting
     ripgrep          # Fast grep replacement (rg)
+    fd               # Fast find replacement
     fzf              # Fuzzy finder
 
     # Git and version control

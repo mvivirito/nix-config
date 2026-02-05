@@ -99,7 +99,7 @@ nix-config/
 - **Editor:** Neovim (40+ plugins, 10 LSP servers, Tokyonight theme)
 - **Terminals:** Alacritty (primary), Kitty (secondary)
 - **Multiplexer:** tmux (Catppuccin Mocha, vim-style panes)
-- **CLI:** bat, ripgrep, fzf, lazygit, htop, wget, ffmpeg, yt-dlp
+- **CLI:** bat, ripgrep, fd, fzf, lazygit, htop, wget, ffmpeg, yt-dlp
 - **Git:** Configured with extensive aliases
 
 ## Key Files
@@ -204,7 +204,7 @@ These are always active at the system level, before any application sees the key
 | Binding | Action |
 |---------|--------|
 | `Mod+C` | Center column on screen |
-| `Mod+R` | Cycle preset widths (1/3 → 1/2 → 2/3 → full) |
+| `Mod+Shift+R` | Cycle preset widths (1/3 → 1/2 → 2/3 → full) |
 | `Mod+Minus` | Shrink column width 10% |
 | `Mod+Equal` | Grow column width 10% |
 | `Mod+Comma` | Consume window into column |
@@ -228,13 +228,13 @@ These are always active at the system level, before any application sees the key
 | `Mod+Return` | Alacritty terminal |
 | `Mod+Space` | DMS spotlight launcher |
 | `Mod+B` | Firefox |
-| `Mod+D` | Discord |
+| `Mod+D` | PDF fuzzy finder (fzf → Zathura) |
 | `Mod+O` | 1Password quick access |
 | `Mod+Y` | Alacritty + Neovim |
 | `Mod+I` | VS Code |
 | `Mod+Z` | VLC |
-| `Mod+Shift+R` | Alacritty + Yazi file manager |
-| `Mod+Shift+D` | Open latest PDF from ~/Downloads (Zathura) |
+| `Mod+R` | Alacritty + Yazi file manager |
+| `Mod+Shift+D` | Discord |
 
 **System:**
 

@@ -48,6 +48,16 @@ let
       echo $! > "$PIDFILE"
     fi
   '';
+
+  pdf-picker = pkgs.writeShellScript "pdf-picker" ''
+    selected=$(${pkgs.fd}/bin/fd --type f --extension pdf . "$HOME" 2>/dev/null | \
+      ${pkgs.fzf}/bin/fzf --prompt="PDF> " --preview-window=hidden)
+    if [ -n "$selected" ]; then
+      # systemd-run detaches zathura from terminal — setsid/disown fail because
+      # alacritty -e tears down the process tree on script exit
+      systemd-run --user -- ${pkgs.zathura}/bin/zathura "$selected"
+    fi
+  '';
 in {
   # Note: niri is enabled at the system level in nixos/niri.nix
   # The niri NixOS module auto-imports homeModules.config for settings
@@ -140,6 +150,10 @@ in {
           matches = [{ app-id = "firefox"; title = "Picture-in-Picture"; }];
           open-floating = true;
         }
+        {
+          matches = [{ app-id = "pdf-picker"; }];
+          open-floating = true;
+        }
       ];
 
       # Cursor settings
@@ -203,7 +217,7 @@ in {
         "Mod+C".action.center-column = [];
 
         # Switch column width presets (1/3, 1/2, 2/3, full)
-        "Mod+R".action.switch-preset-column-width = [];
+        "Mod+Shift+R".action.switch-preset-column-width = [];
 
         # Grow/shrink column width
         "Mod+Minus".action.set-column-width = "-10%";
@@ -259,13 +273,13 @@ in {
         # DMS spotlight (app launcher)
         "Mod+Space".action.spawn = [ "dms" "ipc" "call" "spotlight" "toggle" ];
         "Mod+B".action.spawn = [ "firefox" ];
-        "Mod+D".action.spawn = [ "discord" ];
+        "Mod+D".action.spawn = [ "alacritty" "--class" "pdf-picker" "-e" "${pdf-picker}" ];
         "Mod+O".action.spawn = [ "1password" "--quick-access" ];
         "Mod+Y".action.spawn = [ "alacritty" "-e" "nvim" ];
         "Mod+I".action.spawn = [ "code" ];
         "Mod+Z".action.spawn = [ "vlc" ];
         # Yazi file manager in terminal
-        "Mod+Shift+R".action.spawn = [ "alacritty" "-e" "yazi" ];
+        "Mod+R".action.spawn = [ "alacritty" "-e" "yazi" ];
 
         # ==========================================
         # System tools
@@ -280,11 +294,7 @@ in {
         # DMS clipboard history
         "Mod+Shift+V".action.spawn = [ "dms" "ipc" "call" "clipboard" "toggle" ];
 
-        # Open latest PDF from Downloads with Zathura
-        "Mod+Shift+D".action.spawn = [
-          "bash" "-c"
-          "latest=$(ls -t ~/Downloads/*.pdf 2>/dev/null | head -1); [ -n \"$latest\" ] && zathura \"$latest\""
-        ];
+        "Mod+Shift+D".action.spawn = [ "discord" ];
 
         # ==========================================
         # Dictation (whisper-cpp)
