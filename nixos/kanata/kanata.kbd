@@ -1,0 +1,55 @@
+;; Kanata configuration
+;; Migrated from keyd with mouse movement support
+;;
+;; Key concepts:
+;; - tap-hold: tap for one key, hold for another action
+;; - one-shot: tap modifier, next key gets that modifier
+;; - layer-toggle: hold to activate layer, release to deactivate
+;; - movemouse-*: mouse pointer movement (speed, acceleration)
+
+(defcfg
+  process-unmapped-keys yes
+)
+
+(defsrc
+  caps lctl lsft ralt scln apos
+  a    s    d    e    f    g
+  h    j    k    l    u    i
+)
+
+(defalias
+  ;; Capslock: tap for escape, hold for super/meta
+  caps (tap-hold 200 200 esc lmet)
+
+  ;; Oneshot modifiers: tap-release-press instead of hold
+  ;; Reduces RSI from holding modifiers
+  ctl (one-shot 2000 lctl)
+  sft (one-shot 2000 lsft)
+
+  ;; Right alt: tap for escape, hold for super (same as caps)
+  ralt (tap-hold 200 200 esc lmet)
+
+  ;; Semicolon: tap for semicolon, hold for nav layer
+  nav (tap-hold 200 200 scln (layer-toggle navigation))
+
+  ;; Apostrophe: tap for apostrophe, hold for control
+  apo (tap-hold 200 200 apos lctl)
+
+  ;; Mouse movement aliases (speed=3, acceleration=1)
+  ml (movemouse-left 3 1)
+  md (movemouse-down 3 1)
+  mu (movemouse-up 3 1)
+  mr (movemouse-right 3 1)
+)
+
+(deflayer base
+  @caps @ctl @sft @ralt @nav  @apo
+  a     s    d    e     f     g
+  h     j    k    l     u     i
+)
+
+(deflayer navigation
+  _     _    _    _     _     _
+  mrgt  @ml  @md  @mu   @mr   mlft
+  left  down up   rght  S-grv S-\
+)

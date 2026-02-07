@@ -18,7 +18,7 @@
 
     # System-specific modules
     ./greetd.nix
-    ./keyd
+    ./kanata
     ./theme.nix
     ./niri.nix
   ];
