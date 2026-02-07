@@ -109,6 +109,13 @@
       bindkey '^[[A' history-search-backward
       bindkey '^[[B' history-search-forward
       bindkey '^[^?' backward-kill-word
+
+      # Ctrl+V to paste from clipboard
+      paste-from-clipboard() {
+        LBUFFER+=$(wl-paste -n 2>/dev/null)
+      }
+      zle -N paste-from-clipboard
+      bindkey '^V' paste-from-clipboard
     '';
   };
 }

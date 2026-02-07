@@ -231,7 +231,7 @@ These are always active at the system level, before any application sees the key
 | `Mod+Return` | Alacritty terminal |
 | `Mod+Space` | DMS spotlight launcher |
 | `Mod+B` | Firefox |
-| `Mod+D` | PDF fuzzy finder (fzf → Zathura) |
+| `Mod+D` | PDF fuzzy finder (fzf → sioyek) |
 | `Mod+O` | 1Password quick access |
 | `Mod+Y` | Alacritty + Neovim |
 | `Mod+I` | VS Code |

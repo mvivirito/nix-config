@@ -77,7 +77,7 @@
       # App ID substitutions (for correct icons)
       appIdSubstitutions = [
         { pattern = "Alacritty"; replacement = "com.alacritty.Alacritty"; type = "contains"; }
-        { pattern = "zathura"; replacement = "org.pwmt.zathura"; type = "contains"; }
+        { pattern = "sioyek"; replacement = "sioyek"; type = "contains"; }
         { pattern = "Spotify"; replacement = "spotify"; type = "exact"; }
         { pattern = "^steam_app_(\\d+)$"; replacement = "steam_icon_$1"; type = "regex"; }
       ];

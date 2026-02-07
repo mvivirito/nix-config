@@ -53,9 +53,9 @@ let
     selected=$(${pkgs.fd}/bin/fd --type f --extension pdf . "$HOME" 2>/dev/null | \
       ${pkgs.fzf}/bin/fzf --prompt="PDF> " --preview-window=hidden)
     if [ -n "$selected" ]; then
-      # systemd-run detaches zathura from terminal — setsid/disown fail because
+      # systemd-run detaches sioyek from terminal — setsid/disown fail because
       # alacritty -e tears down the process tree on script exit
-      systemd-run --user -- ${pkgs.zathura}/bin/zathura "$selected"
+      systemd-run --user -- ${pkgs.sioyek}/bin/sioyek "$selected"
     fi
   '';
 in {
