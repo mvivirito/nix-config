@@ -7,6 +7,7 @@
   home.packages = with pkgs; [
     # File and text processing
     bat              # Better cat with syntax highlighting
+    glow             # Terminal markdown renderer
     ripgrep          # Fast grep replacement (rg)
     fd               # Fast find replacement
     fzf              # Fuzzy finder

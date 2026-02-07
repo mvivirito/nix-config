@@ -121,10 +121,10 @@ in {
 
         # Default column width (can be preset or fixed)
         default-column-width = {
-          proportion = 0.5;  # Half screen by default (good for ultrawide)
+          proportion = 0.5;  # Half screen by default
         };
 
-        # Preset column widths for Mod+R cycling
+        # Preset column widths for Mod+Shift+R cycling
         preset-column-widths = [
           { proportion = 1.0 / 3.0; }  # 1/3 screen
           { proportion = 0.5; }        # 1/2 screen

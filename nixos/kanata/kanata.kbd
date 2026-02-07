@@ -50,6 +50,6 @@
 
 (deflayer navigation
   _     _    _    _     _     _
-  mrgt  @ml  @md  @mu   @mr   mlft
+  mlft  @ml  @md  @mu   @mr   mrgt
   left  down up   rght  S-grv S-\
 )

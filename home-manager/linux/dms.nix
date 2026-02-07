@@ -126,7 +126,7 @@
             "focusedWindow"
             { id = "runningApps"; enabled = true; }
           ];
-          centerWidgets = [ "music" "clock" "weather" ];
+          centerWidgets = [ "clock" ];
           rightWidgets = [
             "systemTray"
             "clipboard"

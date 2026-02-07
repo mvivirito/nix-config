@@ -72,16 +72,61 @@
 
   services.playerctld.enable = true;
 
+  xdg.desktopEntries.nvim = {
+    name = "Neovim";
+    genericName = "Text Editor";
+    exec = "alacritty -e nvim %F";
+    terminal = false;
+    categories = [ "Utility" "TextEditor" ];
+    mimeType = [ "text/plain" "text/markdown" "application/json" "application/xml" ];
+  };
+
   xdg.mimeApps = {
     enable = true;
     defaultApplications = {
+      # PDF
       "application/pdf" = [ "sioyek.desktop" ];
+
+      # Web
       "text/html" = [ "firefox.desktop" ];
       "x-scheme-handler/http" = [ "firefox.desktop" ];
       "x-scheme-handler/https" = [ "firefox.desktop" ];
       "x-scheme-handler/about" = [ "firefox.desktop" ];
       "x-scheme-handler/unknown" = [ "firefox.desktop" ];
       "application/xhtml+xml" = [ "firefox.desktop" ];
+
+      # Images
+      "image/png" = [ "imv.desktop" ];
+      "image/jpeg" = [ "imv.desktop" ];
+      "image/gif" = [ "imv.desktop" ];
+      "image/webp" = [ "imv.desktop" ];
+      "image/tiff" = [ "imv.desktop" ];
+      "image/bmp" = [ "imv.desktop" ];
+      "image/svg+xml" = [ "imv.desktop" ];
+
+      # Video
+      "video/mp4" = [ "mpv.desktop" ];
+      "video/x-matroska" = [ "mpv.desktop" ];
+      "video/webm" = [ "mpv.desktop" ];
+      "video/quicktime" = [ "mpv.desktop" ];
+      "video/x-msvideo" = [ "mpv.desktop" ];
+
+      # Audio
+      "audio/mpeg" = [ "mpv.desktop" ];
+      "audio/flac" = [ "mpv.desktop" ];
+      "audio/ogg" = [ "mpv.desktop" ];
+      "audio/wav" = [ "mpv.desktop" ];
+      "audio/x-m4a" = [ "mpv.desktop" ];
+
+      # Text/code
+      "text/plain" = [ "nvim.desktop" ];
+      "text/markdown" = [ "nvim.desktop" ];
+      "text/x-python" = [ "nvim.desktop" ];
+      "text/x-shellscript" = [ "nvim.desktop" ];
+      "application/json" = [ "nvim.desktop" ];
+      "application/xml" = [ "nvim.desktop" ];
+      "application/x-yaml" = [ "nvim.desktop" ];
+
     };
   };
 
