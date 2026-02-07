@@ -11,6 +11,7 @@
   imports = [
     # Cross-platform core configuration
     ./core/cli-tools.nix
+    ./core/git.nix
     ./core/terminals.nix
     ./core/neovim
     ./core/zsh.nix
@@ -33,9 +34,8 @@
     EDITOR = "nvim";
   };
 
-  # Enable home-manager and git
+  # Enable home-manager (git configured in core/git.nix)
   programs.home-manager.enable = true;
-  programs.git.enable = true;
   programs.neovim.enable = true;
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion

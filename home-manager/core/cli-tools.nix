@@ -10,18 +10,33 @@
     ripgrep          # Fast grep replacement (rg)
     fd               # Fast find replacement
     fzf              # Fuzzy finder
+    tree             # Directory tree view
+    sd               # Simpler sed for find/replace
+    jq               # JSON processor
+
+    # Modern replacements for classic tools
+    eza              # Modern ls with icons and git status
+    dust             # Intuitive du alternative
+    duf              # Better df with pretty output
+    btop             # Beautiful htop replacement
+    procs            # Modern ps
+    delta            # Beautiful git diffs
+    httpie           # Human-friendly curl
+    ncdu             # Interactive disk usage analyzer
+    gping            # Ping with live graph
 
     # Git and version control
-    git
     lazygit          # Terminal UI for git
 
     # System utilities
-    htop             # Process viewer
-    neofetch         # System info display
+    fastfetch        # Fast system info display
     wget             # Download utility
 
     # Development tools
     clang            # C/C++ compiler (works cross-platform)
+    tldr             # Simplified man pages with examples
+    tokei            # Code statistics
+    hyperfine        # CLI benchmarking
 
     # Media and conversion
     ffmpeg           # Video/audio processing
@@ -32,7 +47,8 @@
     cowsay           # ASCII cow
     figlet           # ASCII art text
     pipes            # Animated pipes screensaver
-  ] ++ lib.optionals stdenv.isLinux [
-    cool-retro-term  # Retro terminal emulator (Linux only)
+  ] ++ lib.optionals pkgs.stdenv.isLinux [
+    cool-retro-term  # Retro terminal emulator
+    bandwhich        # Bandwidth usage by process
   ];
 }

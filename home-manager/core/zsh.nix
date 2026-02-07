@@ -4,6 +4,11 @@
     enable = true;
     enableZshIntegration = true;
   };
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;  # Better nix integration
+  };
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -33,9 +38,10 @@
       # Quick navigation
       v = "nvim";
       vi = "nvim";
-      ls = "ls --color=auto";
-      la = "ls -la";
-      ll = "ls -lh";
+      ls = "eza --icons";
+      la = "eza -la --icons";
+      ll = "eza -lh --icons";
+      lt = "eza --tree --icons";
       mkdir = "mkdir -p";
       cd = "z";
 
@@ -113,9 +119,13 @@
       bindkey '^[[B' history-search-forward
       bindkey '^[^?' backward-kill-word
 
-      # Ctrl+V to paste from clipboard
+      # Ctrl+V to paste from clipboard (cross-platform)
       paste-from-clipboard() {
-        LBUFFER+=$(wl-paste -n 2>/dev/null)
+        if [[ "$(uname)" == "Darwin" ]]; then
+          LBUFFER+=$(pbpaste 2>/dev/null)
+        else
+          LBUFFER+=$(wl-paste -n 2>/dev/null)
+        fi
       }
       zle -N paste-from-clipboard
       bindkey '^V' paste-from-clipboard

@@ -14,6 +14,7 @@
 
     # Cross-platform core configuration (works on Linux, macOS, BSD, etc.)
     ./core/cli-tools.nix
+    ./core/git.nix
     ./core/terminals.nix
     ./core/neovim
     ./core/zsh.nix
@@ -64,9 +65,8 @@
   # programs.neovim.enable = true;
   # home.packages = with pkgs; [ steam ];
 
-  # Enable home-manager and git
+  # Enable home-manager (git configured in core/git.nix)
   programs.home-manager.enable = true;
-  programs.git.enable = true;
   dconf.enable = true;
   programs.neovim.enable = true;
 
