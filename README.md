@@ -140,6 +140,9 @@ Edit `home-manager/core/neovim/default.nix`, add to plugins list, rebuild.
 ### Add an LSP server
 Edit `home-manager/core/neovim/config/setup/lspconfig.lua`, add server config, rebuild.
 
+### Customize DMS settings (Linux)
+Export from DMS GUI (Settings → Export), convert JSON to Nix syntax, add to `home-manager/linux/dms.nix` under `settings`, rebuild with `home-manager switch`, then `systemctl --user restart dms.service`.
+
 ### Change Niri keybindings (Linux)
 Edit `home-manager/linux/niri/default.nix`, modify `config.binds`, rebuild with `home-manager switch`.
 
@@ -527,7 +530,7 @@ killall AeroSpace && open -a AeroSpace
 
 ### Restart DMS (Linux)
 ```bash
-systemctl --user restart dank-material-shell
+systemctl --user restart dms.service
 ```
 
 ### Check Niri logs (Linux)

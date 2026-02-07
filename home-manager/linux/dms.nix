@@ -9,58 +9,153 @@
 
   # Dank Material Shell configuration
   # Replaces: waybar, swaylock, swayidle, swaync, tofi/rofi, polkit agent
-  #
-  # DMS uses matugen for dynamic wallpaper-based theming
-  # Colors are generated from your wallpaper automatically
   programs.dank-material-shell = {
     enable = true;
 
     # Niri-specific integration
     niri = {
-      enableKeybinds = false;  # Disabled - we define our own keybinds in niri/default.nix
-      enableSpawn = false;     # Disabled - using systemd instead (spawn-at-startup fails with greetd)
-      includes.enable = false; # Disabled - niri doesn't support DMS's KDL includes (causes parse errors)
+      enableKeybinds = false;  # We define our own keybinds in niri/default.nix
+      enableSpawn = false;     # Using systemd instead (spawn-at-startup fails with greetd)
+      includes.enable = false; # Niri doesn't support DMS's KDL includes
     };
 
-    # Use systemd for starting DMS (more reliable with greetd)
     systemd.enable = true;
-
-    # Enable system monitoring (CPU, RAM, etc. in bar)
     enableSystemMonitoring = true;
 
-    # DMS settings (written to ~/.config/DankMaterialShell/settings.json)
-    # These are the main DMS configuration options
     settings = {
-      # Lock screen before suspend (lid close, power button, etc.)
-      lockBeforeSuspend = true;
+      # Theme: petrichor with blue variant
+      currentThemeName = "custom";
+      currentThemeCategory = "registry";
+      customThemeFile = "${config.home.homeDirectory}/.config/DankMaterialShell/themes/petrichor/theme.json";
+      registryThemeVariants = {
+        everforest = "soft";
+        flexoki = "magenta";
+        petrichor = "blue";
+      };
 
-      # Lock screen timeout (in seconds)
-      lockTimeout = 900;  # 15 minutes
+      # Matugen: enable for terminal/app theming from wallpaper
+      matugenScheme = "scheme-tonal-spot";
+      runUserMatugenTemplates = true;
+      runDmsMatugenTemplates = true;
+      matugenTemplateAlacritty = true;
+      matugenTemplateFirefox = true;
+      matugenTemplateNeovim = true;
+      matugenTemplateKitty = true;
+      matugenTemplateVscode = true;
+      # Disable unused matugen templates
+      matugenTemplateGtk = false;  # home-manager handles GTK
+      matugenTemplateNiri = false; # niri config is in home-manager
+      matugenTemplateHyprland = false;
+      matugenTemplateMangowc = false;
+      matugenTemplateQt5ct = false;
+      matugenTemplateQt6ct = false;
+      matugenTemplatePywalfox = false;
+      matugenTemplateZenBrowser = false;
+      matugenTemplateVesktop = false;
+      matugenTemplateEquibop = false;
+      matugenTemplateGhostty = false;
+      matugenTemplateFoot = false;
+      matugenTemplateWezterm = false;
+      matugenTemplateDgop = false;
+      matugenTemplateKcolorscheme = false;
 
-      # DPMS timeout (in seconds)
-      dpmsTimeout = 930;  # 15.5 minutes
+      # Appearance
+      widgetColorMode = "colorful";
+      cornerRadius = 12;
 
-      # Bar position
-      barPosition = "top";
+      # Time/locale
+      use24HourClock = false;
+      useFahrenheit = true;
 
-      # Show system tray in bar (ensure tray icons like trayscale are visible)
+      # Bar widgets
       showSystemTray = true;
+      showCpuUsage = true;
+      showMemUsage = true;
+      showCpuTemp = true;
+      showGpuTemp = true;
+
+      # App ID substitutions (for correct icons)
+      appIdSubstitutions = [
+        { pattern = "Alacritty"; replacement = "com.alacritty.Alacritty"; type = "contains"; }
+        { pattern = "zathura"; replacement = "org.pwmt.zathura"; type = "contains"; }
+        { pattern = "Spotify"; replacement = "spotify"; type = "exact"; }
+        { pattern = "^steam_app_(\\d+)$"; replacement = "steam_icon_$1"; type = "regex"; }
+      ];
+
+      # Spotlight/launcher
+      appLauncherViewMode = "list";
+      spotlightModalViewMode = "list";
+      spotlightCloseNiriOverview = true;
+      niriOverviewOverlayEnabled = true;
+
+      # Power/idle (0 = disabled, rely on manual lock)
+      acMonitorTimeout = 0;
+      acLockTimeout = 0;
+      batteryMonitorTimeout = 0;
+      batteryLockTimeout = 0;
+      lockBeforeSuspend = true;
+      fadeToLockEnabled = true;
+      fadeToLockGracePeriod = 5;
+      fadeToDpmsEnabled = true;
+      fadeToDpmsGracePeriod = 5;
+
+      # Lock screen
+      enableFprint = true;
+      maxFprintTries = 15;
+
+      # Sounds
+      soundsEnabled = true;
+
+      # Notifications
+      notificationHistoryEnabled = true;
+      notificationHistoryMaxCount = 50;
+
+      # Bar config
+      barConfigs = [
+        {
+          id = "default";
+          name = "Main Bar";
+          enabled = true;
+          position = 0;  # top
+          screenPreferences = [ "all" ];
+          showOnLastDisplay = true;
+          leftWidgets = [
+            "launcherButton"
+            "workspaceSwitcher"
+            "focusedWindow"
+            { id = "runningApps"; enabled = true; }
+          ];
+          centerWidgets = [ "music" "clock" "weather" ];
+          rightWidgets = [
+            "systemTray"
+            "clipboard"
+            "cpuUsage"
+            "memUsage"
+            "notificationButton"
+            "battery"
+            "controlCenterButton"
+          ];
+          spacing = 4;
+          innerPadding = 4;
+          transparency = 1;
+          widgetTransparency = 1;
+          visible = true;
+        }
+      ];
+
+      # Fonts
+      fontFamily = "Inter Variable";
+      monoFontFamily = "Fira Code";
+
+      configVersion = 5;
     };
 
-    # Clipboard settings
-    clipboardSettings = {
-      # Clipboard history length
-      maxItems = 100;
-    };
+    clipboardSettings.maxItems = 100;
   };
 
-  # Override DMS systemd service to fix Qt platform plugin issue
-  # The DMS wrapper sets QT_PLUGIN_PATH but doesn't include qtbase's platforms/
-  # This causes quickshell to fail with "cannot open display" error
+  # Fix Qt platform plugin for DMS/quickshell
   systemd.user.services.dms.Service.Environment = [
     "QT_QPA_PLATFORM=wayland"
-    # Prepend qtbase plugins (contains libqwayland.so platform plugin)
-    # This will be prepended to the wrapper's QT_PLUGIN_PATH
     "QT_PLUGIN_PATH=${pkgs.kdePackages.qtbase}/lib/qt-6/plugins"
   ];
 
@@ -80,9 +175,8 @@
     Install.WantedBy = [ "graphical-session.target" ];
   };
 
-  # Required packages for DMS/quickshell
   home.packages = with pkgs; [
-    kdePackages.qtwayland  # Qt6 Wayland support libraries
-    xwayland-satellite     # XWayland support for niri (for X11 fallback)
+    kdePackages.qtwayland
+    xwayland-satellite
   ];
 }
