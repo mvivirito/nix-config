@@ -86,16 +86,16 @@ in {
       };
 
       # Output (monitor) configuration
-      # Format matches hyprland setup: ultrawide + laptop
+      # Ultrawide on left, laptop on right
       outputs = {
-        "DP-2" = {
+        "DP-3" = {
           mode = {
             width = 5120;
             height = 1440;
             refresh = 120.0;
           };
           position = {
-            x = 1661;
+            x = 0;
             y = 0;
           };
           scale = 1.0;
@@ -107,8 +107,8 @@ in {
             refresh = 59.744;
           };
           position = {
-            x = 6781;
-            y = 166;
+            x = 5120;  # Right edge of ultrawide
+            y = 166;   # Vertically centered
           };
           scale = 1.25;
         };
@@ -262,6 +262,14 @@ in {
         "Mod+Shift+8".action.move-column-to-workspace = 8;
         "Mod+Shift+9".action.move-column-to-workspace = 9;
         "Mod+Shift+0".action.move-column-to-workspace = 10;
+
+        # ==========================================
+        # Monitor navigation
+        # ==========================================
+        "Mod+BracketLeft".action.focus-monitor-left = [];
+        "Mod+BracketRight".action.focus-monitor-right = [];
+        "Mod+Shift+BracketLeft".action.move-column-to-monitor-left = [];
+        "Mod+Shift+BracketRight".action.move-column-to-monitor-right = [];
 
         # ==========================================
         # Overview mode (birds-eye view of workspaces)
