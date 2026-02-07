@@ -67,6 +67,9 @@ in {
   systemd.user.services.niri-flake-polkit.Install.WantedBy = lib.mkForce [];
 
   programs.niri.settings = {
+      # Prefer server-side decorations (removes app title bars like sioyek's)
+      prefer-no-csd = true;
+
       # Input configuration
       input = {
         keyboard = {
@@ -129,12 +132,12 @@ in {
           { proportion = 1.0; }        # Full width
         ];
 
-        # Border colors (monochrome theme from hyprland)
+        # Border colors (Gruvbox Dark)
         border = {
           enable = true;
           width = 1;
-          active.color = "#4a4a4a";
-          inactive.color = "#2f2f2f";
+          active.color = "#83a598";    # Gruvbox bright blue
+          inactive.color = "#3c3836";  # Gruvbox bg1
         };
 
         # Focus ring (alternative to border)

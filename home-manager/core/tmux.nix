@@ -32,15 +32,15 @@
       bind -r K resize-pane -U 5
       bind -r L resize-pane -R 5
 
-      # Catppuccin Mocha status bar theme
-      set -g status-style "bg=#1e1e2e,fg=#cdd6f4"
-      set -g status-left-style "bg=#89b4fa,fg=#1e1e2e,bold"
-      set -g status-right-style "bg=#313244,fg=#cdd6f4"
-      set -g window-status-current-style "bg=#89b4fa,fg=#1e1e2e,bold"
-      set -g window-status-style "bg=#313244,fg=#cdd6f4"
-      set -g pane-border-style "fg=#313244"
-      set -g pane-active-border-style "fg=#89b4fa"
-      set -g message-style "bg=#89b4fa,fg=#1e1e2e"
+      # Gruvbox Dark status bar theme
+      set -g status-style "bg=#282828,fg=#ebdbb2"
+      set -g status-left-style "bg=#458588,fg=#282828,bold"
+      set -g status-right-style "bg=#3c3836,fg=#ebdbb2"
+      set -g window-status-current-style "bg=#458588,fg=#282828,bold"
+      set -g window-status-style "bg=#3c3836,fg=#a89984"
+      set -g pane-border-style "fg=#3c3836"
+      set -g pane-active-border-style "fg=#83a598"
+      set -g message-style "bg=#458588,fg=#282828"
     '';
   };
 }

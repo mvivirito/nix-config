@@ -37,11 +37,12 @@
       matugenScheme = "scheme-tonal-spot";
       runUserMatugenTemplates = true;
       runDmsMatugenTemplates = true;
-      matugenTemplateAlacritty = true;
-      matugenTemplateFirefox = true;
-      matugenTemplateNeovim = true;
-      matugenTemplateKitty = true;
-      matugenTemplateVscode = true;
+      # Disabled - using consistent Gruvbox theme instead of wallpaper-generated colors
+      matugenTemplateAlacritty = false;
+      matugenTemplateFirefox = false;
+      matugenTemplateNeovim = false;
+      matugenTemplateKitty = false;
+      matugenTemplateVscode = false;
       # Disable unused matugen templates
       matugenTemplateGtk = false;  # home-manager handles GTK
       matugenTemplateNiri = false; # niri config is in home-manager

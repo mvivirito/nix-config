@@ -7,22 +7,21 @@
   programs.sioyek = {
     enable = true;
     config = {
-      # Catppuccin Mocha colors
-      "background_color" = "0.12 0.12 0.18";
-      "text_highlight_color" = "0.98 0.89 0.68";
-      "visual_mark_color" = "0.54 0.71 0.98 0.3";
-      "search_highlight_color" = "0.98 0.89 0.68";
-      "status_bar_color" = "0.12 0.12 0.18";
-      "status_bar_text_color" = "0.80 0.84 0.96";
+      # Gruvbox Dark colors - high contrast, readable
+      "background_color" = "0.16 0.16 0.16";           # #282828
+      "text_highlight_color" = "0.84 0.60 0.13";       # #d79921 yellow
+      "visual_mark_color" = "0.27 0.52 0.53 0.3";      # #458588 blue with alpha
+      "search_highlight_color" = "0.98 0.74 0.18";     # #fabd2f bright yellow
+      "status_bar_color" = "0.20 0.20 0.20";           # slightly lighter than bg
+      "status_bar_text_color" = "0.92 0.86 0.70";      # #ebdbb2
 
       # Dark mode (invert) - toggle with 'i'
-      "dark_mode_background_color" = "0.12 0.12 0.18";
+      "dark_mode_background_color" = "0.16 0.16 0.16";
       "dark_mode_contrast" = "0.8";
 
       # Custom color mode - toggle with Ctrl+R (better than invert for readability)
-      # Catppuccin Mocha: base background, text foreground
-      "custom_background_color" = "0.12 0.12 0.18";
-      "custom_text_color" = "0.80 0.84 0.96";
+      "custom_background_color" = "0.16 0.16 0.16";    # #282828
+      "custom_text_color" = "0.92 0.86 0.70";          # #ebdbb2
 
       # Wayland clipboard integration
       "copy_command" = "wl-copy";

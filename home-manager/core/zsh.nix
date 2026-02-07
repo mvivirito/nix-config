@@ -104,6 +104,9 @@
       setopt HIST_FIND_NO_DUPS
       setopt HIST_SAVE_NO_DUPS
       setopt INC_APPEND_HISTORY
+
+      # Warn before exiting with background jobs (works when typing 'exit')
+      setopt CHECK_JOBS
       
       # Keybindings
       bindkey '^[[A' history-search-backward

@@ -7,29 +7,29 @@
   qt.platformTheme = "gtk2";
   qt.style = "gtk2";
 
-  # Console colors (Catppuccin Mocha palette)
+  # Console colors (Gruvbox Dark palette)
   console = {
     earlySetup = true;
     colors = [
       # Normal colors
-      "1e1e2e"  # base (background)
-      "f38ba8"  # red
-      "a6e3a1"  # green
-      "f9e2af"  # yellow
-      "89b4fa"  # blue
-      "f5c2e7"  # pink
-      "94e2d5"  # teal
-      "cdd6f4"  # text
+      "282828"  # bg (background)
+      "cc241d"  # red
+      "98971a"  # green
+      "d79921"  # yellow
+      "458588"  # blue
+      "b16286"  # purple
+      "689d6a"  # aqua
+      "a89984"  # fg4 (text)
 
       # Bright colors
-      "585b70"  # surface1 (bright black)
-      "f38ba8"  # bright red
-      "a6e3a1"  # bright green
-      "f9e2af"  # bright yellow
-      "89b4fa"  # bright blue
-      "f5c2e7"  # bright pink
-      "94e2d5"  # bright teal
-      "bac2de"  # subtext0 (bright white)
+      "928374"  # gray (bright black)
+      "fb4934"  # bright red
+      "b8bb26"  # bright green
+      "fabd2f"  # bright yellow
+      "83a598"  # bright blue
+      "d3869b"  # bright purple
+      "8ec07c"  # bright aqua
+      "ebdbb2"  # fg (bright white)
     ];
   };
 

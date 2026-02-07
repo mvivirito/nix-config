@@ -15,30 +15,30 @@
       # Only disable ligatures when the cursor is on them.
       disable_ligatures = "cursor";
 
-      # Catppuccin Macchiato color scheme (matches GTK/appearance setup)
-      foreground = "#cad3f5";
-      background = "#24273a";
-      cursor = "#f5bde6";
+      # Gruvbox Dark color scheme - high contrast, readable
+      foreground = "#ebdbb2";
+      background = "#282828";
+      cursor = "#ebdbb2";
 
-      color0 = "#24273a";
-      color8 = "#5b6078";
-      color1 = "#ed8796";
-      color9 = "#ed8796";
-      color2 = "#a6da95";
-      color10 = "#a6da95";
-      color3 = "#eed49f";
-      color11 = "#eed49f";
-      color4 = "#8aadf4";
-      color12 = "#8aadf4";
-      color5 = "#f5bde6";
-      color13 = "#f5bde6";
-      color6 = "#8bd5ca";
-      color14 = "#8bd5ca";
-      color7 = "#a5adcb";
-      color15 = "#cad3f5";
+      color0 = "#282828";
+      color8 = "#928374";
+      color1 = "#cc241d";
+      color9 = "#fb4934";
+      color2 = "#98971a";
+      color10 = "#b8bb26";
+      color3 = "#d79921";
+      color11 = "#fabd2f";
+      color4 = "#458588";
+      color12 = "#83a598";
+      color5 = "#b16286";
+      color13 = "#d3869b";
+      color6 = "#689d6a";
+      color14 = "#8ec07c";
+      color7 = "#a89984";
+      color15 = "#ebdbb2";
 
-      selection_foreground = "#24273a";
-      selection_background = "#8bd5ca";
+      selection_foreground = "#282828";
+      selection_background = "#83a598";
 
       # Disable cursor blinking
       cursor_blink_interval = "0";

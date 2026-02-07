@@ -22,10 +22,15 @@ in {
   programs = {
     neovim = {
       plugins = [
-        ## Theme
+        ## Theme - Gruvbox Dark for readability
         {
-          plugin = pkgs.vimPlugins.tokyonight-nvim;
-          config = "vim.cmd[[colorscheme tokyonight-night]]";
+          plugin = pkgs.vimPlugins.gruvbox-nvim;
+          config = ''
+            require("gruvbox").setup({
+              contrast = "hard",  -- harder background for better contrast
+            })
+            vim.cmd[[colorscheme gruvbox]]
+          '';
           type = "lua";
         }
 
@@ -125,7 +130,7 @@ in {
           config = ''
             require('lualine').setup {
                 options = {
-                    theme = 'tokyonight',
+                    theme = 'gruvbox',
                 }
             }
           '';
