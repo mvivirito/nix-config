@@ -152,7 +152,7 @@ in
   # Copy laptop config to ~/.aerospace.toml if it doesn't already exist
   # (preserves Hammerspoon's last switch across rebuilds)
   home.activation.aerospaceConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    if [ ! -f "$HOME/.aerospace.toml" ]; then
+    if [ ! -f "$HOME/.aerospace.toml" ] && [ -f "$HOME/.config/aerospace/laptop.toml" ]; then
       cp "$HOME/.config/aerospace/laptop.toml" "$HOME/.aerospace.toml"
     fi
   '';
