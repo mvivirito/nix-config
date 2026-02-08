@@ -129,6 +129,7 @@
           centerWidgets = [ "clock" ];
           rightWidgets = [
             "systemTray"
+            { id = "tailscale"; enabled = true; }  # dms-tailscale plugin
             "clipboard"
             "cpuUsage"
             "memUsage"
@@ -154,27 +155,10 @@
     clipboardSettings.maxItems = 100;
   };
 
-  # Fix Qt platform plugin for DMS/quickshell
   systemd.user.services.dms.Service.Environment = [
     "QT_QPA_PLATFORM=wayland"
     "QT_PLUGIN_PATH=${pkgs.kdePackages.qtbase}/lib/qt-6/plugins"
   ];
-
-  # Trayscale tray icon
-  systemd.user.services.trayscale = {
-    Unit = {
-      Description = "Trayscale Tailscale tray icon";
-      After = [ "graphical-session.target" "dms.service" ];
-      Requires = [ "graphical-session.target" ];
-    };
-    Service = {
-      ExecStartPre = "${pkgs.coreutils}/bin/sleep 5";
-      ExecStart = "${pkgs.trayscale}/bin/trayscale --hide-window";
-      Restart = "on-failure";
-      RestartSec = 10;
-    };
-    Install.WantedBy = [ "graphical-session.target" ];
-  };
 
   home.packages = with pkgs; [
     kdePackages.qtwayland

@@ -50,6 +50,7 @@
     vim              # Emergency editor if home-manager breaks
     git              # To clone/update this config repository
     claude-code      # System-level claude-code installation
+    gemini-cli
   ];
 
   # NixOS state version - DO NOT CHANGE

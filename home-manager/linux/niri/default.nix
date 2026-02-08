@@ -12,7 +12,7 @@ let
   dictation-toggle = pkgs.writeShellScript "dictation-toggle" ''
     export YDOTOOL_SOCKET="$XDG_RUNTIME_DIR/.ydotool_socket"
     PIDFILE="$XDG_RUNTIME_DIR/dictation-stream.pid"
-    MODEL="$HOME/.local/share/whisper-cpp/ggml-base.en.bin"
+    MODEL="$HOME/.local/share/whisper-cpp/ggml-medium.en.bin"
 
     if [ -f "$PIDFILE" ]; then
       # Kill the whole process group (whisper-stream + pipe)
@@ -24,8 +24,8 @@ let
       if [ ! -f "$MODEL" ]; then
         mkdir -p "$(dirname "$MODEL")"
         ${notify} -u low -t 0 -a Dictation "Dictation" "Downloading model..."
-        ${pkgs.whisper-cpp}/bin/whisper-cpp-download-ggml-model base.en
-        mv ggml-base.en.bin "$MODEL"
+        ${pkgs.whisper-cpp}/bin/whisper-cpp-download-ggml-model medium.en
+        mv ggml-medium.en.bin "$MODEL"
       fi
       ${notify} -u low -t 2000 -a Dictation "Dictation" "Listening..."
       # Run in a new process group so we can kill everything on stop

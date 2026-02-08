@@ -59,7 +59,6 @@
     # System utilities
     blueberry        # Bluetooth manager GUI
     mission-center   # Modern GTK4 system monitor (Mod+Shift+M keybind)
-    trayscale        # Tailscale systray GUI (appears in DMS system tray)
 
     # Wayland clipboard tools
     wl-clipboard     # wl-copy/wl-paste for Wayland clipboard (needed by sioyek, etc.)
