@@ -1,5 +1,11 @@
 { pkgs, lib, ... }:
 {
+  programs.eza = {
+    enable = true;
+    enableZshIntegration = true;
+    icons = "auto";
+    git = true;
+  };
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;
@@ -38,10 +44,10 @@
       # Quick navigation
       v = "nvim";
       vi = "nvim";
-      ls = "eza --icons";
-      la = "eza -la --icons";
-      ll = "eza -lh --icons";
-      lt = "eza --tree --icons";
+      ls = "eza";
+      la = "eza -la";
+      ll = "eza -lh";
+      lt = "eza --tree";
       mkdir = "mkdir -p";
       cd = "z";
 

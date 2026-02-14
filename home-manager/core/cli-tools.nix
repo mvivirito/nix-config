@@ -16,7 +16,7 @@
     jq               # JSON processor
 
     # Modern replacements for classic tools
-    eza              # Modern ls with icons and git status
+    # eza is managed via programs.eza in zsh.nix for proper completions
     dust             # Intuitive du alternative
     duf              # Better df with pretty output
     btop             # Beautiful htop replacement
