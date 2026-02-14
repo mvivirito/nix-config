@@ -9,6 +9,7 @@
     ../../../home-manager/core/zsh.nix
     ../../../home-manager/core/kitty.nix
     ../../../home-manager/core/tmux.nix
+    ../../../home-manager/linux/kde-gui-apps.nix
     # Skip: niri, dms, appearance.nix - VM uses KDE
   ];
 

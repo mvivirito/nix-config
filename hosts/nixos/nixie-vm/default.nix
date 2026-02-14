@@ -5,7 +5,10 @@
 
   # Nix settings (flakes, git for fetching)
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  environment.systemPackages = [ pkgs.git ];
+  environment.systemPackages = with pkgs; [
+    git
+    claude-code  # Claude CLI tool
+  ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

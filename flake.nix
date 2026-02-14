@@ -72,6 +72,7 @@
           # VM-specific modules
           ./hosts/nixos/vm/base.nix
           ./hosts/nixos/vm/desktop/kde.nix
+          ./hosts/nixos/vm/sunshine.nix
 
           # Shared modules
           ./hosts/nixos/shared/locale.nix
