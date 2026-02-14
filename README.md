@@ -5,8 +5,11 @@ Multi-platform Nix configuration for NixOS (laptop) and macOS (personal + work M
 ## Quick Start
 
 ```bash
-# NixOS - full system rebuild (boot, kernel, services, system packages)
+# NixOS Laptop - full system rebuild
 sudo nixos-rebuild switch --flake .#nixos-laptop
+
+# NixOS VM (Proxmox) - full system rebuild
+sudo nixos-rebuild switch --flake .#nixie-vm
 
 # NixOS - user config only (dotfiles, user packages, themes — no sudo, faster)
 home-manager switch --flake .#michael@nixos-laptop
@@ -32,6 +35,7 @@ nix-collect-garbage -d
 | Host | System | Arch | Description |
 |------|--------|------|-------------|
 | `nixos-laptop` | NixOS | x86_64-linux | Personal dev laptop (Intel, LUKS encrypted, NVMe) |
+| `nixie-vm` | NixOS | x86_64-linux | Proxmox VM (KDE Plasma, AI/gaming) |
 | `macbook` | macOS | aarch64-darwin | Personal MacBook (Apple Silicon) |
 | `michaelvivirito-mbp` | macOS | aarch64-darwin | Work MacBook (Apple Silicon) |
 
@@ -64,6 +68,10 @@ nix-config/
 │   │   └── shared/              # Homebrew casks, system prefs, fonts
 │   └── nixos/
 │       ├── laptop/              # Laptop hardware, host overrides
+│       ├── nixie-vm/            # Proxmox VM host (KDE Plasma)
+│       ├── vm/                  # Shared VM modules
+│       │   ├── base.nix         # QEMU guest, GRUB, virtio
+│       │   └── desktop/kde.nix  # KDE Plasma profile
 │       └── shared/              # Boot, users, networking, audio, power, fonts
 └── home-manager/
     ├── home.nix                 # Linux entry point
@@ -93,6 +101,12 @@ nix-config/
 - **Homebrew Casks:** GUI apps managed declaratively (see `hosts/darwin/shared/homebrew.nix`)
 - **Window Management:** Aerospace tiling WM + Karabiner key remapping
 - **Fonts:** Nerd Fonts, Noto, Font Awesome
+
+### Proxmox VMs
+- **Base:** QEMU guest agent, GRUB bootloader, virtio drivers
+- **Desktop:** KDE Plasma 6 + SDDM (or Niri for tiling)
+- **Networking:** NetworkManager + Tailscale + SSH
+- **Future:** GPU passthrough (NVIDIA), Sunshine game streaming
 
 ### Cross-Platform (home-manager)
 - **Shell:** zsh + oh-my-zsh (fishy theme) + zoxide + vi-mode
@@ -142,6 +156,15 @@ Edit `home-manager/core/neovim/config/setup/lspconfig.lua`, add server config, r
 
 ### Customize DMS settings (Linux)
 Export from DMS GUI (Settings → Export), convert JSON to Nix syntax, add to `home-manager/linux/dms.nix` under `settings`, rebuild with `home-manager switch`, then `systemctl --user restart dms.service`.
+
+### Add a new Proxmox VM
+1. Clone from Proxmox template (Full Clone)
+2. Create `hosts/nixos/<hostname>/` with:
+   - `default.nix` - hostname and host-specific config
+   - `hardware-configuration.nix` - use `/dev/disk/by-label/root`
+   - `home.nix` - import from `home-manager/core/`
+3. Add configuration to `flake.nix` nixosConfigurations
+4. Boot VM, clone nix-config, run `sudo nixos-rebuild switch --flake .#<hostname>`
 
 ### Change Niri keybindings (Linux)
 Edit `home-manager/linux/niri/default.nix`, modify `config.binds`, rebuild with `home-manager switch`.
@@ -550,4 +573,27 @@ sudo fprintd-enroll michael
 tailscale status
 # Login again
 sudo tailscale up
+```
+
+### Proxmox VM Issues
+
+```bash
+# Check QEMU guest agent
+systemctl status qemu-guest-agent
+
+# Verify root filesystem label
+lsblk -f
+
+# If label missing, set it (use actual device)
+sudo e2label /dev/sda1 root
+```
+
+### Preparing VM for Proxmox Template
+```bash
+# Clear machine-specific data
+sudo rm /etc/machine-id
+sudo rm /etc/ssh/ssh_host_*
+history -c && history -w
+
+# Then in Proxmox: Stop VM -> Convert to Template
 ```

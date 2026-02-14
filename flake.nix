@@ -61,8 +61,38 @@
           }
         ];
       };
-      # Future hosts prepared:
-      # desktop = nixpkgs.lib.nixosSystem { ... };
+
+      # NixOS VM on Proxmox (KDE Plasma)
+      nixie-vm = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit inputs outputs;
+          hostname = "nixie-vm";
+        };
+        modules = [
+          # VM-specific modules
+          ./hosts/nixos/vm/base.nix
+          ./hosts/nixos/vm/desktop/kde.nix
+
+          # Shared modules
+          ./hosts/nixos/shared/locale.nix
+          ./hosts/nixos/shared/networking.nix
+          ./hosts/nixos/shared/audio.nix
+          ./hosts/nixos/shared/fonts.nix
+
+          # Host-specific
+          ./hosts/nixos/nixie-vm/hardware-configuration.nix
+          ./hosts/nixos/nixie-vm/default.nix
+
+          # Integrate home-manager as NixOS module
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = {inherit inputs outputs;};
+            home-manager.users.michael = ./hosts/nixos/nixie-vm/home.nix;
+          }
+        ];
+      };
     };
 
     # nix-darwin configuration entrypoint
