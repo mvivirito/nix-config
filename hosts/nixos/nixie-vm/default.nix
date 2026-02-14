@@ -32,7 +32,6 @@
   users.defaultUserShell = pkgs.zsh;
 
   # Basic programs
-  programs.firefox.enable = true;
   programs.zsh.enable = true;
 
   # Printing support
