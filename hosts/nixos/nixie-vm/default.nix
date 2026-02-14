@@ -3,6 +3,10 @@
 {
   networking.hostName = "nixie-vm";
 
+  # GPU passthrough - enabled for NVIDIA RTX
+  vm.gpu.enable = true;
+  vm.gpu.nvidia.enable = true;
+
   # Nix settings (flakes, git for fetching)
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   environment.systemPackages = with pkgs; [
@@ -17,7 +21,7 @@
   services.openssh = {
     enable = true;
     settings = {
-      PasswordAuthentication = false;
+      PasswordAuthentication = true;
       PermitRootLogin = "no";
     };
   };
@@ -26,7 +30,7 @@
   users.users.michael = {
     isNormalUser = true;
     description = "Michael Vivirito";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "input" "video" "render" ];
   };
 
   users.defaultUserShell = pkgs.zsh;

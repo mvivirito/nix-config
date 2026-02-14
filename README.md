@@ -35,7 +35,7 @@ nix-collect-garbage -d
 | Host | System | Arch | Description |
 |------|--------|------|-------------|
 | `nixos-laptop` | NixOS | x86_64-linux | Personal dev laptop (Intel, LUKS encrypted, NVMe) |
-| `nixie-vm` | NixOS | x86_64-linux | Proxmox VM (KDE Plasma, Sunshine streaming, AI/gaming) |
+| `nixie-vm` | NixOS | x86_64-linux | Proxmox VM (KDE Plasma, RTX 4080 GPU passthrough, Sunshine/NVENC streaming) |
 | `macbook` | macOS | aarch64-darwin | Personal MacBook (Apple Silicon) |
 | `michaelvivirito-mbp` | macOS | aarch64-darwin | Work MacBook (Apple Silicon) |
 
@@ -70,9 +70,10 @@ nix-config/
 │       ├── laptop/              # Laptop hardware, host overrides
 │       ├── nixie-vm/            # Proxmox VM host (KDE Plasma)
 │       ├── vm/                  # Shared VM modules
-│       │   ├── base.nix         # QEMU guest, GRUB, virtio
-│       │   ├── desktop/kde.nix  # KDE Plasma + apps + Catppuccin theming
-│       │   └── sunshine.nix     # Sunshine streaming + Avahi mDNS
+│       │   ├── base.nix         # QEMU guest, GRUB, virtio, kernel tuning
+│       │   ├── desktop/kde.nix  # KDE Plasma + apps + auto-login + Catppuccin
+│       │   ├── gpu-passthrough.nix  # NVIDIA GPU passthrough + headless X11
+│       │   └── sunshine.nix     # Sunshine streaming (NVENC) + Avahi mDNS
 │       └── shared/              # Boot, users, networking, audio, power, fonts
 └── home-manager/
     ├── home.nix                 # Linux entry point
@@ -105,13 +106,13 @@ nix-config/
 - **Fonts:** Nerd Fonts, Noto, Font Awesome
 
 ### Proxmox VMs
-- **Base:** QEMU guest agent, GRUB bootloader, virtio drivers
-- **Desktop:** KDE Plasma 6 + SDDM + KDE apps (Okular, Gwenview, Spectacle, KDE Connect, etc.)
-- **Streaming:** Sunshine game streaming (Moonlight-compatible) + Avahi mDNS
+- **Base:** QEMU guest agent, GRUB bootloader, virtio drivers, kernel tuning (zswap, sysctl)
+- **Desktop:** KDE Plasma 6 + SDDM + auto-login + KDE apps (Okular, Gwenview, Spectacle, KDE Connect, etc.)
+- **GPU:** NVIDIA RTX 4080 passthrough with headless X11 (virtual display, no monitor required)
+- **Streaming:** Sunshine with NVENC hardware encoding (Moonlight-compatible) + Avahi mDNS
 - **Apps:** Floorp, Chrome, Brave, Discord, Spotify, VSCode, Obsidian, claude-code CLI
 - **Theming:** Catppuccin Mocha (KDE, Kvantum, GTK, Papirus icons)
 - **Networking:** NetworkManager + Tailscale + SSH + KDE Connect firewall
-- **Future:** GPU passthrough (NVIDIA)
 
 ### Cross-Platform (home-manager)
 - **Shell:** zsh + oh-my-zsh (fishy theme) + zoxide + vi-mode
@@ -601,4 +602,23 @@ sudo rm /etc/ssh/ssh_host_*
 history -c && history -w
 
 # Then in Proxmox: Stop VM -> Convert to Template
+```
+
+### GPU Passthrough / Sunshine Issues
+```bash
+# Check GPU is detected
+nvidia-smi
+
+# Check X11 session is running (needed for Sunshine)
+systemctl status display-manager
+loginctl list-sessions
+
+# Check Sunshine status
+systemctl --user status sunshine
+
+# Verify NVENC encoding
+journalctl --user -u sunshine | grep -i nvenc
+
+# If X11 fails with "no screens found", the headless config may need adjustment
+# Check /etc/X11/xorg.conf.d/ for BusID and virtual display settings
 ```

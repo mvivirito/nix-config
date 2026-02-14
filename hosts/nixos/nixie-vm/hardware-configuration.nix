@@ -9,7 +9,11 @@
     fsType = "ext4";
   };
 
-  swapDevices = [ ];
+  # Swap file for memory pressure handling
+  swapDevices = [{
+    device = "/swapfile";
+    size = 4096;  # 4GB
+  }];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }

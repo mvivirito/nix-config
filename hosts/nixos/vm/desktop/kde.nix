@@ -5,8 +5,21 @@
   services.xserver.enable = true;
 
   # KDE Plasma 6 desktop environment
-  services.displayManager.sddm.enable = true;
+  services.displayManager.sddm = {
+    enable = true;
+    wayland.enable = true;  # Wayland SDDM for better integration
+  };
   services.desktopManager.plasma6.enable = true;
+
+  # Auto-login for headless streaming (Sunshine needs a session)
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "michael";
+  };
+
+  # Force X11 session for better VM compatibility (Wayland can be laggy in VMs)
+  # Comment out the line below if you want to try Wayland instead
+  services.displayManager.defaultSession = "plasmax11";
 
   # KDE packages
   environment.systemPackages = with pkgs; [
