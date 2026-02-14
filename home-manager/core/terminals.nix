@@ -32,6 +32,23 @@
         };
       };
 
+      # Font configuration - use Nerd Font for icons (eza, etc.)
+      font = {
+        normal = {
+          family = "JetBrainsMono Nerd Font";
+          style = "Regular";
+        };
+        bold = {
+          family = "JetBrainsMono Nerd Font";
+          style = "Bold";
+        };
+        italic = {
+          family = "JetBrainsMono Nerd Font";
+          style = "Italic";
+        };
+        size = 14;
+      };
+
       # Scrollback
       scrolling = {
         history = 100000;
