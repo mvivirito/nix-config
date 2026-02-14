@@ -35,7 +35,7 @@ nix-collect-garbage -d
 | Host | System | Arch | Description |
 |------|--------|------|-------------|
 | `nixos-laptop` | NixOS | x86_64-linux | Personal dev laptop (Intel, LUKS encrypted, NVMe) |
-| `nixie-vm` | NixOS | x86_64-linux | Proxmox VM (KDE Plasma, AI/gaming) |
+| `nixie-vm` | NixOS | x86_64-linux | Proxmox VM (KDE Plasma, Sunshine streaming, AI/gaming) |
 | `macbook` | macOS | aarch64-darwin | Personal MacBook (Apple Silicon) |
 | `michaelvivirito-mbp` | macOS | aarch64-darwin | Work MacBook (Apple Silicon) |
 
@@ -71,7 +71,8 @@ nix-config/
 │       ├── nixie-vm/            # Proxmox VM host (KDE Plasma)
 │       ├── vm/                  # Shared VM modules
 │       │   ├── base.nix         # QEMU guest, GRUB, virtio
-│       │   └── desktop/kde.nix  # KDE Plasma profile
+│       │   ├── desktop/kde.nix  # KDE Plasma + apps + Catppuccin theming
+│       │   └── sunshine.nix     # Sunshine streaming + Avahi mDNS
 │       └── shared/              # Boot, users, networking, audio, power, fonts
 └── home-manager/
     ├── home.nix                 # Linux entry point
@@ -79,6 +80,7 @@ nix-config/
     ├── appearance.nix           # GTK/Qt theming (Linux)
     ├── core/                    # Cross-platform: zsh, neovim, alacritty, kitty, tmux, cli-tools
     ├── linux/                   # Niri WM config, DMS shell, GUI apps
+    │   └── kde-gui-apps.nix     # KDE-friendly GUI apps (browsers, media, productivity)
     └── darwin/                  # Aerospace WM, Karabiner remapping, GUI apps
 ```
 
@@ -104,9 +106,12 @@ nix-config/
 
 ### Proxmox VMs
 - **Base:** QEMU guest agent, GRUB bootloader, virtio drivers
-- **Desktop:** KDE Plasma 6 + SDDM (or Niri for tiling)
-- **Networking:** NetworkManager + Tailscale + SSH
-- **Future:** GPU passthrough (NVIDIA), Sunshine game streaming
+- **Desktop:** KDE Plasma 6 + SDDM + KDE apps (Okular, Gwenview, Spectacle, KDE Connect, etc.)
+- **Streaming:** Sunshine game streaming (Moonlight-compatible) + Avahi mDNS
+- **Apps:** Floorp, Chrome, Brave, Discord, Spotify, VSCode, Obsidian, claude-code CLI
+- **Theming:** Catppuccin Mocha (KDE, Kvantum, GTK, Papirus icons)
+- **Networking:** NetworkManager + Tailscale + SSH + KDE Connect firewall
+- **Future:** GPU passthrough (NVIDIA)
 
 ### Cross-Platform (home-manager)
 - **Shell:** zsh + oh-my-zsh (fishy theme) + zoxide + vi-mode
