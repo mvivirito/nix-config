@@ -24,9 +24,26 @@
       # Thread count for better parallelism
       min_threads = 4;
 
-      # Audio settings
-      audio_sink = "auto";
+      # Audio settings - use the virtual Sunshine sink
+      audio_sink = "Sunshine-Sink";
     };
+  };
+
+  # Virtual audio sink for headless streaming
+  # Creates a sink that Sunshine can capture audio from when no physical audio device exists
+  services.pipewire.extraConfig.pipewire."91-sunshine-sink" = {
+    "context.objects" = [
+      {
+        factory = "adapter";
+        args = {
+          "factory.name" = "support.null-audio-sink";
+          "node.name" = "Sunshine-Sink";
+          "node.description" = "Sunshine Audio Output";
+          "media.class" = "Audio/Sink";
+          "audio.position" = "FL,FR";
+        };
+      }
+    ];
   };
 
   # Ensure uinput module is loaded for virtual input devices
