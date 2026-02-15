@@ -27,9 +27,9 @@
       "copy_command" = "wl-copy";
     };
     bindings = {
-      # Vim-style horizontal scrolling
-      "move_left" = "h";
-      "move_right" = "l";
+      # Reversed vim-style horizontal scrolling
+      "move_left" = "l";
+      "move_right" = "h";
 
       # Dark mode toggle
       "toggle_custom_color" = "<C-r>";
