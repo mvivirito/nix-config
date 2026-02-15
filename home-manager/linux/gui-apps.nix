@@ -46,6 +46,7 @@
     # Media
     imv              # Lightweight Wayland image viewer
     mpv              # Lightweight video player (keyboard-driven)
+    moonlight-qt
     spotify
     vlc
 
