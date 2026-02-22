@@ -20,6 +20,10 @@
     # Dank Material Shell (desktop shell: bar, launcher, notifications, lock screen)
     dms.url = "github:AvengeMedia/DankMaterialShell/stable";
     dms.inputs.nixpkgs.follows = "nixpkgs";
+
+    # OpenClaw AI assistant
+    nix-openclaw.url = "github:openclaw/nix-openclaw";
+    nix-openclaw.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -29,6 +33,7 @@
     nix-darwin,
     niri,
     dms,
+    nix-openclaw,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -69,6 +74,9 @@
           hostname = "nixie-vm";
         };
         modules = [
+          # OpenClaw overlay (adds pkgs.openclaw)
+          { nixpkgs.overlays = [ nix-openclaw.overlays.default ]; }
+
           # VM-specific modules
           ./hosts/nixos/vm/base.nix
           ./hosts/nixos/vm/desktop/kde.nix
@@ -84,6 +92,7 @@
           # Host-specific
           ./hosts/nixos/nixie-vm/hardware-configuration.nix
           ./hosts/nixos/nixie-vm/default.nix
+          ./hosts/nixos/nixie-vm/ollama.nix
 
           # Integrate home-manager as NixOS module
           home-manager.nixosModules.home-manager

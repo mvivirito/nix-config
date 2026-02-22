@@ -135,6 +135,9 @@
       }
       zle -N paste-from-clipboard
       bindkey '^V' paste-from-clipboard
+
+      # Source OpenClaw secrets (if present)
+      [[ -f ~/.config/openclaw/secrets.env ]] && source ~/.config/openclaw/secrets.env
     '';
   };
 }
