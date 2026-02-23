@@ -80,7 +80,40 @@
     whisper-cpp      # Speech-to-text via whisper model
     ydotool          # Virtual keyboard input for typing transcriptions
 
+    # DMS integration
+    dsearch          # Filesystem search for DMS spotlight
+
     # Note: Bar, launcher, notifications, lock screen, clipboard, and screenshots
     # are all provided by DMS (Dank Material Shell) - see linux/dms.nix
   ];
+
+  # dsearch: indexed filesystem search for DMS spotlight file results
+  systemd.user.services.dsearch = {
+    Unit.Description = "dsearch filesystem indexer";
+    Service = {
+      ExecStart = "${pkgs.dsearch}/bin/dsearch serve";
+      Restart = "on-failure";
+      StandardOutput = "journal";
+      StandardError = "journal";
+      SyslogIdentifier = "dsearch";
+    };
+    Install.WantedBy = [ "default.target" ];
+  };
+
+  xdg.configFile."danksearch/config.toml".text = ''
+    listen_addr = ":43654"
+    index_all_files = true
+    max_file_bytes = 2097152
+
+    [[index_paths]]
+    path = "/home/michael"
+    max_depth = 6
+    exclude_hidden = true
+    extract_exif = true
+    exclude_dirs = [
+      "node_modules", "__pycache__", "venv", ".venv",
+      "target", "dist", "build", "vendor", ".cache",
+      ".local", ".nix-defexpr", ".nix-profile"
+    ]
+  '';
 }
