@@ -101,8 +101,7 @@
       fadeToDpmsGracePeriod = 5;
 
       # Lock screen
-      enableFprint = true;
-      maxFprintTries = 15;
+      enableFprint = false;
 
       # Sounds
       soundsEnabled = true;

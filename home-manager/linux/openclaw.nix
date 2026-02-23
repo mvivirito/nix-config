@@ -116,6 +116,19 @@ in
             softThresholdTokens = 32000;
           };
         };
+
+        # Memory search - Ollama local embeddings via OpenAI-compatible endpoint
+        memorySearch = {
+          enabled = true;
+          provider = "openai";
+          model = "nomic-embed-text:latest";
+          remote = {
+            baseUrl = "http://127.0.0.1:11434/v1";
+            apiKey = "ollama-local";
+          };
+          sources = [ "memory" "sessions" ];
+          fallback = "none";
+        };
       };
 
       # Enable Telegram plugin (required since OpenClaw 2026.2.22+)
