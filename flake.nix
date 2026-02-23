@@ -22,7 +22,7 @@
     dms.inputs.nixpkgs.follows = "nixpkgs";
 
     # OpenClaw AI assistant
-    nix-openclaw.url = "github:openclaw/nix-openclaw";
+    nix-openclaw.url = "github:mvivirito/nix-openclaw";
     nix-openclaw.inputs.nixpkgs.follows = "nixpkgs";
   };
 

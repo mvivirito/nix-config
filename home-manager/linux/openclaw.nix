@@ -77,7 +77,7 @@ in
           "ollama/llama3.2:3b"            = { alias = "local"; };
         };
 
-        workspace = "/home/michael/.openclaw/workspace";
+        workspace = "${config.home.homeDirectory}/.openclaw/workspace";
 
         # Heartbeat (free via Ollama)
         heartbeat = {
