@@ -21,14 +21,23 @@ in
 
       # Model providers
       models.providers = {
+        # NVIDIA NIM - Kimi K2.5 (free tier, OpenAI-compatible)
+        nvidia = {
+          baseUrl = "https://integrate.api.nvidia.com/v1";
+          api = "openai-completions";
+          models = [
+            { id = "moonshotai/kimi-k2.5"; name = "Kimi K2.5"; contextWindow = 131072; maxTokens = 8192; }
+          ];
+        };
+
         # Anthropic Claude (API key injected from secrets.env via activation script)
         anthropic = {
           baseUrl = "https://api.anthropic.com";
           api = "anthropic-messages";
           models = [
-            { id = "claude-haiku-4-5"; name = "Claude Haiku 4.5"; }
-            { id = "claude-sonnet-4-5"; name = "Claude Sonnet 4.5"; }
-            { id = "claude-opus-4-5"; name = "Claude Opus 4.5"; }
+            { id = "claude-haiku-4-5"; name = "Claude Haiku 4.5"; contextWindow = 65536; maxTokens = 4096; }
+            { id = "claude-sonnet-4-5"; name = "Claude Sonnet 4.5"; contextWindow = 131072; maxTokens = 8192; }
+            { id = "claude-opus-4-5"; name = "Claude Opus 4.5"; contextWindow = 131072; maxTokens = 8192; }
           ];
         };
 
@@ -37,52 +46,54 @@ in
           baseUrl = "https://generativelanguage.googleapis.com";
           api = "google-generative-ai";
           models = [
-            { id = "gemini-3-flash-preview"; name = "Gemini 3 Flash"; }
-            { id = "gemini-2.5-pro"; name = "Gemini 2.5 Pro"; }
+            { id = "gemini-3-flash-preview"; name = "Gemini 3 Flash"; contextWindow = 131072; maxTokens = 8192; }
+            { id = "gemini-2.5-pro"; name = "Gemini 2.5 Pro"; contextWindow = 131072; maxTokens = 8192; }
           ];
         };
 
-        # Ollama (local - free)
+        # Ollama (local GPU - free)
         ollama = {
           baseUrl = "http://127.0.0.1:11434";
           api = "ollama";
           apiKey = "ollama-local";
           models = [
-            { id = "llama3.2:3b"; name = "Llama 3.2 3B"; }
-            { id = "qwen2.5:7b"; name = "Qwen 2.5 7B"; }
+            { id = "qwen2.5:14b"; name = "Qwen 2.5 14B"; contextWindow = 32768; maxTokens = 4096; }
           ];
         };
       };
 
       # Default agent settings
       agents.defaults = {
-        # Default to Claude Haiku (cheapest cloud, good for most queries)
-        model.primary = "anthropic/claude-haiku-4-5";
+        # Default to Kimi K2.5 (free via NVIDIA NIM)
+        model.primary = "nvidia/moonshotai/kimi-k2.5";
 
-        # Fallback chain: cloud-to-local cascade
+        # Fallback chain: free cloud → local GPU → paid cloud (last resort)
         model.fallbacks = [
           "google/gemini-3-flash-preview"
-          "google/gemini-2.5-pro"
-          "ollama/qwen2.5:7b"
+          "ollama/qwen2.5:14b"
+          "anthropic/claude-haiku-4-5"
         ];
 
         # Model aliases for quick switching (e.g. /model sonnet in Telegram)
         models = {
-          "anthropic/claude-haiku-4-5"    = { alias = "haiku"; };
-          "anthropic/claude-sonnet-4-5"   = { alias = "sonnet"; };
-          "anthropic/claude-opus-4-5"     = { alias = "opus"; };
-          "google/gemini-3-flash-preview" = { alias = "flash"; };
-          "google/gemini-2.5-pro"         = { alias = "pro"; };
-          "ollama/qwen2.5:7b"             = { alias = "qwen"; };
-          "ollama/llama3.2:3b"            = { alias = "local"; };
+          "nvidia/moonshotai/kimi-k2.5"   = { alias = "kimi"; };
+          "anthropic/claude-haiku-4-5"     = { alias = "haiku"; };
+          "anthropic/claude-sonnet-4-5"    = { alias = "sonnet"; };
+          "anthropic/claude-opus-4-5"      = { alias = "opus"; };
+          "google/gemini-3-flash-preview"  = { alias = "flash"; };
+          "google/gemini-2.5-pro"          = { alias = "pro"; };
+          "ollama/qwen2.5:14b"             = { alias = "qwen"; };
         };
+
+        # Hard cap on context sent to any model
+        contextTokens = 65536;
 
         workspace = "${config.home.homeDirectory}/.openclaw/workspace";
 
-        # Heartbeat (free via Ollama)
+        # Heartbeat (free via Ollama - Qwen 14B already loaded in VRAM)
         heartbeat = {
-          every = "55m";  # 55min to keep cache warm with 60min TTL
-          model = "ollama/llama3.2:3b";
+          every = "55m";
+          model = "ollama/qwen2.5:14b";
           session = "main";
           prompt = "Check: Any blockers, opportunities, or progress updates?";
         };
@@ -93,9 +104,17 @@ in
           ttl = "60m";
         };
 
-        # Compaction strategy
+        # Compaction strategy - aggressive token saving
         compaction = {
           mode = "safeguard";
+          keepRecentTokens = 4000;
+          maxHistoryShare = 0.6;
+          reserveTokens = 2048;
+          reserveTokensFloor = 1024;
+          memoryFlush = {
+            enabled = true;
+            softThresholdTokens = 32000;
+          };
         };
       };
 
@@ -128,6 +147,14 @@ in
       ANTHROPIC_KEY=$(${pkgs.gnugrep}/bin/grep -m1 '^ANTHROPIC_API_KEY=' "${secretsDir}/secrets.env" | cut -d= -f2-)
       if [ -n "$ANTHROPIC_KEY" ]; then
         ${pkgs.jq}/bin/jq --arg k "$ANTHROPIC_KEY" '.models.providers.anthropic.apiKey = $k' \
+          "${openclawConfig}" > "${openclawConfig}.tmp" && \
+          mv "${openclawConfig}.tmp" "${openclawConfig}"
+      fi
+
+      # Inject NVIDIA API key
+      NVIDIA_KEY=$(${pkgs.gnugrep}/bin/grep -m1 '^NVIDIA_API_KEY=' "${secretsDir}/secrets.env" | cut -d= -f2-)
+      if [ -n "$NVIDIA_KEY" ]; then
+        ${pkgs.jq}/bin/jq --arg k "$NVIDIA_KEY" '.models.providers.nvidia.apiKey = $k' \
           "${openclawConfig}" > "${openclawConfig}.tmp" && \
           mv "${openclawConfig}.tmp" "${openclawConfig}"
       fi
