@@ -99,11 +99,15 @@ in
         };
       };
 
+      # Enable Telegram plugin (required since OpenClaw 2026.2.22+)
+      plugins.entries.telegram.enabled = true;
+
       # Telegram channel
       channels.telegram = {
         tokenFile = "${secretsDir}/telegram-token";
         allowFrom = [ telegramUserId ];
         defaultTo = telegramUserId;
+        dmPolicy = "allowlist";
       };
     };
   };
