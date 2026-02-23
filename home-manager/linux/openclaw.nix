@@ -17,7 +17,6 @@ in
     config = {
       gateway = {
         mode = "local";
-        # Token read from OPENCLAW_GATEWAY_TOKEN env var (set via EnvironmentFile below)
       };
 
       # Model providers
