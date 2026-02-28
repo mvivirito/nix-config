@@ -91,7 +91,7 @@
     powerOnBoot = true;
     settings = {
       General = {
-        Enable = "Source,Sink,Media,Socket";
+        Enable = "Source,Sink,Media,Socket,Input";
         Experimental = true;  # For battery reporting
       };
     };

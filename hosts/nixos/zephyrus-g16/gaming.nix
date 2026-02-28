@@ -39,6 +39,12 @@
   # Xbox controller support (Bluetooth)
   hardware.xpadneo.enable = true;
 
+  # 8BitDo controller udev rules (Steam needs hidraw access)
+  services.udev.extraRules = ''
+    KERNEL=="hidraw*", ATTRS{idVendor}=="2dc8", MODE="0660", TAG+="uaccess"
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="2dc8", MODE="0660", TAG+="uaccess"
+  '';
+
   # Steam hardware (controllers, VR)
   hardware.steam-hardware.enable = true;
 
