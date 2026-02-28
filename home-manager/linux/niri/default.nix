@@ -63,9 +63,6 @@ in {
   # The niri NixOS module auto-imports homeModules.config for settings
   # We only configure settings here, not enable
 
-  # Disable niri-flake's polkit agent - DMS provides its own
-  systemd.user.services.niri-flake-polkit.Install.WantedBy = lib.mkForce [];
-
   programs.niri.settings = {
       # Prefer server-side decorations (removes app title bars like sioyek's)
       prefer-no-csd = true;
@@ -78,7 +75,8 @@ in {
         touchpad = {
           tap = true;
           natural-scroll = true;
-          dwt = true;  # disable while typing
+          dwt = true;   # disable while typing
+          dwtp = true;  # disable while trackpointing/using mouse
         };
         mouse = {
           accel-speed = 0.15;

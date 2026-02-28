@@ -8,9 +8,12 @@
   # System-level Niri configuration
   # User-level config (keybinds, settings) is in home-manager/linux/niri/
 
-  # Enable Niri compositor system-wide via niri-flake
+  # Enable Niri compositor system-wide via niri-flake module
+  # Use nixpkgs niri package - niri-flake builds from source and its tests
+  # SIGABRT without a GPU in the nix sandbox
   programs.niri = {
     enable = true;
+    package = pkgs.niri;
   };
 
   # XWayland for legacy X11 applications

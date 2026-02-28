@@ -1,12 +1,15 @@
 # nix-config
 
-Multi-platform Nix configuration for NixOS (laptop) and macOS (personal + work MacBooks via nix-darwin).
+Multi-platform Nix configuration for NixOS (laptops, VMs) and macOS (personal + work MacBooks via nix-darwin).
 
 ## Quick Start
 
 ```bash
 # NixOS Laptop - full system rebuild
 sudo nixos-rebuild switch --flake .#nixos-laptop
+
+# Asus ROG Zephyrus G16 - full system rebuild
+sudo nixos-rebuild switch --flake .#zephyrus
 
 # NixOS VM (Proxmox) - full system rebuild
 sudo nixos-rebuild switch --flake .#nixie-vm
@@ -35,6 +38,7 @@ nix-collect-garbage -d
 | Host | System | Arch | Description |
 |------|--------|------|-------------|
 | `nixos-laptop` | NixOS | x86_64-linux | Personal dev laptop (Intel, LUKS encrypted, NVMe) |
+| `zephyrus` | NixOS | x86_64-linux | Asus ROG Zephyrus G16 (Intel Core Ultra 9 + RTX 4090, NVIDIA PRIME, gaming, Ollama CUDA) |
 | `nixie-vm` | NixOS | x86_64-linux | Proxmox VM (KDE Plasma, RTX 4080 GPU passthrough, Sunshine/NVENC streaming) |
 | `macbook` | macOS | aarch64-darwin | Personal MacBook (Apple Silicon) |
 | `michaelvivirito-mbp` | macOS | aarch64-darwin | Work MacBook (Apple Silicon) |
@@ -69,6 +73,14 @@ nix-config/
 │   │   └── shared/              # Homebrew casks, system prefs, fonts
 │   └── nixos/
 │       ├── laptop/              # Laptop hardware, host overrides
+│       ├── zephyrus-g16/        # Asus ROG Zephyrus G16 (NVIDIA + gaming)
+│       │   ├── default.nix      # Asus services, firmware, Bluetooth, kernel
+│       │   ├── hardware.nix     # Hardware config (Intel CPU, LUKS, NVMe)
+│       │   ├── nvidia.nix       # NVIDIA PRIME hybrid graphics (Intel Arc + RTX 4090)
+│       │   ├── gaming.nix       # Steam, Proton-GE, emulators, GameMode
+│       │   ├── ollama.nix       # Ollama with CUDA acceleration
+│       │   ├── power.nix        # TLP power management
+│       │   └── home.nix         # Home-manager (Niri + DMS desktop)
 │       ├── nixie-vm/            # Proxmox VM host (KDE Plasma)
 │       ├── vm/                  # Shared VM modules
 │       │   ├── base.nix         # QEMU guest, GRUB, virtio, kernel tuning
@@ -107,6 +119,18 @@ nix-config/
 - **Window Management:** Aerospace tiling WM + Karabiner key remapping
 - **Fonts:** Nerd Fonts, Noto, Font Awesome
 
+### Asus ROG Zephyrus G16 (zephyrus)
+- **Hardware:** Intel Core Ultra 9 185H + NVIDIA RTX 4090 Mobile (16GB VRAM)
+- **Display:** 240Hz OLED, Intel Arc iGPU for display/battery, NVIDIA for compute/gaming
+- **Graphics:** NVIDIA PRIME hybrid offload (`nvidia-offload` command), Wayland native
+- **Asus Services:** asusd (keyboard RGB, fan curves, battery limits), supergfxd (GPU switching)
+- **Firmware:** fwupd with LVFS for BIOS/firmware updates
+- **Gaming:** Steam + Proton-GE, Gamescope, GameMode, MangoHud, Lutris, Heroic
+- **Emulators:** RetroArch, Dolphin (GC/Wii), RPCS3 (PS3), PCSX2 (PS2), PPSSPP, Duckstation, Cemu
+- **AI/ML:** Ollama with CUDA acceleration (qwen2.5:14b pre-loaded)
+- **Power:** TLP (performance on AC, powersave on battery), Intel thermald
+- **Desktop:** Niri compositor + DMS shell (same as nixos-laptop)
+
 ### Proxmox VMs
 - **Base:** QEMU guest agent, GRUB bootloader, virtio drivers, kernel tuning (zswap, sysctl)
 - **Desktop:** KDE Plasma 6 + SDDM + auto-login + KDE apps (Okular, Gwenview, Spectacle, KDE Connect, etc.)
@@ -142,6 +166,9 @@ nix-config/
 | `hosts/darwin/shared/homebrew.nix` | Managed Homebrew casks |
 | `hosts/nixos/shared/networking.nix` | NetworkManager + Tailscale |
 | `hosts/nixos/shared/hibernate.nix` | Auto-hibernate on battery |
+| `hosts/nixos/zephyrus-g16/nvidia.nix` | NVIDIA PRIME hybrid graphics config |
+| `hosts/nixos/zephyrus-g16/gaming.nix` | Steam, Proton, emulators config |
+| `hosts/nixos/zephyrus-g16/default.nix` | Asus laptop services (asusd, supergfxd) |
 | `home-manager/linux/openclaw.nix` | OpenClaw AI gateway config (nixie-vm) |
 
 ## Common Tasks
@@ -181,6 +208,15 @@ Edit `home-manager/linux/niri/default.nix`, modify `config.binds`, rebuild with 
 
 ### Change Aerospace keybindings (macOS)
 Edit `home-manager/darwin/aerospace.nix`, modify binding sets, rebuild then `aerospace reload-config`.
+
+### Add an emulator (zephyrus)
+Edit `hosts/nixos/zephyrus-g16/gaming.nix`, add to `environment.systemPackages`, rebuild.
+
+### Customize Asus fan curves (zephyrus)
+Edit `hosts/nixos/zephyrus-g16/default.nix`, uncomment and modify `fanCurvesConfig` in `services.asusd`, rebuild.
+
+### Change NVIDIA power settings (zephyrus)
+Edit `hosts/nixos/zephyrus-g16/nvidia.nix`, modify `hardware.nvidia.powerManagement` options, rebuild.
 
 ---
 
@@ -644,6 +680,64 @@ ls -la ~/.config/openclaw/
 # Web UI (paste gateway token in settings)
 # http://localhost:18789
 cat ~/.config/openclaw/gateway-token
+```
+
+### Asus ROG Zephyrus Issues
+
+```bash
+# Check asusd status
+systemctl status asusd
+
+# Control keyboard backlight
+asusctl led-mode static -c ff0000   # Red
+asusctl led-mode rainbow            # Rainbow effect
+asusctl led-mode off                # Turn off
+
+# Set fan profile
+asusctl profile -P Quiet            # Quiet/Balanced/Performance
+
+# Set battery charge limit (preserve battery health)
+asusctl -c 80                       # Charge to 80% max
+
+# Switch GPU mode
+supergfxctl -m hybrid               # Hybrid (Intel + NVIDIA on-demand)
+supergfxctl -m integrated           # Intel only (max battery)
+supergfxctl -m dedicated            # NVIDIA only (max performance)
+supergfxctl -g                      # Get current mode
+
+# Update firmware
+fwupdmgr refresh && fwupdmgr get-updates && fwupdmgr update
+```
+
+### NVIDIA PRIME / Gaming Issues
+
+```bash
+# Check NVIDIA driver loaded
+nvidia-smi
+
+# Test PRIME offload
+nvidia-offload glxinfo | grep vendor   # Should show NVIDIA
+
+# Run application on NVIDIA GPU
+nvidia-offload steam
+nvidia-offload mangohud glxgears
+
+# Check Ollama CUDA
+systemctl status ollama
+ollama run qwen2.5:14b "Hello"      # Should use GPU
+
+# Verify GameMode
+gamemoded -s
+
+# Steam with MangoHud overlay
+mangohud %command%                   # Add to Steam launch options
+
+# Check power consumption
+powertop
+
+# Monitor GPU temps/usage
+nvtop
+sensors
 ```
 
 ### OpenClaw Setup (nixie-vm)

@@ -14,8 +14,8 @@
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     # Niri scrolling tiling Wayland compositor
+    # Don't follow nixpkgs - let niri use its own tested nixpkgs to avoid build failures
     niri.url = "github:sodiboo/niri-flake";
-    niri.inputs.nixpkgs.follows = "nixpkgs";
 
     # Dank Material Shell (desktop shell: bar, launcher, notifications, lock screen)
     dms.url = "github:AvengeMedia/DankMaterialShell/stable";
@@ -63,6 +63,59 @@
             home-manager.useUserPackages = true;
             home-manager.extraSpecialArgs = {inherit inputs outputs;};
             home-manager.users.michael = ./home-manager/home.nix;
+          }
+        ];
+      };
+
+      # Asus ROG Zephyrus G16 (Intel Core Ultra 9 + NVIDIA RTX 4090)
+      zephyrus = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit inputs outputs;
+          hostname = "zephyrus";
+        };
+        modules = [
+          # Overlays
+          {
+            nixpkgs.overlays = [
+              # Workaround: khal is broken in nixpkgs (build fails)
+              (final: prev: {
+                khal = final.writeShellScriptBin "khal" "echo 'khal disabled - broken in nixpkgs'";
+              })
+            ];
+          }
+
+          # Shared modules
+          ./hosts/nixos/shared/boot.nix
+          ./hosts/nixos/shared/locale.nix
+          ./hosts/nixos/shared/networking.nix
+          ./hosts/nixos/shared/audio.nix
+          ./hosts/nixos/shared/fonts.nix
+          ./hosts/nixos/shared/power.nix
+          ./hosts/nixos/shared/hibernate.nix
+
+          # Desktop (Niri + DMS)
+          niri.nixosModules.niri
+          dms.nixosModules.dank-material-shell
+          ./nixos/niri.nix
+          ./nixos/greetd.nix
+          ./nixos/kanata
+          ./nixos/theme.nix
+
+          # Host-specific
+          ./hosts/nixos/zephyrus-g16/hardware.nix
+          ./hosts/nixos/zephyrus-g16/default.nix
+          ./hosts/nixos/zephyrus-g16/nvidia.nix
+          ./hosts/nixos/zephyrus-g16/gaming.nix
+          ./hosts/nixos/zephyrus-g16/ollama.nix
+          ./hosts/nixos/zephyrus-g16/power.nix
+
+          # Integrate home-manager as NixOS module
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs outputs; };
+            home-manager.users.michael = ./hosts/nixos/zephyrus-g16/home.nix;
           }
         ];
       };

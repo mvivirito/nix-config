@@ -23,10 +23,9 @@
     enableSystemMonitoring = true;
 
     settings = {
-      # Theme: petrichor with blue variant
-      currentThemeName = "custom";
+      # Theme: petrichor with blue variant (set in registryThemeVariants below)
+      currentThemeName = "petrichor";
       currentThemeCategory = "registry";
-      customThemeFile = "${config.home.homeDirectory}/.config/DankMaterialShell/themes/petrichor/theme.json";
       registryThemeVariants = {
         everforest = "soft";
         flexoki = "magenta";
