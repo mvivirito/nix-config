@@ -189,5 +189,28 @@
     # Additional sensor modules if needed
   ];
 
+  # ============================================================================
+  # EFI FALLBACK BOOT PATH (ASUS BIOS WORKAROUND)
+  # ============================================================================
+  # ASUS firmware resets EFI NVRAM boot order on cold boot. The UEFI spec
+  # requires firmware to try EFI/BOOT/BOOTX64.EFI as a fallback unconditionally.
+  # Copying systemd-boot there ensures NixOS always boots without BIOS intervention.
+  system.activationScripts.efiBootFallback = {
+    text = ''
+      src="/boot/EFI/systemd/systemd-bootx64.efi"
+      dst="/boot/EFI/BOOT/BOOTX64.EFI"
+      if [ ! -f "$src" ]; then
+        echo "WARNING: systemd-boot EFI binary not found at $src, skipping fallback install"
+      else
+        mkdir -p /boot/EFI/BOOT
+        if ! cmp -s "$src" "$dst" 2>/dev/null; then
+          cp "$src" "$dst"
+          echo "Installed systemd-boot to EFI fallback path"
+        fi
+      fi
+    '';
+    deps = [];
+  };
+
   system.stateVersion = "24.11";
 }
