@@ -26,6 +26,13 @@
     };
   };
 
+  # Enable Podman for container management
+  virtualisation.podman = {
+    enable = true;
+    # Create a `docker` alias for podman, for cli compatibility
+    dockerCompat = true;
+  };
+
   # User account for VM (simplified from laptop users.nix)
   users.users.michael = {
     isNormalUser = true;

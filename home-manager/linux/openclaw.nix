@@ -26,7 +26,10 @@ in
           baseUrl = "https://integrate.api.nvidia.com/v1";
           api = "openai-completions";
           models = [
-            { id = "moonshotai/kimi-k2.5"; name = "Kimi K2.5"; contextWindow = 131072; maxTokens = 8192; }
+            { id = "moonshotai/kimi-k2.5"; name = "Kimi K2.5"; contextWindow = 131072; maxTokens = 8192; reasoning = false; input = [ "text" ]; cost = { input = 0; output = 0; cacheRead = 0; cacheWrite = 0; }; }
+            { id = "nvidia/llama-3.1-nemotron-70b-instruct"; name = "NVIDIA Llama 3.1 Nemotron 70B Instruct"; contextWindow = 131072; maxTokens = 4096; reasoning = false; input = [ "text" ]; cost = { input = 0; output = 0; cacheRead = 0; cacheWrite = 0; }; }
+            { id = "meta/llama-3.3-70b-instruct"; name = "Meta Llama 3.3 70B Instruct"; contextWindow = 131072; maxTokens = 4096; reasoning = false; input = [ "text" ]; cost = { input = 0; output = 0; cacheRead = 0; cacheWrite = 0; }; }
+            { id = "nvidia/mistral-nemo-minitron-8b-8k-instruct"; name = "NVIDIA Mistral NeMo Minitron 8B Instruct"; contextWindow = 8192; maxTokens = 2048; reasoning = false; input = [ "text" ]; cost = { input = 0; output = 0; cacheRead = 0; cacheWrite = 0; }; }
           ];
         };
 
@@ -35,9 +38,9 @@ in
           baseUrl = "https://api.anthropic.com";
           api = "anthropic-messages";
           models = [
-            { id = "claude-haiku-4-5"; name = "Claude Haiku 4.5"; contextWindow = 65536; maxTokens = 4096; }
-            { id = "claude-sonnet-4-5"; name = "Claude Sonnet 4.5"; contextWindow = 131072; maxTokens = 8192; }
-            { id = "claude-opus-4-5"; name = "Claude Opus 4.5"; contextWindow = 131072; maxTokens = 8192; }
+            { id = "claude-haiku-4-5"; name = "Claude Haiku 4.5"; contextWindow = 200000; maxTokens = 4096; reasoning = false; input = [ "text" "image" ]; cost = { input = 0.80; output = 4.00; cacheRead = 0; cacheWrite = 0; }; }
+            { id = "claude-sonnet-4-5"; name = "Claude Sonnet 4.5"; contextWindow = 200000; maxTokens = 8192; reasoning = true; input = [ "text" "image" ]; cost = { input = 3.00; output = 15.00; cacheRead = 0; cacheWrite = 0; }; }
+            { id = "claude-opus-4-5"; name = "Claude Opus 4.5"; contextWindow = 200000; maxTokens = 8192; reasoning = false; input = [ "text" "image" ]; cost = { input = 15.00; output = 75.00; cacheRead = 0; cacheWrite = 0; }; }
           ];
         };
 
@@ -46,8 +49,9 @@ in
           baseUrl = "https://generativelanguage.googleapis.com";
           api = "google-generative-ai";
           models = [
-            { id = "gemini-3-flash-preview"; name = "Gemini 3 Flash"; contextWindow = 131072; maxTokens = 8192; }
-            { id = "gemini-2.5-pro"; name = "Gemini 2.5 Pro"; contextWindow = 131072; maxTokens = 8192; }
+            { id = "gemini-3.1-pro-preview"; name = "Gemini 3.1 Pro"; contextWindow = 1048576; maxTokens = 8192; reasoning = true; input = [ "text" "image" ]; cost = { input = 1.25; output = 10.00; cacheRead = 0; cacheWrite = 0; }; }
+            { id = "gemini-3-flash-preview"; name = "Gemini 3 Flash"; contextWindow = 131072; maxTokens = 8192; reasoning = false; input = [ "text" ]; cost = { input = 0.15; output = 0.60; cacheRead = 0; cacheWrite = 0; }; }
+            { id = "gemini-2.5-pro"; name = "Gemini 2.5 Pro"; contextWindow = 1048576; maxTokens = 8192; reasoning = true; input = [ "text" ]; cost = { input = 1.25; output = 10.00; cacheRead = 0; cacheWrite = 0; }; }
           ];
         };
 
@@ -57,32 +61,39 @@ in
           api = "ollama";
           apiKey = "ollama-local";
           models = [
+            { id = "qwen2.5:7b"; name = "Qwen 2.5 7B"; contextWindow = 32768; maxTokens = 4096; }
             { id = "qwen2.5:14b"; name = "Qwen 2.5 14B"; contextWindow = 32768; maxTokens = 4096; }
+            { id = "llama3.2:3b"; name = "Llama 3.2 3B"; contextWindow = 8192; maxTokens = 4096; }
           ];
         };
       };
 
       # Default agent settings
-      agents.defaults = {
-        # Default to Kimi K2.5 (free via NVIDIA NIM)
-        model.primary = "nvidia/moonshotai/kimi-k2.5";
+      agents = {
+      defaults = {
+        # Default to Gemini 3.1 Pro (confirmed working, high quality)
+        model.primary = "google/gemini-3.1-pro-preview";
 
-        # Fallback chain: free cloud → local GPU → paid cloud (last resort)
+        # Fallback chain: paid cloud → local GPU → free cloud
         model.fallbacks = [
-          "google/gemini-3-flash-preview"
-          "ollama/qwen2.5:14b"
+          "google/gemini-2.5-pro"
           "anthropic/claude-haiku-4-5"
+          "ollama/qwen2.5:14b"
+          "nvidia/moonshotai/kimi-k2.5"
         ];
 
         # Model aliases for quick switching (e.g. /model sonnet in Telegram)
         models = {
+          "google/gemini-3.1-pro-preview"  = { alias = "gemini"; };
           "nvidia/moonshotai/kimi-k2.5"   = { alias = "kimi"; };
           "anthropic/claude-haiku-4-5"     = { alias = "haiku"; };
           "anthropic/claude-sonnet-4-5"    = { alias = "sonnet"; };
           "anthropic/claude-opus-4-5"      = { alias = "opus"; };
           "google/gemini-3-flash-preview"  = { alias = "flash"; };
           "google/gemini-2.5-pro"          = { alias = "pro"; };
+          "ollama/qwen2.5:7b"              = { alias = "qwen7"; };
           "ollama/qwen2.5:14b"             = { alias = "qwen"; };
+          "ollama/llama3.2:3b"             = { alias = "llama3"; };
         };
 
         # Hard cap on context sent to any model
@@ -90,12 +101,18 @@ in
 
         workspace = "${config.home.homeDirectory}/.openclaw/workspace";
 
-        # Heartbeat (free via Ollama - Qwen 14B already loaded in VRAM)
+        # Heartbeat (Tier 2 optimized - Qwen 7B, every 30m, visible on Telegram, 8am-11pm PT)
         heartbeat = {
-          every = "55m";
-          model = "ollama/qwen2.5:14b";
+          every = "30m";
+          model = "ollama/qwen2.5:7b";
           session = "main";
+          target = "last";
           prompt = "Check: Any blockers, opportunities, or progress updates?";
+          activeHours = {
+            start = "08:00";
+            end = "23:00";
+            timezone = "America/Los_Angeles";
+          };
         };
 
         # Context pruning (cache-aware)
@@ -128,10 +145,81 @@ in
           };
           sources = [ "memory" "sessions" ];
           fallback = "none";
+
+          # Hybrid search (BM25 + vector), temporal decay, MMR deduplication
+          query.hybrid = {
+            enabled = true;
+            textWeight = 0.3;
+            vectorWeight = 0.7;
+            temporalDecay = {
+              enabled = true;
+              halfLifeDays = 30;
+            };
+            mmr = {
+              enabled = true;
+              lambda = 0.7;
+            };
+          };
         };
       };
 
-      # Enable Telegram plugin (required since OpenClaw 2026.2.22+)
+      list = [
+        {
+          id = "nixie";
+          name = "Nixie";
+          default = true;
+          identity.emoji = "⚡";
+        }
+        {
+          id = "prophet";
+          name = "Prophet";
+          model = "google/gemini-3.1-pro-preview";
+          tools.profile = "coding";
+          identity.emoji = "🔮";
+        }
+        {
+          id = "junior";
+          name = "Junior";
+          model = "anthropic/claude-haiku-4-5";
+          tools.profile = "coding";
+          identity.emoji = "🧑‍💻";
+        }
+        {
+          id = "doc";
+          name = "Doc";
+          model = "google/gemini-2.5-pro";
+          tools.allow = [ "web_search" "web_fetch" "read" "write" ];
+          identity.emoji = "🔬";
+        }
+        {
+          id = "thinker";
+          name = "Thinker";
+          model = "anthropic/claude-sonnet-4-5";
+          identity.emoji = "🧠";
+        }
+        {
+          id = "local";
+          name = "Local";
+          model = "ollama/qwen2.5:14b";
+          identity.emoji = "🏠";
+        }
+        {
+          id = "free";
+          name = "Free";
+          model = "nvidia/moonshotai/kimi-k2.5";
+          identity.emoji = "🆓";
+        }
+        {
+          id = "scout";
+          name = "Scout";
+          model = "google/gemini-3-flash-preview";
+          tools.allow = [ "web_search" "web_fetch" "browser" "image" "read" ];
+          identity.emoji = "🔭";
+        }
+      ];
+    };
+
+    # Enable Telegram plugin (required since OpenClaw 2026.2.22+)
       plugins.entries.telegram.enabled = true;
 
       # Telegram channel

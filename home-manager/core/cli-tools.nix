@@ -38,6 +38,7 @@
     tldr             # Simplified man pages with examples
     tokei            # Code statistics
     hyperfine        # CLI benchmarking
+    todoist          # Todoist CLI client
 
     # Media and conversion
     ffmpeg           # Video/audio processing
