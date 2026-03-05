@@ -51,5 +51,21 @@
   # Polkit for privilege escalation dialogs
   security.polkit.enable = true;
 
+  # NFS mount from NAS
+  services.rpcbind.enable = true;
+
+  fileSystems."/mnt/harbor" = {
+    device = "10.0.0.108:/volume1/harbor";
+    fsType = "nfs";
+    options = [
+      "nfsvers=4"
+      "soft"
+      "timeo=30"
+      "x-systemd.automount"
+      "noauto"
+      "x-systemd.idle-timeout=600"
+    ];
+  };
+
   system.stateVersion = "25.11";
 }
