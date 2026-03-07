@@ -3,7 +3,7 @@
 {
   services.ollama = {
     enable = true;
-    package = pkgs.ollama-cuda;
+    package = pkgs.ollama;
 
     # Pre-pull Qwen 2.5 14B for local LLM
     loadModels = [ "qwen2.5:14b" ];

@@ -75,6 +75,10 @@
   boot.kernelParams = [
     # Enable ACPI backlight control
     "acpi_backlight=native"
+    # Meteor Lake (Intel Core Ultra) only supports S0ix, not S3
+    "mem_sleep_default=s2idle"
+    # IOMMU passthrough for NVIDIA PRIME stability
+    "iommu=pt"
   ];
 
   # Hardware quirks/fixes
@@ -101,9 +105,6 @@
   # ============================================================================
   # DISPLAY & SCREEN
   # ============================================================================
-
-  # Screen brightness control
-  programs.light.enable = true;
 
   # High refresh rate display support
   # The Zephyrus G16 has a 240Hz OLED display

@@ -6,8 +6,11 @@
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "thunderbolt" "vmd" "nvme" "usb_storage" "usbhid" "sd_mod" "rtsx_pci_sdmmc" ];
-  boot.initrd.kernelModules = [ ];
+  boot.initrd.kernelModules = [ "i915" ];
   boot.kernelModules = [ "kvm-intel" ];
+
+  # Resume from hibernation image on LUKS swap partition
+  boot.resumeDevice = "/dev/mapper/luks-6917e498-3306-44d3-9d59-acc0a318e716";
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
