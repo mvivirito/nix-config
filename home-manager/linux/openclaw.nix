@@ -17,6 +17,7 @@ in
     config = {
       gateway = {
         mode = "local";
+        auth.mode = "token";
       };
 
       # Model providers
@@ -228,6 +229,15 @@ in
         allowFrom = [ telegramUserId ];
         defaultTo = telegramUserId;
         dmPolicy = "allowlist";
+        groupPolicy = "allowlist";
+        streaming = "off";
+      };
+
+      commands = {
+        native = "auto";
+        nativeSkills = "auto";
+        restart = true;
+        ownerDisplay = "raw";
       };
     };
   };
@@ -256,6 +266,14 @@ in
       NVIDIA_KEY=$(${pkgs.gnugrep}/bin/grep -m1 '^NVIDIA_API_KEY=' "${secretsDir}/secrets.env" | cut -d= -f2-)
       if [ -n "$NVIDIA_KEY" ]; then
         ${pkgs.jq}/bin/jq --arg k "$NVIDIA_KEY" '.models.providers.nvidia.apiKey = $k' \
+          "${openclawConfig}" > "${openclawConfig}.tmp" && \
+          mv "${openclawConfig}.tmp" "${openclawConfig}"
+      fi
+
+      # Inject Gateway auth token
+      GATEWAY_TOKEN=$(${pkgs.gnugrep}/bin/grep -m1 '^OPENCLAW_GATEWAY_TOKEN=' "${secretsDir}/secrets.env" | cut -d= -f2-)
+      if [ -n "$GATEWAY_TOKEN" ]; then
+        ${pkgs.jq}/bin/jq --arg k "$GATEWAY_TOKEN" '.gateway.auth.token = $k' \
           "${openclawConfig}" > "${openclawConfig}.tmp" && \
           mv "${openclawConfig}.tmp" "${openclawConfig}"
       fi
