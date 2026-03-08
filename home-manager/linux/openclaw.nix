@@ -20,7 +20,33 @@ in
         auth.mode = "token";
       };
 
+      # QMD memory backend (BM25 + vectors + reranking)
+      memory = {
+        backend = "qmd";
+        qmd = {
+          command = "${config.home.homeDirectory}/.bun/bin/qmd";
+          searchMode = "search";
+          includeDefaultMemory = true;
+          update = {
+            interval = "5m";
+            onBoot = true;
+            embedInterval = "60m";
+          };
+          sessions = {
+            enabled = true;
+          };
+          limits = {
+            maxResults = 6;
+          };
+        };
+      };
+
       # Model providers
+      # Caching notes:
+      #   Anthropic: Prompt caching (90% discount on cache reads, 1hr TTL). Auto for prompts >= 1024 tokens.
+      #   Google Gemini 2.5+: Implicit caching (75-90% discount). Automatic, no config needed.
+      #   NVIDIA NIM: Free tier, no caching benefit (already $0).
+      #   Ollama: Local, no API caching needed. KV cache quantization handled at service level.
       models.providers = {
         # NVIDIA NIM - Kimi K2.5 (free tier, OpenAI-compatible)
         nvidia = {
@@ -72,13 +98,15 @@ in
       # Default agent settings
       agents = {
       defaults = {
-        # Default to Gemini 3.1 Pro (confirmed working, high quality)
-        model.primary = "google/gemini-3.1-pro-preview";
+        # Default to Claude Opus 4.5 (highest quality)
+        model.primary = "anthropic/claude-opus-4-5";
 
-        # Fallback chain: paid cloud → local GPU → free cloud
+        # Fallback chain: Anthropic → Gemini → local GPU → free cloud
         model.fallbacks = [
-          "google/gemini-2.5-pro"
+          "anthropic/claude-sonnet-4-5"
           "anthropic/claude-haiku-4-5"
+          "google/gemini-2.5-pro"
+          "google/gemini-3.1-pro-preview"
           "ollama/qwen2.5:14b"
           "nvidia/moonshotai/kimi-k2.5"
         ];
@@ -102,13 +130,13 @@ in
 
         workspace = "${config.home.homeDirectory}/.openclaw/workspace";
 
-        # Heartbeat (Tier 2 optimized - Qwen 7B, every 30m, visible on Telegram, 8am-11pm PT)
+        # Heartbeat (Llama 3.2 3B, every 30m, 8am-11pm PT — isolated session to avoid main transcript pollution)
         heartbeat = {
           every = "30m";
-          model = "ollama/qwen2.5:7b";
-          session = "main";
+          model = "ollama/llama3.2:3b";
+          session = "isolated";
           target = "last";
-          prompt = "Check: Any blockers, opportunities, or progress updates?";
+          lightContext = true;
           activeHours = {
             start = "08:00";
             end = "23:00";
@@ -135,33 +163,6 @@ in
           };
         };
 
-        # Memory search - Ollama local embeddings via OpenAI-compatible endpoint
-        memorySearch = {
-          enabled = true;
-          provider = "openai";
-          model = "nomic-embed-text:latest";
-          remote = {
-            baseUrl = "http://127.0.0.1:11434/v1";
-            apiKey = "ollama-local";
-          };
-          sources = [ "memory" "sessions" ];
-          fallback = "none";
-
-          # Hybrid search (BM25 + vector), temporal decay, MMR deduplication
-          query.hybrid = {
-            enabled = true;
-            textWeight = 0.3;
-            vectorWeight = 0.7;
-            temporalDecay = {
-              enabled = true;
-              halfLifeDays = 30;
-            };
-            mmr = {
-              enabled = true;
-              lambda = 0.7;
-            };
-          };
-        };
       };
 
       list = [
@@ -222,6 +223,12 @@ in
 
     # Enable Telegram plugin (required since OpenClaw 2026.2.22+)
       plugins.entries.telegram.enabled = true;
+
+      # Channel defaults - only deliver real heartbeat alerts to Telegram
+      channels.defaults.heartbeat = {
+        showOk = false;
+        showAlerts = true;
+      };
 
       # Telegram channel
       channels.telegram = {
@@ -286,6 +293,7 @@ in
     # Suppress bundled skills warning (nix-openclaw doesn't include the dir next to the binary)
     Service.Environment = [
       "OPENCLAW_BUNDLED_SKILLS_DIR=${config.home.homeDirectory}/.openclaw/skills"
+      "PATH=${pkgs.bun}/bin:${pkgs.nodejs_22}/bin:${config.home.homeDirectory}/.bun/bin:/run/current-system/sw/bin:/etc/profiles/per-user/${config.home.username}/bin"
     ];
   };
 }
