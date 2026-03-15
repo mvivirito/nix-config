@@ -8,6 +8,7 @@
 
     # Communication
     discord
+    telegram-desktop
 
     # Media
     vlc

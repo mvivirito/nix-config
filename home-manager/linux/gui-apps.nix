@@ -42,6 +42,7 @@
 
     # Communication
     discord
+    telegram-desktop
 
     # Media
     imv              # Lightweight Wayland image viewer

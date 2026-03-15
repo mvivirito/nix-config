@@ -57,8 +57,9 @@
   };
 
   # NVIDIA suspend/resume: preserve video memory allocations across sleep
+  # EnableS0ixPowerManagement is required for s2idle (Meteor Lake uses S0ix, not S3)
   boot.extraModprobeConfig = ''
-    options nvidia NVreg_PreserveVideoMemoryAllocations=1
+    options nvidia NVreg_PreserveVideoMemoryAllocations=1 NVreg_EnableS0ixPowerManagement=1
   '';
 
   # Note: nvidia-suspend/resume systemd services are automatically

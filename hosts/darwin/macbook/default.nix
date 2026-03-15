@@ -17,6 +17,7 @@
   homebrew.casks = [
     # Communication
     "discord"
+    "telegram"
     "spotify"
     "claude"
 
