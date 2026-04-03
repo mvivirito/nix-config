@@ -59,7 +59,7 @@
     yazi             # Modern terminal file manager (Mod+Shift+R keybind)
 
     # System utilities
-    blueberry        # Bluetooth manager GUI
+    blueman          # Bluetooth manager GUI
     mission-center   # Modern GTK4 system monitor (Mod+Shift+M keybind)
 
     # Wayland clipboard tools

@@ -22,8 +22,12 @@
     dms.inputs.nixpkgs.follows = "nixpkgs";
 
     # OpenClaw AI assistant
-    nix-openclaw.url = "github:mvivirito/nix-openclaw";
+    nix-openclaw.url = "github:openclaw/nix-openclaw";
     nix-openclaw.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Google Workspace CLI (gws)
+    gws.url = "github:googleworkspace/cli";
+    gws.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -34,6 +38,7 @@
     niri,
     dms,
     nix-openclaw,
+    gws,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -49,6 +54,7 @@
         # > Our main nixos configuration file <
         modules = [
           ./nixos/configuration.nix
+          ./hosts/nixos/shared/nix.nix
 
           # Niri compositor NixOS module
           niri.nixosModules.niri
@@ -61,6 +67,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = {inherit inputs outputs;};
             home-manager.users.michael = ./home-manager/home.nix;
           }
@@ -85,6 +92,7 @@
           }
 
           # Shared modules
+          ./hosts/nixos/shared/nix.nix
           ./hosts/nixos/shared/boot.nix
           ./hosts/nixos/shared/locale.nix
           ./hosts/nixos/shared/networking.nix
@@ -114,6 +122,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = { inherit inputs outputs; };
             home-manager.users.michael = ./hosts/nixos/zephyrus-g16/home.nix;
           }
@@ -137,6 +146,7 @@
           ./hosts/nixos/vm/gpu-passthrough.nix
 
           # Shared modules
+          ./hosts/nixos/shared/nix.nix
           ./hosts/nixos/shared/locale.nix
           ./hosts/nixos/shared/networking.nix
           ./hosts/nixos/shared/audio.nix
@@ -152,6 +162,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = {inherit inputs outputs;};
             home-manager.users.michael = ./hosts/nixos/nixie-vm/home.nix;
           }

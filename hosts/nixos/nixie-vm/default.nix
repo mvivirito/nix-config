@@ -7,8 +7,6 @@
   vm.gpu.enable = true;
   vm.gpu.nvidia.enable = true;
 
-  # Nix settings (flakes, git for fetching)
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   environment.systemPackages = with pkgs; [
     git
     claude-code  # Claude CLI tool

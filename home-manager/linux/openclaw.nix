@@ -2,7 +2,6 @@
 let
   secretsDir = "${config.home.homeDirectory}/.config/openclaw";
   telegramUserId = 5135194752;
-  openclawConfig = "${config.home.homeDirectory}/.openclaw/openclaw.json";
 in
 {
   imports = [ inputs.nix-openclaw.homeManagerModules.openclaw ];
@@ -12,6 +11,16 @@ in
 
     # Enable systemd user service on Linux
     systemd.enable = true;
+
+    # No-sudo config refresh + gateway restart helper
+    reloadScript.enable = true;
+
+    # Bundled plugins (Linux-relevant ones)
+    bundledPlugins = {
+      summarize.enable = true;   # Summarize URLs, PDFs, YouTube videos
+      # gogcli conflicts with openclaw's own `gog` binary
+      # gogcli.enable = true;    # Google Calendar integration
+    };
 
     # Gateway configuration
     config = {
@@ -60,7 +69,7 @@ in
           ];
         };
 
-        # Anthropic Claude (API key injected from secrets.env via activation script)
+        # Anthropic Claude (ANTHROPIC_API_KEY from env)
         anthropic = {
           baseUrl = "https://api.anthropic.com";
           api = "anthropic-messages";
@@ -71,7 +80,7 @@ in
           ];
         };
 
-        # Google Gemini (API key injected from secrets.env via activation script)
+        # Google Gemini (GEMINI_API_KEY from env)
         google = {
           baseUrl = "https://generativelanguage.googleapis.com";
           api = "google-generative-ai";
@@ -79,6 +88,16 @@ in
             { id = "gemini-3.1-pro-preview"; name = "Gemini 3.1 Pro"; contextWindow = 1048576; maxTokens = 8192; reasoning = true; input = [ "text" "image" ]; cost = { input = 1.25; output = 10.00; cacheRead = 0; cacheWrite = 0; }; }
             { id = "gemini-3-flash-preview"; name = "Gemini 3 Flash"; contextWindow = 131072; maxTokens = 8192; reasoning = false; input = [ "text" ]; cost = { input = 0.15; output = 0.60; cacheRead = 0; cacheWrite = 0; }; }
             { id = "gemini-2.5-pro"; name = "Gemini 2.5 Pro"; contextWindow = 1048576; maxTokens = 8192; reasoning = true; input = [ "text" ]; cost = { input = 1.25; output = 10.00; cacheRead = 0; cacheWrite = 0; }; }
+          ];
+        };
+
+        # OpenRouter (MiMo v2 Pro + Step 3.5 Flash)
+        openrouter = {
+          baseUrl = "https://openrouter.ai/api/v1";
+          api = "openai-completions";
+          models = [
+            { id = "xiaomi/mimo-v2-pro"; name = "MiMo v2 Pro"; contextWindow = 1048576; maxTokens = 131072; reasoning = true; input = [ "text" ]; cost = { input = 0.001; output = 0.003; cacheRead = 0; cacheWrite = 0; }; }
+            { id = "stepfun/step-3.5-flash"; name = "Step 3.5 Flash"; contextWindow = 256000; maxTokens = 256000; reasoning = false; input = [ "text" ]; cost = { input = 0.0001; output = 0.0003; cacheRead = 0; cacheWrite = 0; }; }
           ];
         };
 
@@ -98,21 +117,22 @@ in
       # Default agent settings
       agents = {
       defaults = {
-        # Default to Claude Opus 4.5 (highest quality)
-        model.primary = "anthropic/claude-opus-4-5";
+        # Default to MiMo v2 Pro (reasoning, 1M context, near-free)
+        model.primary = "openrouter/xiaomi/mimo-v2-pro";
 
-        # Fallback chain: Anthropic → Gemini → local GPU → free cloud
+        # Fallback chain: Step Flash → Gemini → local GPU → free cloud
         model.fallbacks = [
-          "anthropic/claude-sonnet-4-5"
-          "anthropic/claude-haiku-4-5"
+          "openrouter/stepfun/step-3.5-flash"
           "google/gemini-2.5-pro"
           "google/gemini-3.1-pro-preview"
           "ollama/qwen2.5:14b"
           "nvidia/moonshotai/kimi-k2.5"
         ];
 
-        # Model aliases for quick switching (e.g. /model sonnet in Telegram)
+        # Model aliases for quick switching (e.g. /model mimo in Telegram)
         models = {
+          "openrouter/xiaomi/mimo-v2-pro"  = { alias = "mimo"; };
+          "openrouter/stepfun/step-3.5-flash" = { alias = "step"; };
           "google/gemini-3.1-pro-preview"  = { alias = "gemini"; };
           "nvidia/moonshotai/kimi-k2.5"   = { alias = "kimi"; };
           "anthropic/claude-haiku-4-5"     = { alias = "haiku"; };
@@ -175,28 +195,25 @@ in
         {
           id = "prophet";
           name = "Prophet";
-          model = "google/gemini-3.1-pro-preview";
           tools.profile = "coding";
           identity.emoji = "🔮";
         }
         {
           id = "junior";
           name = "Junior";
-          model = "anthropic/claude-haiku-4-5";
+          model = "openrouter/stepfun/step-3.5-flash";
           tools.profile = "coding";
           identity.emoji = "🧑‍💻";
         }
         {
           id = "doc";
           name = "Doc";
-          model = "google/gemini-2.5-pro";
           tools.allow = [ "web_search" "web_fetch" "read" "write" ];
           identity.emoji = "🔬";
         }
         {
           id = "thinker";
           name = "Thinker";
-          model = "anthropic/claude-sonnet-4-5";
           identity.emoji = "🧠";
         }
         {
@@ -208,13 +225,11 @@ in
         {
           id = "free";
           name = "Free";
-          model = "nvidia/moonshotai/kimi-k2.5";
           identity.emoji = "🆓";
         }
         {
           id = "scout";
           name = "Scout";
-          model = "google/gemini-3-flash-preview";
           tools.allow = [ "web_search" "web_fetch" "browser" "image" "read" ];
           identity.emoji = "🔭";
         }
@@ -246,54 +261,82 @@ in
         restart = true;
         ownerDisplay = "raw";
       };
+
+      # Skills: load from workspace skills directory
+      skills.load.extraDirs = [ "${config.home.homeDirectory}/.openclaw/workspace/skills" ];
+
+      # MCP servers
+      mcp.servers = {
+        jcodemunch = {
+          command = "${pkgs.uv}/bin/uvx";
+          args = [ "jcodemunch-mcp" ];
+          env = {
+            CODE_INDEX_PATH = "${config.home.homeDirectory}/.code-index";
+            JCODEMUNCH_USE_AI_SUMMARIES = "true";
+            JCODEMUNCH_SHARE_SAVINGS = "0";
+          };
+        };
+      };
+
+      # Headless browser (Playwright/CDP)
+      browser = {
+        enabled = true;
+        headless = true;
+        executablePath = "${pkgs.chromium}/bin/chromium";
+        noSandbox = true;
+      };
+
+      # Gmail hooks (uncomment when Google Cloud Pub/Sub is set up)
+      # hooks = {
+      #   enabled = true;
+      #   gmail = {
+      #     account = "your@gmail.com";
+      #     label = "INBOX";
+      #     topic = "projects/<project-id>/topics/<topic-name>";
+      #     subscription = "gog-gmail-watch-push";
+      #     includeBody = true;
+      #     maxBytes = 20000;
+      #     model = "openrouter/xiaomi/mimo-v2-pro";
+      #     thinking = "medium";
+      #     serve = {
+      #       bind = "127.0.0.1";
+      #       port = 8788;
+      #     };
+      #   };
+      # };
     };
   };
 
-  # Inject API keys from secrets.env into the Nix-generated openclaw config.
-  # Runs after home-manager writes the config file.
-  home.activation.openclawApiKeys = lib.hm.dag.entryAfter [ "openclawConfigFiles" ] ''
-    if [ -f "${secretsDir}/secrets.env" ] && [ -f "${openclawConfig}" ]; then
-      # Inject Gemini API key
-      GEMINI_KEY=$(${pkgs.gnugrep}/bin/grep -m1 '^GEMINI_API_KEY=' "${secretsDir}/secrets.env" | cut -d= -f2-)
-      if [ -n "$GEMINI_KEY" ]; then
-        ${pkgs.jq}/bin/jq --arg k "$GEMINI_KEY" '.models.providers.google.apiKey = $k' \
-          "${openclawConfig}" > "${openclawConfig}.tmp" && \
-          mv "${openclawConfig}.tmp" "${openclawConfig}"
-      fi
+  # Fix upstream packaging bug: dist/extensions/ has compiled JS but no plugin manifests.
+  # Point both shell and systemd to the source extensions/ dir which has them.
+  home.sessionVariables.OPENCLAW_BUNDLED_PLUGINS_DIR = "${pkgs.openclaw-gateway}/lib/openclaw/extensions";
 
-      # Inject Anthropic API key
-      ANTHROPIC_KEY=$(${pkgs.gnugrep}/bin/grep -m1 '^ANTHROPIC_API_KEY=' "${secretsDir}/secrets.env" | cut -d= -f2-)
-      if [ -n "$ANTHROPIC_KEY" ]; then
-        ${pkgs.jq}/bin/jq --arg k "$ANTHROPIC_KEY" '.models.providers.anthropic.apiKey = $k' \
-          "${openclawConfig}" > "${openclawConfig}.tmp" && \
-          mv "${openclawConfig}.tmp" "${openclawConfig}"
-      fi
-
-      # Inject NVIDIA API key
-      NVIDIA_KEY=$(${pkgs.gnugrep}/bin/grep -m1 '^NVIDIA_API_KEY=' "${secretsDir}/secrets.env" | cut -d= -f2-)
-      if [ -n "$NVIDIA_KEY" ]; then
-        ${pkgs.jq}/bin/jq --arg k "$NVIDIA_KEY" '.models.providers.nvidia.apiKey = $k' \
-          "${openclawConfig}" > "${openclawConfig}.tmp" && \
-          mv "${openclawConfig}.tmp" "${openclawConfig}"
-      fi
-
-      # Inject Gateway auth token
-      GATEWAY_TOKEN=$(${pkgs.gnugrep}/bin/grep -m1 '^OPENCLAW_GATEWAY_TOKEN=' "${secretsDir}/secrets.env" | cut -d= -f2-)
-      if [ -n "$GATEWAY_TOKEN" ]; then
-        ${pkgs.jq}/bin/jq --arg k "$GATEWAY_TOKEN" '.gateway.auth.token = $k' \
-          "${openclawConfig}" > "${openclawConfig}.tmp" && \
-          mv "${openclawConfig}.tmp" "${openclawConfig}"
-      fi
-    fi
+  # Source secrets.env in shell so CLI tools (openclaw tui, etc.) have API keys + gateway token
+  programs.zsh.initExtra = ''
+    [ -f "${secretsDir}/secrets.env" ] && set -a && source "${secretsDir}/secrets.env" && set +a
   '';
 
-  # Add EnvironmentFile to the openclaw systemd service for gateway token + API keys
+  # API keys resolved from environment variables at runtime via EnvironmentFile
   systemd.user.services.openclaw-gateway = {
     Service.EnvironmentFile = "${secretsDir}/secrets.env";
-    # Suppress bundled skills warning (nix-openclaw doesn't include the dir next to the binary)
     Service.Environment = [
       "OPENCLAW_BUNDLED_SKILLS_DIR=${config.home.homeDirectory}/.openclaw/skills"
-      "PATH=${pkgs.bun}/bin:${pkgs.nodejs_22}/bin:${config.home.homeDirectory}/.bun/bin:/run/current-system/sw/bin:/etc/profiles/per-user/${config.home.username}/bin"
+      "OPENCLAW_BUNDLED_PLUGINS_DIR=${pkgs.openclaw-gateway}/lib/openclaw/extensions"
+      "PATH=${pkgs.uv}/bin:${pkgs.bun}/bin:${pkgs.nodejs_22}/bin:${config.home.homeDirectory}/.bun/bin:/run/current-system/sw/bin:/etc/profiles/per-user/${config.home.username}/bin"
     ];
   };
+
+  # Fix: nix-openclaw module symlinks skills into the Nix store,
+  # but the skill loader rejects symlinked paths (resolves outside root).
+  # Copy symlinked SKILL.md files to real files after each rebuild.
+  home.activation.fixSkillSymlinks = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+    skillsDir="${config.home.homeDirectory}/.openclaw/workspace/skills"
+    if [ -d "$skillsDir" ]; then
+      find "$skillsDir" -name "SKILL.md" -type l | while read -r link; do
+        target="$(readlink -f "$link")"
+        rm "$link"
+        cp "$target" "$link"
+      done
+    fi
+  '';
 }
