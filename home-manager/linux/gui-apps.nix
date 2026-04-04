@@ -59,13 +59,7 @@
     yazi             # Modern terminal file manager (Mod+Shift+R keybind)
 
     # System utilities
-<<<<<<< HEAD
-    blueman          # Bluetooth manager GUI
-||||||| parent of 4d00687 (bluetooth and wine update)
-    blueberry        # Bluetooth manager GUI
-=======
     blueman
->>>>>>> 4d00687 (bluetooth and wine update)
     mission-center   # Modern GTK4 system monitor (Mod+Shift+M keybind)
 
     # Wayland clipboard tools
