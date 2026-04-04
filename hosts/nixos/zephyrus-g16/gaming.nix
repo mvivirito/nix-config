@@ -80,7 +80,7 @@
 
     # Additional gaming utilities
     gamemode
-    wineWowPackages.stagingFull
+    wineWow64Packages.stableFull
     winetricks
   ];
 
