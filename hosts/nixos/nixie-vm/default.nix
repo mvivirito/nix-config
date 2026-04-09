@@ -1,6 +1,10 @@
 { pkgs, ... }:
 
 {
+  imports = [
+    ./flutter-dev.nix  # Flutter + Android SDK for mobile development
+  ];
+
   networking.hostName = "nixie-vm";
 
   # GPU passthrough - enabled for NVIDIA RTX
@@ -14,6 +18,9 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  # Accept Android SDK licenses (required for Flutter/Android development)
+  nixpkgs.config.android_sdk.accept_license = true;
 
   # Enable SSH for remote access
   services.openssh = {

@@ -69,17 +69,6 @@ in
           ];
         };
 
-        # Anthropic Claude (ANTHROPIC_API_KEY from env)
-        anthropic = {
-          baseUrl = "https://api.anthropic.com";
-          api = "anthropic-messages";
-          models = [
-            { id = "claude-haiku-4-5"; name = "Claude Haiku 4.5"; contextWindow = 200000; maxTokens = 4096; reasoning = false; input = [ "text" "image" ]; cost = { input = 0.80; output = 4.00; cacheRead = 0; cacheWrite = 0; }; }
-            { id = "claude-sonnet-4-5"; name = "Claude Sonnet 4.5"; contextWindow = 200000; maxTokens = 8192; reasoning = true; input = [ "text" "image" ]; cost = { input = 3.00; output = 15.00; cacheRead = 0; cacheWrite = 0; }; }
-            { id = "claude-opus-4-5"; name = "Claude Opus 4.5"; contextWindow = 200000; maxTokens = 8192; reasoning = false; input = [ "text" "image" ]; cost = { input = 15.00; output = 75.00; cacheRead = 0; cacheWrite = 0; }; }
-          ];
-        };
-
         # Google Gemini (GEMINI_API_KEY from env)
         google = {
           baseUrl = "https://generativelanguage.googleapis.com";
@@ -135,9 +124,6 @@ in
           "openrouter/stepfun/step-3.5-flash" = { alias = "step"; };
           "google/gemini-3.1-pro-preview"  = { alias = "gemini"; };
           "nvidia/moonshotai/kimi-k2.5"   = { alias = "kimi"; };
-          "anthropic/claude-haiku-4-5"     = { alias = "haiku"; };
-          "anthropic/claude-sonnet-4-5"    = { alias = "sonnet"; };
-          "anthropic/claude-opus-4-5"      = { alias = "opus"; };
           "google/gemini-3-flash-preview"  = { alias = "flash"; };
           "google/gemini-2.5-pro"          = { alias = "pro"; };
           "ollama/qwen2.5:7b"              = { alias = "qwen7"; };
@@ -153,7 +139,7 @@ in
         # Heartbeat (Llama 3.2 3B, every 30m, 8am-11pm PT — isolated session to avoid main transcript pollution)
         heartbeat = {
           every = "30m";
-          model = "ollama/llama3.2:3b";
+          model = "ollama/qwen2.5:14b";
           session = "isolated";
           target = "last";
           lightContext = true;
