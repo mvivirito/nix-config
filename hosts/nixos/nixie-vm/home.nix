@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, lib, inputs, ... }:
 
 {
   # Core configuration (cross-platform CLI tools)
@@ -10,9 +10,12 @@
     ../../../home-manager/core/kitty.nix
     ../../../home-manager/core/tmux.nix
     ../../../home-manager/linux/kde-gui-apps.nix
-    ../../../home-manager/linux/openclaw.nix
     # Skip: niri, dms, appearance.nix - VM uses KDE
   ];
+
+  # Disable zoxide on this host; restore plain `cd` (shared zsh.nix aliases cd -> z).
+  programs.zoxide.enable = lib.mkForce false;
+  programs.zsh.shellAliases.cd = lib.mkForce "cd";
 
   home = {
     username = "michael";
@@ -39,8 +42,6 @@
   programs.home-manager.enable = true;
   programs.git.enable = true;
   programs.neovim.enable = true;
-
-  # OpenClaw config managed in openclaw.nix (Ollama + qwen2.5:7b)
 
   # Nicely reload system units when changing configs
   systemd.user.startServices = "sd-switch";
