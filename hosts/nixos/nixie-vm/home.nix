@@ -32,8 +32,11 @@
     gemini-cli        # Google Gemini AI CLI
     google-cloud-sdk  # Google Cloud CLI (gcloud)
     kubectl           # Kubernetes command-line tool
-    kubernetes-helm              # The Kubernetes package manager
+    kubernetes-helm   # The Kubernetes package manager
     k9s               # Kubernetes CLI To Manage Your Clusters In Style!
+    awscli2           # AWS CLI v2
+    terraform         # Infrastructure as Code (HashiCorp)
+    opentofu          # Open-source Terraform fork
   ]) ++ [
     inputs.gws.packages.x86_64-linux.gws  # Google Workspace CLI
   ];
