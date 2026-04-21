@@ -11,8 +11,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check:
-    name: flake check (eval)
+  linux:
+    name: eval NixOS + home-manager (x86_64-linux)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,5 +22,41 @@ jobs:
           extra-conf: |
             accept-flake-config = true
 
-      - name: nix flake check
-        run: nix flake check --all-systems --no-build --show-trace
+      - name: Evaluate nixosConfigurations
+        run: |
+          set -euo pipefail
+          for host in nixos-laptop zephyrus nixie-vm; do
+            echo "::group::nixosConfigurations.$host"
+            nix eval --raw ".#nixosConfigurations.$host.config.system.build.toplevel.drvPath" --show-trace
+            echo
+            echo "::endgroup::"
+          done
+
+      - name: Evaluate homeConfigurations
+        run: |
+          set -euo pipefail
+          echo "::group::homeConfigurations.michael@nixos-laptop"
+          nix eval --raw '.#homeConfigurations."michael@nixos-laptop".activationPackage.drvPath' --show-trace
+          echo
+          echo "::endgroup::"
+
+  darwin:
+    name: eval nix-darwin (aarch64-darwin)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@main
+        with:
+          extra-conf: |
+            accept-flake-config = true
+
+      - name: Evaluate darwinConfigurations
+        run: |
+          set -euo pipefail
+          for host in macbook michaelvivirito-mbp; do
+            echo "::group::darwinConfigurations.$host"
+            nix eval --raw ".#darwinConfigurations.$host.config.system.build.toplevel.drvPath" --show-trace
+            echo
+            echo "::endgroup::"
+          done
