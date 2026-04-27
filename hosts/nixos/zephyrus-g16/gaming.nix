@@ -5,6 +5,7 @@
   programs.steam = {
     enable = true;
     gamescopeSession.enable = true;
+    protontricks.enable = true;
 
     # Proton-GE for better game compatibility
     extraCompatPackages = with pkgs; [
@@ -14,6 +15,7 @@
     # Remote play firewall rules
     remotePlay.openFirewall = true;
     dedicatedServer.openFirewall = true;
+    localNetworkGameTransfers.openFirewall = true;
   };
 
   # Gamescope compositor for games
@@ -82,8 +84,39 @@
     gamemode
     wineWow64Packages.stableFull
     winetricks
+
+    # Wine prefix manager (nicer UX than raw winetricks)
+    bottles
+
+    # Run Proton outside Steam (used by Lutris/Heroic)
+    umu-launcher
+
+    # NVENC ShadowPlay-style replay buffer / recording
+    gpu-screen-recorder
+    gpu-screen-recorder-gtk
+
+    # Logitech wireless device manager
+    solaar
+
+    # Cross-vendor RGB control (complements asusctl for peripherals)
+    openrgb-with-all-plugins
   ];
 
   # Add user to gamemode group
   users.users.michael.extraGroups = [ "gamemode" ];
+
+  # Allow gamemode group to renice and lock memory for game processes.
+  # Why: gamemode's renice = 10 silently no-ops without RLIMIT_NICE headroom;
+  # memlock + rtprio help anti-cheat shims and audio threads avoid stalls.
+  security.pam.loginLimits = [
+    { domain = "@gamemode"; type = "-"; item = "nice";    value = "-10"; }
+    { domain = "@gamemode"; type = "-"; item = "rtprio";  value = "20"; }
+    { domain = "@gamemode"; type = "-"; item = "memlock"; value = "unlimited"; }
+  ];
+
+  # Steam Deck-equivalent map count. Required by some modern games and EAC titles.
+  boot.kernel.sysctl."vm.max_map_count" = 2147483642;
+
+  # ZRAM swap to absorb memory pressure during long sessions / shader compile.
+  zramSwap.enable = true;
 }

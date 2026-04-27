@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, lib, ... }:
 
 {
   imports = [
@@ -44,6 +44,9 @@
     obs-studio          # Streaming/recording with NVENC
     nvtopPackages.nvidia  # GPU monitoring
   ];
+
+  # Keep trackpad active while typing — frequent gaming use makes dwt annoying
+  programs.niri.settings.input.touchpad.dwt = lib.mkForce false;
 
   # Enable home-manager
   programs.home-manager.enable = true;

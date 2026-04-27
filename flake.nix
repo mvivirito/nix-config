@@ -84,6 +84,10 @@
           # Overlays
           {
             nixpkgs.overlays = [
+              # Workaround: openldap test017-syncreplication flaky in nixpkgs
+              (final: prev: {
+                openldap = prev.openldap.overrideAttrs { doCheck = false; };
+              })
               # Workaround: khal is broken in nixpkgs (build fails)
               (final: prev: {
                 khal = final.writeShellScriptBin "khal" "echo 'khal disabled - broken in nixpkgs'";

@@ -51,9 +51,6 @@
 
     # Help Electron apps with NVIDIA
     LIBVA_DRIVER_NAME = "nvidia";
-
-    # Cursor fix for some Wayland compositors
-    WLR_NO_HARDWARE_CURSORS = "1";
   };
 
   # NVIDIA suspend/resume: preserve video memory allocations across sleep
