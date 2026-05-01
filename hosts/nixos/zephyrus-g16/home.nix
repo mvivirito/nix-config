@@ -40,6 +40,7 @@
 
   # zephyrus-g16 specific packages
   home.packages = with pkgs; [
+    obsidian
     discord
     obs-studio          # Streaming/recording with NVENC
     nvtopPackages.nvidia  # GPU monitoring

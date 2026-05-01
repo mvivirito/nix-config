@@ -27,6 +27,15 @@
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
+  fileSystems."/vault" =
+    { device = "/dev/disk/by-uuid/faad8601-b641-4bdd-9099-c8a6dfd1d1ee";
+      fsType = "ext4";
+    };
+
+  systemd.tmpfiles.rules = [
+    "d /vault 0755 michael users -"
+  ];
+
   swapDevices =
     [ { device = "/dev/mapper/luks-6917e498-3306-44d3-9d59-acc0a318e716"; }
     ];
