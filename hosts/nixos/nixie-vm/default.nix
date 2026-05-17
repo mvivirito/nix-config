@@ -3,6 +3,7 @@
 {
   imports = [
     ./flutter-dev.nix  # Flutter + Android SDK for mobile development
+    ./vault.nix        # Second/third brain: Syncthing, rclone, vault automation timers
   ];
 
   networking.hostName = "nixie-vm";

@@ -138,6 +138,9 @@
 
       # Source OpenClaw secrets (if present)
       [[ -f ~/.config/openclaw/secrets.env ]] && source ~/.config/openclaw/secrets.env
+
+      # Vault: code snippet capture function
+      [[ -f ~/vault/.scripts/vault-clip.zsh ]] && source ~/vault/.scripts/vault-clip.zsh
     '';
   };
 }
