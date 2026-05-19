@@ -53,6 +53,7 @@
 
     # Productivity
     vscode           # Primary code editor (alongside neovim)
+    obsidian         # Note-taking
     # sioyek configured via programs.sioyek above
 
     # File managers
@@ -69,9 +70,6 @@
 
     # Wayland desktop components
     wlr-randr        # Display configuration tool
-
-    # Desktop integration
-    xdg-desktop-portal-wlr  # File picker, screensharing for wlroots compositors (Niri)
 
     # Audio/media control
     playerctl        # Media player controller (XF86Audio* keybinds)

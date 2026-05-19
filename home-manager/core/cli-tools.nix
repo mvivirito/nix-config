@@ -45,7 +45,7 @@
 
     # Media and conversion
     ffmpeg           # Video/audio processing
-    yt-dlp           # YouTube downloader
+    yt-dlp-light     # YouTube downloader (no Deno dependency)
 
     # Fun terminal programs
     cmatrix          # Matrix rain

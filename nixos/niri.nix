@@ -41,4 +41,19 @@
   # DMS (Dank Material Shell) is spawned by niri via enableSpawn in home-manager/linux/dms.nix
   # Do NOT enable dms-shell at system level - it conflicts with niri spawn (starts before display available)
   # programs.dms-shell.enable = false;  # Not needed - defaults to false
+
+  # xdg-desktop-portal-gnome 49's FileChooser delegates to Nautilus (not installed),
+  # so route FileChooser directly to xdg-desktop-portal-gtk for Electron apps
+  # (Obsidian, VSCode). Mirrors the niri-shipped niri-portals.conf otherwise.
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.niri = {
+      default = [ "gnome" "gtk" ];
+      "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+      "org.freedesktop.impl.portal.Access" = [ "gtk" ];
+      "org.freedesktop.impl.portal.Notification" = [ "gtk" ];
+      "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
+    };
+  };
 }

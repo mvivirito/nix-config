@@ -19,6 +19,17 @@
   # LUKS encryption device
   boot.initrd.luks.devices."luks-77a6df21-58f4-4c91-84c0-7ac231e5208d".device = "/dev/disk/by-uuid/77a6df21-58f4-4c91-84c0-7ac231e5208d";
 
+  services.syncthing = {
+    enable = true;
+    user = "michael";
+    group = "users";
+    dataDir = "/home/michael";
+    configDir = "/home/michael/.config/syncthing";
+    openDefaultPorts = true;      # TCP 22000, UDP 21027
+    overrideDevices = false;      # allow GUI device pairing
+    overrideFolders = false;      # allow GUI folder pairing
+  };
+
   # Host-specific overrides can be added here
   # Examples:
   # - Additional hardware-specific kernel modules
