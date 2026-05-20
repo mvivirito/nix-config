@@ -1,11 +1,27 @@
 # Vault (second/third brain) services and packages
-{ pkgs, ... }:
+{ config, pkgs, ... }:
 
+let
+  # PATH for systemd user services: include bash, git, claude, obsidian, and
+  # the bun-installed qmd binary used by heartbeat scripts.
+  vaultServicePath = builtins.concatStringsSep ":" [
+    "${pkgs.bash}/bin"
+    "${pkgs.coreutils}/bin"
+    "${pkgs.git}/bin"
+    "${pkgs.obsidian}/bin"
+    "${pkgs.bun}/bin"
+    "${config.users.users.michael.home}/.bun/bin"
+    "/run/current-system/sw/bin"
+    "/etc/profiles/per-user/michael/bin"
+  ];
+in
 {
   environment.systemPackages = with pkgs; [
+    git
     git-lfs
     rclone
     obsidian
+    bun  # for qmd maintenance (qmd update, qmd embed)
   ];
 
   services.syncthing = {
@@ -17,18 +33,22 @@
     openDefaultPorts = true;      # TCP 22000, UDP 21027
     overrideDevices = false;       # allow GUI device pairing
     overrideFolders = false;       # allow GUI folder pairing
+    guiAddress = "0.0.0.0:8384";   # listen on all interfaces (tailnet trusted)
   };
 
   # Open Syncthing GUI port for localhost-only access
   networking.firewall.allowedTCPPorts = [ 8384 ];
 
-  # User systemd timers for vault automation
-  # Note: services.* would be system-scope; using systemd.user.* for per-user
+  # ── User systemd services ────────────────────────────────────────
+  # All vault services share the same PATH so scripts can find bash,
+  # git, claude, obsidian, bun, etc.
+
   systemd.user.services.vault-autocommit = {
     description = "Vault auto-commit to git";
     serviceConfig = {
       Type = "oneshot";
       ExecStart = "/home/michael/vault/.scripts/auto-commit.sh";
+      Environment = [ "PATH=${vaultServicePath}" ];
     };
   };
 
@@ -45,7 +65,12 @@
     description = "Vault backup to Google Drive via rclone";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = ''
+      Environment = [ "PATH=${vaultServicePath}" ];
+      ExecStart = pkgs.writeShellScript "vault-backup" ''
+        if ! ${pkgs.rclone}/bin/rclone listremotes | grep -q '^gdrive:'; then
+          echo "vault-backup: gdrive remote not configured. Run 'rclone config' to enable. Skipping."
+          exit 0
+        fi
         ${pkgs.rclone}/bin/rclone sync /home/michael/vault gdrive:vault-backup \
           --exclude ".git/**" --exclude ".stversions/**" \
           --exclude ".qmd/**" --exclude "_agent/memory/working/**"
@@ -62,19 +87,62 @@
     };
   };
 
-  systemd.user.services.vault-heartbeat-daily = {
-    description = "Vault daily heartbeat (Claude Agent SDK)";
+  # ── Three-times-daily heartbeat ──────────────────────────────
+  # Morning (6 AM):  briefing + memory hygiene
+  # Noon (12 PM):    midday pulse, what changed since morning
+  # Night (10 PM):   inbox processing + reflection (heaviest)
+  # Each fires Claude Agent SDK via OAuth, bills against $100/mo Max pool.
+
+  systemd.user.services.vault-heartbeat-morning = {
+    description = "Vault heartbeat — morning briefing (Claude Agent SDK)";
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "/home/michael/vault/.scripts/heartbeat-daily.sh";
+      ExecStart = "/home/michael/vault/.scripts/heartbeat-morning.sh";
+      Environment = [ "PATH=${vaultServicePath}" ];
     };
   };
 
-  systemd.user.timers.vault-heartbeat-daily = {
-    description = "Daily vault heartbeat at 6 AM";
+  systemd.user.timers.vault-heartbeat-morning = {
+    description = "Morning vault heartbeat at 6 AM";
     wantedBy = [ "timers.target" ];
     timerConfig = {
       OnCalendar = "*-*-* 06:00:00";
+      Persistent = true;
+    };
+  };
+
+  systemd.user.services.vault-heartbeat-noon = {
+    description = "Vault heartbeat — midday pulse (Claude Agent SDK)";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "/home/michael/vault/.scripts/heartbeat-noon.sh";
+      Environment = [ "PATH=${vaultServicePath}" ];
+    };
+  };
+
+  systemd.user.timers.vault-heartbeat-noon = {
+    description = "Midday vault pulse at 12 PM";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "*-*-* 12:00:00";
+      Persistent = true;
+    };
+  };
+
+  systemd.user.services.vault-heartbeat-night = {
+    description = "Vault heartbeat — night ingest + reflection (Claude Agent SDK)";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "/home/michael/vault/.scripts/heartbeat-night.sh";
+      Environment = [ "PATH=${vaultServicePath}" ];
+    };
+  };
+
+  systemd.user.timers.vault-heartbeat-night = {
+    description = "Night vault reflection + inbox processing at 10 PM";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "*-*-* 22:00:00";
       Persistent = true;
     };
   };
@@ -84,6 +152,7 @@
     serviceConfig = {
       Type = "oneshot";
       ExecStart = "/home/michael/vault/.scripts/heartbeat-weekly.sh";
+      Environment = [ "PATH=${vaultServicePath}" ];
     };
   };
 
