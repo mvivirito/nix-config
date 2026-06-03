@@ -21,10 +21,6 @@
     dms.url = "github:AvengeMedia/DankMaterialShell/stable";
     dms.inputs.nixpkgs.follows = "nixpkgs";
 
-    # OpenClaw AI assistant
-    nix-openclaw.url = "github:openclaw/nix-openclaw";
-    nix-openclaw.inputs.nixpkgs.follows = "nixpkgs";
-
     # Google Workspace CLI (gws)
     gws.url = "github:googleworkspace/cli";
     gws.inputs.nixpkgs.follows = "nixpkgs";
@@ -37,7 +33,6 @@
     nix-darwin,
     niri,
     dms,
-    nix-openclaw,
     gws,
     ...
   } @ inputs: let
@@ -140,9 +135,6 @@
           hostname = "nixie-vm";
         };
         modules = [
-          # OpenClaw overlay (adds pkgs.openclaw)
-          { nixpkgs.overlays = [ nix-openclaw.overlays.default ]; }
-
           # VM-specific modules
           ./hosts/nixos/vm/base.nix
           ./hosts/nixos/vm/desktop/kde.nix

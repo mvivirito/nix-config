@@ -31,6 +31,6 @@
 
   security.polkit.enable = true;
 
-  # uinput access for ydotool (used by dictation)
+  # uinput access for kanata (virtual keyboard for system-wide remaps)
   hardware.uinput.enable = true;
 }

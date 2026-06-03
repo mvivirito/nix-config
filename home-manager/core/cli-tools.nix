@@ -39,7 +39,7 @@
     tokei            # Code statistics
     hyperfine        # CLI benchmarking
     todoist          # Todoist CLI client
-    nodejs_20        # Node.js LTS (Lambda runtime, npm)
+    nodejs_22        # Node.js LTS (Lambda runtime, npm)
     awscli2          # AWS CLI v2 (Lambda deploys, DynamoDB, S3)
     zip              # Zip archives (Lambda deployment packages)
 

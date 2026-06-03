@@ -75,9 +75,9 @@
     playerctl        # Media player controller (XF86Audio* keybinds)
     libqalculate     # Calculator backend
 
-    # Dictation
-    whisper-cpp      # Speech-to-text via whisper model
-    ydotool          # Virtual keyboard input for typing transcriptions
+    # Dictation (handy speech-to-text app; PTT bound to PgDn via kanata in nixos/kanata)
+    handy            # Tauri STT GUI app, toggle via `handy --toggle-transcription`
+    wtype            # Wayland virtual-keyboard typing tool used by handy
 
     # DMS integration
     dsearch          # Filesystem search for DMS spotlight
@@ -97,6 +97,23 @@
       SyslogIdentifier = "dsearch";
     };
     Install.WantedBy = [ "default.target" ];
+  };
+
+  # handy: speech-to-text running hidden in the background.
+  # Kanata fires `handy --toggle-transcription` on PgDn press and release
+  # (see nixos/kanata) which signals this running instance to start/stop.
+  systemd.user.services.handy = {
+    Unit = {
+      Description = "Handy speech-to-text";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${pkgs.handy}/bin/handy --start-hidden";
+      Restart = "on-failure";
+      RestartSec = 2;
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
   };
 
   xdg.configFile."danksearch/config.toml".text = ''

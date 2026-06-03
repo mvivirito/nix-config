@@ -52,7 +52,6 @@ nix-collect-garbage -d
 | `nix-darwin` | `LnL7/nix-darwin/master` | macOS system configuration |
 | `niri` | `sodiboo/niri-flake` | Wayland scrollable compositor |
 | `dms` | `AvengeMedia/DankMaterialShell/stable` | Desktop shell (bar, launcher, lock, notifications) |
-| `nix-openclaw` | `openclaw/nix-openclaw` | AI assistant gateway (Telegram) |
 
 ## Structure
 
@@ -94,8 +93,7 @@ nix-config/
     ├── appearance.nix           # GTK/Qt theming (Linux)
     ├── core/                    # Cross-platform: zsh, neovim, alacritty, kitty, tmux, cli-tools
     ├── linux/                   # Niri WM config, DMS shell, GUI apps
-    │   ├── kde-gui-apps.nix     # KDE-friendly GUI apps (browsers, media, productivity)
-    │   └── openclaw.nix         # OpenClaw AI gateway (nixie-vm only)
+    │   └── kde-gui-apps.nix     # KDE-friendly GUI apps (browsers, media, productivity)
     └── darwin/                  # Aerospace WM, Karabiner remapping, GUI apps
 ```
 
@@ -139,7 +137,6 @@ nix-config/
 - **Apps:** Floorp, Chrome, Brave, Discord, Spotify, VSCode, Obsidian, claude-code CLI
 - **Theming:** Catppuccin Mocha (KDE, Kvantum, GTK, Papirus icons)
 - **Networking:** NetworkManager + Tailscale + SSH + KDE Connect firewall
-- **OpenClaw:** AI assistant gateway with Telegram channel (systemd user service)
 
 ### Cross-Platform (home-manager)
 - **Shell:** zsh + oh-my-zsh (fishy theme) + zoxide + vi-mode
@@ -169,7 +166,6 @@ nix-config/
 | `hosts/nixos/zephyrus-g16/nvidia.nix` | NVIDIA PRIME hybrid graphics config |
 | `hosts/nixos/zephyrus-g16/gaming.nix` | Steam, Proton, emulators config |
 | `hosts/nixos/zephyrus-g16/default.nix` | Asus laptop services (asusd, supergfxd) |
-| `home-manager/linux/openclaw.nix` | OpenClaw AI gateway config (nixie-vm) |
 
 ## Common Tasks
 
@@ -663,25 +659,6 @@ journalctl --user -u sunshine | grep -i nvenc
 # Check /etc/X11/xorg.conf.d/ for BusID and virtual display settings
 ```
 
-### OpenClaw Issues
-```bash
-# Check gateway status
-systemctl --user status openclaw-gateway
-
-# View logs
-journalctl --user -u openclaw-gateway -f
-
-# Restart gateway
-systemctl --user restart openclaw-gateway
-
-# Verify secrets exist
-ls -la ~/.config/openclaw/
-
-# Web UI (paste gateway token in settings)
-# http://localhost:18789
-cat ~/.config/openclaw/gateway-token
-```
-
 ### Asus ROG Zephyrus Issues
 
 ```bash
@@ -740,29 +717,3 @@ nvtop
 sensors
 ```
 
-### OpenClaw Setup (nixie-vm)
-```bash
-# 1. Create secrets directory
-mkdir -p ~/.config/openclaw && chmod 700 ~/.config/openclaw
-
-# 2. Generate gateway token
-head -c 32 /dev/urandom | base64 > ~/.config/openclaw/gateway-token
-echo "OPENCLAW_GATEWAY_TOKEN=$(cat ~/.config/openclaw/gateway-token)" > ~/.config/openclaw/secrets.env
-chmod 600 ~/.config/openclaw/secrets.env ~/.config/openclaw/gateway-token
-
-# 3. Add API keys
-echo "GEMINI_API_KEY=your-key-here" >> ~/.config/openclaw/secrets.env
-echo "ANTHROPIC_API_KEY=sk-ant-your-key-here" >> ~/.config/openclaw/secrets.env
-
-# 4. Create Telegram bot (@BotFather -> /newbot) and save token
-echo "YOUR_BOT_TOKEN" > ~/.config/openclaw/telegram-token
-chmod 600 ~/.config/openclaw/telegram-token
-
-# 5. Create agent workspace
-mkdir -p ~/.openclaw/workspace
-# Create AGENTS.md, SOUL.md, TOOLS.md
-
-# 6. Rebuild and start (activation script injects API keys into config)
-sudo nixos-rebuild switch --flake .#nixie-vm
-systemctl --user restart openclaw-gateway
-```

@@ -28,8 +28,7 @@ nix-config/
     ├── home-darwin.nix          # macOS entry
     ├── core/                    # Cross-platform: zsh, neovim, terminals
     ├── linux/                   # Niri WM, DMS shell, GUI apps
-    │   ├── kde-gui-apps.nix     # KDE-friendly GUI apps (browsers, media, productivity)
-    │   └── openclaw.nix         # OpenClaw AI gateway (nixie-vm only)
+    │   └── kde-gui-apps.nix     # KDE-friendly GUI apps (browsers, media, productivity)
     └── darwin/                  # Aerospace WM, Karabiner
 ```
 
@@ -88,43 +87,6 @@ VMs use composable modules in `hosts/nixos/vm/`:
 2. **VM modules** in `hosts/nixos/vm/` - composable VM-specific configs
 3. **Home-manager** imports from `home-manager/core/` for CLI tools, skip Niri/DMS for KDE VMs
 4. **Filesystem labels** - VMs use `/dev/disk/by-label/root` for portability
-
-## OpenClaw (AI Assistant Gateway)
-
-nixie-vm runs OpenClaw, an AI assistant gateway accessible via Telegram.
-
-**Nix config:** `home-manager/linux/openclaw.nix`
-- Defines Anthropic Claude + Google Gemini + Ollama providers, Telegram channel
-- Primary model: `anthropic/claude-haiku-4-5` (cheapest cloud)
-- Fallbacks: Gemini Flash → Gemini Pro → Ollama Qwen 2.5 (cloud-to-local cascade)
-- Aliases: `haiku`, `sonnet`, `opus`, `flash`, `pro`, `qwen`, `local` (switch via `/model <alias>` in Telegram)
-- Telegram user ID hardcoded in config
-- API keys (Gemini + Anthropic) injected from `secrets.env` via home-manager activation script
-- Generates config to `~/.openclaw/openclaw.json`
-
-**Secrets (not in git):**
-- `~/.config/openclaw/secrets.env` - `OPENCLAW_GATEWAY_TOKEN` + `GEMINI_API_KEY` + `ANTHROPIC_API_KEY` (loaded by systemd EnvironmentFile + activation script)
-- `~/.config/openclaw/telegram-token` - Telegram bot token
-
-**Agent docs (not in git):**
-- `~/.openclaw/docs/AGENTS.md` - Agent definitions
-- `~/.openclaw/docs/SOUL.md` - Agent personality
-- `~/.openclaw/docs/TOOLS.md` - Available tools
-
-**Commands:**
-```bash
-# Restart gateway
-systemctl --user restart openclaw-gateway
-
-# Check status
-systemctl --user status openclaw-gateway
-
-# View logs
-journalctl --user -u openclaw-gateway -f
-
-# Web UI
-http://localhost:18789
-```
 
 ## Future VM Variants (Planned)
 
