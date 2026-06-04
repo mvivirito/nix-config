@@ -244,6 +244,7 @@ in {
         "Mod+Y".action.spawn = [ "alacritty" "-e" "nvim" ];
         "Mod+I".action.spawn = [ "code" ];
         "Mod+Z".action.spawn = [ "vlc" ];
+        "Mod+N".action.spawn = [ "obsidian" ];  # Notes — Obsidian vault
         # Yazi file manager in terminal
         "Mod+R".action.spawn = [ "alacritty" "-e" "yazi" ];
 
