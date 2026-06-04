@@ -5,7 +5,7 @@
   users.users.michael = {
     isNormalUser = true;
     description = "Michael Vivirito";
-    extraGroups = [ "input" "keyd" "networkmanager" "uinput" "wheel" ];
+    extraGroups = [ "input" "networkmanager" "uinput" "wheel" ];
   };
 
   users.defaultUserShell = pkgs.zsh;

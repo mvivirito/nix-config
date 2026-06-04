@@ -9,7 +9,18 @@
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;
+    # Replace `cd` itself with zoxide (smart cd; handles real paths too).
+    # Avoids the old `cd = "z"` alias that tripped zoxide's "configuration issue" doctor warning.
+    options = [ "--cmd" "cd" ];
   };
+  programs.fzf = {
+    enable = true;
+    enableZshIntegration = true;  # Ctrl-R history, Ctrl-T files, Alt-C cd — reliably wired
+  };
+  # Working command-not-found + comma (`, foo` runs foo without installing),
+  # backed by a prebuilt, auto-updated nix-index database (see flake input).
+  programs.nix-index.enable = true;
+  programs.nix-index-database.comma.enable = true;
   programs.direnv = {
     enable = true;
     enableZshIntegration = true;
@@ -22,10 +33,9 @@
       enable = true;
       theme = "fishy";
       plugins = [
-                  "git" 
-                  "sudo" 
+                  "git"
+                  "sudo"
                   "vi-mode"
-                  "fzf"
                 ];
     };
     plugins = [
@@ -49,7 +59,6 @@
       ll = "eza -lh";
       lt = "eza --tree";
       mkdir = "mkdir -p";
-      cd = "z";
 
       # Git shortcuts
       ga = "git add";
@@ -102,12 +111,8 @@
       if [[ "$TERM" == "alacritty" ]]; then
         ssh() { TERM=xterm-256color command ssh "$@"; }
       fi
-      # Command not found handler - suggests packages to install
-      command_not_found_handler() {
-        echo "zsh: command not found: $1"
-        echo "Did you mean one of these?"
-        ${pkgs.nix-index}/bin/nix-index -c "nix-shell -p $1 --run $1" 2>/dev/null || echo "Run 'nix search $1' to find packages"
-      }
+      # command-not-found is provided by programs.nix-index (above), which
+      # suggests the package(s) providing a missing command from its database.
 
       # Enhanced prompt with git info
       setopt PROMPT_SUBST

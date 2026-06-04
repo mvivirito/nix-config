@@ -19,7 +19,7 @@
   };
 
   # Console configuration
-  # Keymap configured via keyd for advanced remapping
+  # Advanced key remapping is handled by kanata (see nixos/kanata/)
   services.xserver = {
     enable = true;
     xkb.layout = "us";

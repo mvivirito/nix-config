@@ -3,6 +3,9 @@
 {
   # Core configuration (cross-platform CLI tools)
   imports = [
+    # Prebuilt nix-index database (command-not-found + comma)
+    inputs.nix-index-database.homeModules.nix-index
+
     ../../../home-manager/core/cli-tools.nix
     ../../../home-manager/core/terminals.nix
     ../../../home-manager/core/neovim
@@ -13,9 +16,8 @@
     # Skip: niri, dms, appearance.nix - VM uses KDE
   ];
 
-  # Disable zoxide on this host; restore plain `cd` (shared zsh.nix aliases cd -> z).
+  # Disable zoxide on this VM; use the plain `cd` builtin (no smart-jump on a server).
   programs.zoxide.enable = lib.mkForce false;
-  programs.zsh.shellAliases.cd = lib.mkForce "cd";
 
   home = {
     username = "michael";

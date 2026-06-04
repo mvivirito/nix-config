@@ -14,8 +14,8 @@ sudo nixos-rebuild switch --flake .#zephyrus
 # NixOS VM (Proxmox) - full system rebuild
 sudo nixos-rebuild switch --flake .#nixie-vm
 
-# NixOS - user config only (dotfiles, user packages, themes — no sudo, faster)
-home-manager switch --flake .#michael@nixos-laptop
+# NixOS - user config (dotfiles, themes) is part of the system rebuild above:
+#   home-manager runs as a NixOS module and activates on `nixos-rebuild switch`.
 
 # macOS - personal machine
 darwin-rebuild switch --flake ~/repos/nix-config#macbook
@@ -30,8 +30,10 @@ nix flake update
 nix-collect-garbage -d
 ```
 
-> **Note:** On NixOS, use `home-manager switch` for user-level changes (no sudo, faster).
-> The system-level home-manager integration only activates on boot, not on `nixos-rebuild`.
+> **Note:** On NixOS, home-manager is integrated as a NixOS module, so user-level
+> changes (dotfiles, themes, user packages) apply on every `sudo nixos-rebuild switch`.
+> Do **not** run a standalone `home-manager switch` — there is no such profile, and a
+> second profile would fight the module over the same dotfiles.
 
 ## Hosts
 
@@ -64,7 +66,7 @@ nix-config/
 │   ├── greetd.nix               # TUI login manager
 │   ├── niri.nix                 # Niri compositor system module
 │   ├── theme.nix                # Console colors (Catppuccin Mocha)
-│   └── keyd/                    # System-level keyboard remapping
+│   └── kanata/                  # System-level keyboard remapping
 ├── hosts/
 │   ├── darwin/
 │   │   ├── macbook/             # Personal Mac host
@@ -106,8 +108,8 @@ nix-config/
 - **Audio:** PipeWire (with PulseAudio + ALSA compat)
 - **Networking:** NetworkManager + Tailscale VPN (`--operator=michael`)
 - **Auth:** Fingerprint (fprintd), 1Password, polkit
-- **Keyboard:** keyd (system-level key remapping)
-- **Power:** Suspend on lid close, auto-hibernate after 15 min on battery
+- **Keyboard:** kanata (system-level key remapping)
+- **Power:** Lid close → suspend (on AC) / suspend-then-hibernate after 30 min (on battery)
 - **Theme:** Catppuccin Mocha (console, GTK, Qt, icons)
 - **Boot:** systemd-boot, LUKS encryption, 10 generations max
 
@@ -151,7 +153,7 @@ nix-config/
 | File | Purpose |
 |------|---------|
 | `flake.nix` | Flake inputs and all system/host definitions |
-| `nixos/keyd/keyd.conf` | System keyboard remapping (Linux) |
+| `nixos/kanata/default.nix` | System keyboard remapping (Linux) |
 | `home-manager/linux/niri/default.nix` | Niri WM keybindings and layout (Linux) |
 | `home-manager/linux/dms.nix` | Desktop shell config (Linux) |
 | `home-manager/darwin/aerospace.nix` | Aerospace WM keybindings (macOS) |
@@ -162,7 +164,7 @@ nix-config/
 | `home-manager/core/tmux.nix` | Tmux config |
 | `hosts/darwin/shared/homebrew.nix` | Managed Homebrew casks |
 | `hosts/nixos/shared/networking.nix` | NetworkManager + Tailscale |
-| `hosts/nixos/shared/hibernate.nix` | Auto-hibernate on battery |
+| `hosts/nixos/shared/hibernate.nix` | Suspend-then-hibernate config + reboot reminder |
 | `hosts/nixos/zephyrus-g16/nvidia.nix` | NVIDIA PRIME hybrid graphics config |
 | `hosts/nixos/zephyrus-g16/gaming.nix` | Steam, Proton, emulators config |
 | `hosts/nixos/zephyrus-g16/default.nix` | Asus laptop services (asusd, supergfxd) |
@@ -176,7 +178,7 @@ Edit `hosts/darwin/shared/homebrew.nix`, add to `casks` list, rebuild.
 Edit `home-manager/core/cli-tools.nix`, add to `home.packages`, rebuild.
 
 ### Add a Linux GUI app
-Edit `home-manager/linux/gui-apps.nix`, add package, rebuild with `home-manager switch`.
+Edit `home-manager/linux/gui-apps.nix`, add package, rebuild with `sudo nixos-rebuild switch --flake .#nixos-laptop`.
 
 ### Add a zsh alias
 Edit `home-manager/core/zsh.nix`, add to `shellAliases`, rebuild.
@@ -188,7 +190,7 @@ Edit `home-manager/core/neovim/default.nix`, add to plugins list, rebuild.
 Edit `home-manager/core/neovim/config/setup/lspconfig.lua`, add server config, rebuild.
 
 ### Customize DMS settings (Linux)
-Export from DMS GUI (Settings → Export), convert JSON to Nix syntax, add to `home-manager/linux/dms.nix` under `settings`, rebuild with `home-manager switch`, then `systemctl --user restart dms.service`.
+Export from DMS GUI (Settings → Export), convert JSON to Nix syntax, add to `home-manager/linux/dms.nix` under `settings`, rebuild with `sudo nixos-rebuild switch --flake .#nixos-laptop`, then `systemctl --user restart dms.service`.
 
 ### Add a new Proxmox VM
 1. Clone from Proxmox template (Full Clone)
@@ -200,7 +202,7 @@ Export from DMS GUI (Settings → Export), convert JSON to Nix syntax, add to `h
 4. Boot VM, clone nix-config, run `sudo nixos-rebuild switch --flake .#<hostname>`
 
 ### Change Niri keybindings (Linux)
-Edit `home-manager/linux/niri/default.nix`, modify `config.binds`, rebuild with `home-manager switch`.
+Edit `home-manager/linux/niri/default.nix`, modify `config.binds`, rebuild with `sudo nixos-rebuild switch --flake .#nixos-laptop`.
 
 ### Change Aerospace keybindings (macOS)
 Edit `home-manager/darwin/aerospace.nix`, modify binding sets, rebuild then `aerospace reload-config`.
@@ -218,7 +220,7 @@ Edit `hosts/nixos/zephyrus-g16/nvidia.nix`, modify `hardware.nvidia.powerManagem
 
 ## Keybindings — NixOS (Linux)
 
-### System Keyboard Remapping (keyd)
+### System Keyboard Remapping (kanata)
 
 These are always active at the system level, before any application sees the keys.
 
@@ -569,8 +571,10 @@ brewup         → brew update && upgrade && cleanup
 
 ### Home-manager changes not applying (NixOS)
 ```bash
-# Run home-manager directly instead of relying on nixos-rebuild
-home-manager switch --flake .#michael@nixos-laptop
+# Home-manager is a NixOS module — apply it with the system rebuild:
+sudo nixos-rebuild switch --flake .#nixos-laptop
+# Then verify the user activation succeeded:
+systemctl --user status home-manager-michael.service
 ```
 
 ### Homebrew won't remove a package

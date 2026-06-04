@@ -1,5 +1,5 @@
 {
-  description = "Your new nix config";
+  description = "Multi-host NixOS + nix-darwin config (nixos-laptop, zephyrus, nixie-vm, 2x macOS)";
 
   inputs = {
     # Nixpkgs - unstable for latest packages
@@ -24,6 +24,10 @@
     # Google Workspace CLI (gws)
     gws.url = "github:googleworkspace/cli";
     gws.inputs.nixpkgs.follows = "nixpkgs";
+
+    # Prebuilt, weekly-updated nix-index database (powers command-not-found + comma)
+    nix-index-database.url = "github:nix-community/nix-index-database";
+    nix-index-database.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -38,6 +42,12 @@
   } @ inputs: let
     inherit (self) outputs;
   in {
+    # `nix fmt` — format all .nix files with the RFC-style formatter
+    formatter = {
+      x86_64-linux = nixpkgs.legacyPackages.x86_64-linux.nixfmt-rfc-style;
+      aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-rfc-style;
+    };
+
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
@@ -220,23 +230,9 @@
       };
     };
 
-    # Standalone home-manager configuration entrypoint
-    # Available through 'home-manager --flake .#your-username@your-hostname'
-    homeConfigurations = {
-      "michael@nixos-laptop" = home-manager.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs {
-          system = "x86_64-linux";
-          config.allowUnfree = true;
-        };
-        extraSpecialArgs = {inherit inputs outputs;};
-        # > Our main home-manager configuration file <
-        modules = [
-          niri.homeModules.niri
-          ./home-manager/home.nix
-        ];
-      };
-      # Future hosts prepared:
-      # "michael@desktop" = home-manager.lib.homeManagerConfiguration { ... };
-    };
+    # NOTE: no standalone `homeConfigurations` entry. Home-manager runs as a
+    # NixOS module (activated by `nixos-rebuild switch`). A separate
+    # `home-manager switch` profile would manage the same dotfiles via a second
+    # generation and cause .backup collisions / config that reverts on rebuild.
   };
 }

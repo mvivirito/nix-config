@@ -35,7 +35,10 @@
     upower.enable = true;         # Power management (battery status)
     power-profiles-daemon.enable = true;  # Power profiles
     accounts-daemon.enable = true;        # User account information
-    thermald.enable = true;               # Intel thermal management daemon
+    # NOTE: thermald intentionally NOT enabled here. On this DYTC ThinkPad
+    # (nixos-laptop) thermald refuses to run ("can't run on this platform") and
+    # exits immediately — firmware/DPTF owns thermal management. zephyrus enables
+    # its own thermald in hosts/nixos/zephyrus-g16/power.nix where it applies.
   };
 
   # DMS (Dank Material Shell) is spawned by niri via enableSpawn in home-manager/linux/dms.nix

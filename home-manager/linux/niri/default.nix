@@ -251,8 +251,11 @@ in {
         # System tools
         # ==========================================
         "Mod+Shift+M".action.spawn = [ "missioncenter" ];
-        "Mod+Shift+Y".action.spawn = [ "alacritty" "-e" "htop" ];
+        "Mod+Shift+Y".action.spawn = [ "alacritty" "-e" "btop" ];  # btop (htop isn't installed)
         "Mod+Shift+E".action.quit = [];  # Exit niri
+
+        # Manual lock (DMS honors loginctl lock-session)
+        "Super+Alt+L".action.spawn = [ "loginctl" "lock-session" ];
 
         # DMS power menu (shutdown, reboot, sleep, logout)
         "Mod+Shift+P".action.spawn = [ "dms" "ipc" "call" "powermenu" "toggle" ];

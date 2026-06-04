@@ -128,7 +128,6 @@
       "video"
       "render"
       "gamemode"
-      "keyd"
       "uinput"
     ];
   };

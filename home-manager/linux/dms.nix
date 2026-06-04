@@ -88,11 +88,13 @@
       spotlightCloseNiriOverview = true;
       niriOverviewOverlayEnabled = true;
 
-      # Power/idle (0 = disabled, rely on manual lock)
+      # Power/idle. On AC: never blank/lock (desk use). On battery: blank the
+      # display after 3 min and lock after 5 min (battery + security). Keep the
+      # lock timeout well under the 30-min suspend-then-hibernate window.
       acMonitorTimeout = 0;
       acLockTimeout = 0;
-      batteryMonitorTimeout = 0;
-      batteryLockTimeout = 0;
+      batteryMonitorTimeout = 180;
+      batteryLockTimeout = 300;
       lockBeforeSuspend = true;
       fadeToLockEnabled = true;
       fadeToLockGracePeriod = 5;

@@ -5,6 +5,10 @@
     # Enable flakes and new 'nix' command
     experimental-features = [ "nix-command" "flakes" ];
 
+    # Hard-link identical files in the store to save disk (dedup on every build).
+    # Run `nix store optimise` once to dedupe the existing 113 GB store.
+    auto-optimise-store = true;
+
     # Binary caches (official + community)
     substituters = [
       "https://cache.nixos.org"

@@ -9,8 +9,8 @@
 }: {
   # You can import other home-manager modules here
   imports = [
-    # If you want to use home-manager modules from other flakes (such as nix-colors):
-    # inputs.nix-colors.homeManagerModule
+    # Prebuilt nix-index database (command-not-found + comma)
+    inputs.nix-index-database.homeModules.nix-index
 
     # Cross-platform core configuration (works on Linux, macOS, BSD, etc.)
     ./core/cli-tools.nix

@@ -21,7 +21,7 @@
     duf              # Better df with pretty output
     btop             # Beautiful htop replacement
     procs            # Modern ps
-    delta            # Beautiful git diffs
+    # delta is provided by programs.delta (core/git.nix), not duplicated here
     httpie           # Human-friendly curl
     ncdu             # Interactive disk usage analyzer
     gping            # Ping with live graph

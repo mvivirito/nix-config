@@ -1,95 +1,57 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 
-# Automatic hibernation after suspend on battery power
+# Suspend / hibernate behavior.
 #
-# Problem: Laptops left suspended on battery will drain over days/weeks.
-# Solution: Wake from suspend after timeout, check if still on battery, hibernate if so.
+# Lid close on BATTERY   -> suspend-then-hibernate (set in shared/power.nix):
+#   systemd suspends immediately, then hibernates after HibernateDelaySec below
+#   if still asleep. This is systemd's tested native path.
+# Lid close on AC/docked -> plain suspend (see shared/power.nix).
 #
-# How it works:
-# 1. User suspends laptop (lid close or manual)
-# 2. "awake-after-suspend-for-a-time" runs BEFORE suspend
-#    - Checks if on battery power (AC offline)
-#    - If yes: schedules RTC wake-up timer for 930 seconds (15.5 min)
-#    - Writes timestamp to lock file for verification
-#    - If on AC: does nothing (skip hibernation on desktop docking)
-# 3. System suspends normally
-# 4. RTC wakes system after 930 seconds
-# 5. "hibernate-after-recovery" runs AFTER resume
-#    - Reads timestamp from lock file
-#    - Calculates elapsed time since suspend
-#    - If >= 930 seconds (timeout reached): hibernates
-#    - If < 930 seconds (user woke manually): cancels, sets 1-second dummy timer
+# This REPLACES a previous hand-rolled scheme (suspend -> rtcwake RTC alarm ->
+# `systemctl hibernate` from a resume hook). That scheme woke the whole OS with
+# the lid shut to decide whether to hibernate; if the hibernate step hung
+# (intermittent on this Tiger Lake / i915 hardware) the machine sat awake and
+# overheated in a closed clamshell. Native suspend-then-hibernate is more robust
+# and integrates with the lock screen.
 #
-# Trade-offs:
-# - 930 seconds (15.5 min) balances power saving vs. responsiveness
-# - Brief wake-up every 15 min wastes some power, but less than staying suspended for days
-# - Lock file in /var/run persists across suspend but not reboot (correct)
-#
-# Security: Requires swaylock integration - suspend triggers lock, hibernate preserves lock
-#
-# Coordination with swayidle (home-manager/home.nix):
-# - Same 930-second timeout ensures lock → DPMS → hibernate sequence
+# CAVEAT (rolling release): a hibernation image can only be resumed by the SAME
+# kernel that wrote it. After `nixos-rebuild switch` bumps the kernel, the
+# systemd-boot default points at the NEW kernel, so resuming an image written by
+# the still-running OLD kernel fails -> cold boot -> lost session. The
+# reboot-needed-notify user service below warns you to reboot after such a switch.
 
-let
-  hibernateEnvironment = {
-    HIBERNATE_SECONDS = "930";                      # 15.5 minutes
-    HIBERNATE_LOCK = "/var/run/autohibernate.lock";
+{
+  # How long to stay suspended before hibernating (battery / suspend-then-hibernate).
+  # Longer delay = fewer hibernate attempts = less exposure to the driver-level
+  # hibernate hang; 30 min on a suspended laptop costs very little battery.
+  systemd.sleep.settings.Sleep = {
+    HibernateDelaySec = "30min";
   };
-in {
 
-  # Service 1: Schedule wake-up before suspend
-  systemd.services."awake-after-suspend-for-a-time" = {
-    description = "Sets up the suspend so that it'll wake for hibernation only if not on AC power";
-    wantedBy = [ "suspend.target" ];
-    before = [ "systemd-suspend.service" ];  # Runs BEFORE actual suspend
-    environment = hibernateEnvironment;
+  # Warn (desktop notification) when the running kernel != the activated kernel,
+  # i.e. a rebuild changed the kernel but you have not rebooted yet. In that state
+  # hibernate would NOT resume, so this is the cue to reboot.
+  systemd.user.services.reboot-needed-notify = {
+    description = "Notify when a reboot is needed (kernel changed; hibernate won't resume)";
+    serviceConfig.Type = "oneshot";
     script = ''
-      # Check any available AC adapter (some laptops use different names than "AC")
-      ac_online=0
-      for supply in /sys/class/power_supply/*/type; do
-        if [ "$(cat "$supply" 2>/dev/null)" = "Mains" ]; then
-          online_file="''${supply%/type}/online"
-          if [ "$(cat "$online_file" 2>/dev/null)" = "1" ]; then
-            ac_online=1
-            break
-          fi
-        fi
-      done
-
-      # Only schedule wake-up if on battery (no AC adapter online)
-      if [ "$ac_online" -eq 0 ]; then
-        curtime=$(date +%s)
-        echo "$curtime $1" >> /tmp/autohibernate.log
-        echo "$curtime" > $HIBERNATE_LOCK         # Record suspend time
-        ${pkgs.util-linux}/bin/rtcwake -m no -s $HIBERNATE_SECONDS  # Schedule RTC wake (-m no = don't suspend, just set timer)
-      else
-        echo "System is on AC power, skipping wake-up scheduling for hibernation." >> /tmp/autohibernate.log
+      booted=$(readlink /run/booted-system/kernel 2>/dev/null || true)
+      current=$(readlink /run/current-system/kernel 2>/dev/null || true)
+      if [ -n "$booted" ] && [ -n "$current" ] && [ "$booted" != "$current" ]; then
+        ${pkgs.libnotify}/bin/notify-send -u critical \
+          "Reboot needed" \
+          "The system kernel changed since boot. Hibernate will NOT resume until you reboot — an unsaved session would be lost. Run: sudo reboot"
       fi
     '';
-    serviceConfig.Type = "simple";
   };
 
-  # Service 2: Hibernate after timeout-induced resume
-  systemd.services."hibernate-after-recovery" = {
-    description = "Hibernates after a suspend recovery due to timeout";
-    wantedBy = [ "suspend.target" ];
-    after = [ "systemd-suspend.service" ];   # Runs AFTER resume
-    environment = hibernateEnvironment;
-    script = ''
-      curtime=$(date +%s)
-      sustime=$(cat $HIBERNATE_LOCK)         # Read suspend timestamp
-      rm $HIBERNATE_LOCK                      # Clean up lock file
-
-      # If timeout elapsed (>= 930 sec), this was RTC wake → hibernate
-      if [ $(($curtime - $sustime)) -ge $HIBERNATE_SECONDS ] ; then
-        systemctl hibernate
-      else
-        # User woke manually before timeout → cancel hibernation
-        # Set 1-second dummy timer to clear RTC wake alarm
-        ${pkgs.util-linux}/bin/rtcwake -m no -s 1
-      fi
-    '';
-    serviceConfig.Type = "simple";
+  systemd.user.timers.reboot-needed-notify = {
+    description = "Periodically check whether a reboot is needed for hibernate safety";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnStartupSec = "2min";
+      OnUnitActiveSec = "15min";
+      Unit = "reboot-needed-notify.service";
+    };
   };
-
 }

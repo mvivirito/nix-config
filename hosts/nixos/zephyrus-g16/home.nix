@@ -2,6 +2,9 @@
 
 {
   imports = [
+    # Prebuilt nix-index database (command-not-found + comma)
+    inputs.nix-index-database.homeModules.nix-index
+
     # Cross-platform core configuration
     ../../../home-manager/core/cli-tools.nix
     ../../../home-manager/core/git.nix

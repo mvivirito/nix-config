@@ -30,13 +30,25 @@
     settings = {
       # Workaround for https://github.com/NixOS/nix/issues/9574
       nix-path = config.nix.nixPath;
+      # 4c/8t CPU + 16 GB RAM: cap concurrent derivations and threads-per-build
+      # so a local build (cache miss) can't oversubscribe CPU or OOM.
+      max-jobs = 4;
+      cores = 2;
     };
     gc = {
       automatic = true;
       dates = "weekly";
-      # Keep generations for 365 days to provide a larger safety net
-      options = "--delete-older-than 365d";
+      # Keep 30 days of generations. configurationLimit (boot.nix) caps the boot
+      # menu at 10; this bounds on-disk generations so weekly GC actually frees space.
+      options = "--delete-older-than 30d";
     };
+  };
+
+  # nh: friendlier nixos-rebuild wrapper with a build diff (`nh os switch`).
+  # GC stays handled by nix.gc above, so nh.clean is intentionally left off.
+  programs.nh = {
+    enable = true;
+    flake = "/home/michael/nix-config";
   };
 
   # Allow unfree packages
