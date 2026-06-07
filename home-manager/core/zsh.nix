@@ -96,6 +96,9 @@
       c = "claude";
     } // lib.optionalAttrs pkgs.stdenv.isLinux {
       # Linux-specific aliases
+      # Claude YOLO: skip permissions + max effort, auto-trusting the cwd
+      # (same wrapper as the Mod+A niri launcher)
+      cy = "claude-max";
       nm = "nmtui-connect";
       sx = "sudo systemctl";
       jctl = "journalctl -e";

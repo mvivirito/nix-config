@@ -7,21 +7,21 @@
   programs.sioyek = {
     enable = true;
     config = {
-      # Gruvbox Dark colors - high contrast, readable
-      "background_color" = "0.16 0.16 0.16";           # #282828
-      "text_highlight_color" = "0.84 0.60 0.13";       # #d79921 yellow
-      "visual_mark_color" = "0.27 0.52 0.53 0.3";      # #458588 blue with alpha
-      "search_highlight_color" = "0.98 0.74 0.18";     # #fabd2f bright yellow
-      "status_bar_color" = "0.20 0.20 0.20";           # slightly lighter than bg
-      "status_bar_text_color" = "0.92 0.86 0.70";      # #ebdbb2
+      # Tokyo Night colors
+      "background_color" = "0.102 0.106 0.149";        # #1a1b26
+      "text_highlight_color" = "0.878 0.686 0.408";    # #e0af68 yellow
+      "visual_mark_color" = "0.478 0.635 0.969 0.3";   # #7aa2f7 blue with alpha
+      "search_highlight_color" = "1.0 0.620 0.392";    # #ff9e64 orange
+      "status_bar_color" = "0.141 0.157 0.231";        # #24283b
+      "status_bar_text_color" = "0.753 0.792 0.961";   # #c0caf5
 
       # Dark mode (invert) - toggle with 'i'
-      "dark_mode_background_color" = "0.16 0.16 0.16";
+      "dark_mode_background_color" = "0.102 0.106 0.149";
       "dark_mode_contrast" = "0.8";
 
       # Custom color mode - toggle with Ctrl+R (better than invert for readability)
-      "custom_background_color" = "0.16 0.16 0.16";    # #282828
-      "custom_text_color" = "0.92 0.86 0.70";          # #ebdbb2
+      "custom_background_color" = "0.102 0.106 0.149";  # #1a1b26
+      "custom_text_color" = "0.753 0.792 0.961";        # #c0caf5
 
       # Wayland clipboard integration
       "copy_command" = "wl-copy";

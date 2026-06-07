@@ -23,8 +23,8 @@
     enableSystemMonitoring = true;
 
     settings = {
-      # Theme: petrichor with blue variant (set in registryThemeVariants below)
-      currentThemeName = "petrichor";
+      # Theme: Tokyo Night (vibrant blues/purples; matches terminals + niri border)
+      currentThemeName = "tokyoNight";
       currentThemeCategory = "registry";
       registryThemeVariants = {
         everforest = "soft";
@@ -36,7 +36,7 @@
       matugenScheme = "scheme-tonal-spot";
       runUserMatugenTemplates = true;
       runDmsMatugenTemplates = true;
-      # Disabled - using consistent Gruvbox theme instead of wallpaper-generated colors
+      # Disabled - using the fixed Tokyo Night theme instead of wallpaper-generated colors
       matugenTemplateAlacritty = false;
       matugenTemplateFirefox = false;
       matugenTemplateNeovim = false;
@@ -62,6 +62,12 @@
       # Appearance
       widgetColorMode = "colorful";
       cornerRadius = 12;
+
+      # Frosted glass — translucent surfaces + real backdrop blur.
+      # (blur verified supported on this niri 26.04 via `dms blur check`)
+      blurEnabled = true;
+      blurForegroundLayers = true;
+      popupTransparency = 0.92;  # control center / popout menus (1.0 = opaque)
 
       # Time/locale
       use24HourClock = false;
@@ -139,8 +145,8 @@
           ];
           spacing = 4;
           innerPadding = 4;
-          transparency = 1;
-          widgetTransparency = 1;
+          transparency = 0.82;        # bar strip alpha (1.0 = opaque, 0.0 = clear)
+          widgetTransparency = 0.78;  # per-widget pill alpha
           visible = true;
         }
       ];

@@ -1,49 +1,39 @@
 { pkgs, ... }:
 
 {
-  # Catppuccin Mocha theme - darker, higher contrast than Macchiato
-  environment.variables.GTK_THEME = "Catppuccin-Mocha-Standard-Blue-Dark";
+  # Tokyo Night GTK theme (dark) — Qt follows it via the gtk2 platform theme
+  environment.variables.GTK_THEME = "Tokyonight-Dark";
   qt.enable = true;
   qt.platformTheme = "gtk2";
   qt.style = "gtk2";
 
-  # Console colors (Gruvbox Dark palette)
+  # Console colors (Tokyo Night palette)
   console = {
     earlySetup = true;
     colors = [
       # Normal colors
-      "282828"  # bg (background)
-      "cc241d"  # red
-      "98971a"  # green
-      "d79921"  # yellow
-      "458588"  # blue
-      "b16286"  # purple
-      "689d6a"  # aqua
-      "a89984"  # fg4 (text)
+      "1a1b26"  # bg (background)
+      "f7768e"  # red
+      "9ece6a"  # green
+      "e0af68"  # yellow
+      "7aa2f7"  # blue
+      "bb9af7"  # purple
+      "7dcfff"  # cyan
+      "a9b1d6"  # fg (text)
 
       # Bright colors
-      "928374"  # gray (bright black)
-      "fb4934"  # bright red
-      "b8bb26"  # bright green
-      "fabd2f"  # bright yellow
-      "83a598"  # bright blue
-      "d3869b"  # bright purple
-      "8ec07c"  # bright aqua
-      "ebdbb2"  # fg (bright white)
+      "414868"  # bright black
+      "f7768e"  # bright red
+      "9ece6a"  # bright green
+      "e0af68"  # bright yellow
+      "7aa2f7"  # bright blue
+      "bb9af7"  # bright purple
+      "7dcfff"  # bright cyan
+      "c0caf5"  # fg (bright white)
     ];
   };
 
-  # Override packages for Mocha variant with Blue accent
-  nixpkgs.config.packageOverrides = pkgs: {
-    catppuccin-gtk = pkgs.catppuccin-gtk.override {
-      accents = [ "blue" ];
-      size = "standard";
-      variant = "mocha";
-    };
-  };
-
   environment.systemPackages = with pkgs; [
-    catppuccin-gtk
-    catppuccin-kvantum
+    tokyonight-gtk-theme
   ];
 }
