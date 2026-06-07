@@ -25,7 +25,7 @@
   # Longer delay = fewer hibernate attempts = less exposure to the driver-level
   # hibernate hang; 30 min on a suspended laptop costs very little battery.
   systemd.sleep.settings.Sleep = {
-    HibernateDelaySec = "30min";
+    HibernateDelaySec = "15min";
   };
 
   # Warn (desktop notification) when the running kernel != the activated kernel,

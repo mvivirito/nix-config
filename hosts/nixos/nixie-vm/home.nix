@@ -32,7 +32,6 @@
   # nixie-vm specific packages
   home.packages = (with pkgs; [
     gemini-cli        # Google Gemini AI CLI
-    google-cloud-sdk  # Google Cloud CLI (gcloud)
     kubectl           # Kubernetes command-line tool
     kubernetes-helm   # The Kubernetes package manager
     k9s               # Kubernetes CLI To Manage Your Clusters In Style!

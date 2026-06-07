@@ -71,4 +71,41 @@
       ExecStart = "${pkgs.power-profiles-daemon}/bin/powerprofilesctl set balanced";
     };
   };
+
+  # Disable non-essential ACPI wake sources (USB / PCIe / Thunderbolt) so the
+  # laptop can't wake itself in a bag and then sit awake draining the battery.
+  # Keep LID + power button (SLPB) + RTC (AWAC — needed for the
+  # suspend-then-hibernate timer). Writing a name to /proc/acpi/wakeup toggles
+  # it, so only write when currently enabled (idempotent per boot).
+  systemd.services.disable-wakeups = {
+    description = "Disable spurious ACPI wakeup sources";
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      while read -r name _ status _; do
+        case " XHCI TRP1 TRP2 TXHC TDM0 TDM1 PEG0 " in
+          *" $name "*)
+            case "$status" in
+              *enabled) echo "$name" > /proc/acpi/wakeup ;;
+            esac
+            ;;
+        esac
+      done < /proc/acpi/wakeup
+    '';
+  };
+
+  # Battery safety net: if the machine is ever awake on a low battery (e.g. a
+  # stray wake or a hybrid-sleep that won't power off), hibernate to save the
+  # session instead of draining to a dead, lost-session shutdown.
+  services.upower = {
+    enable = true;
+    usePercentageForPolicy = true;
+    percentageLow = 15;
+    percentageCritical = 10;
+    percentageAction = 5;
+    criticalPowerAction = "Hibernate";
+  };
 }

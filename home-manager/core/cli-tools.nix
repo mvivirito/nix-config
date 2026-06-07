@@ -55,5 +55,7 @@
   ] ++ lib.optionals pkgs.stdenv.isLinux [
     cool-retro-term  # Retro terminal emulator
     bandwhich        # Bandwidth usage by process
+    powertop         # Power consumption analyzer + tunables (run: sudo powertop)
+    google-cloud-sdk # Google Cloud CLI (gcloud, gsutil)
   ];
 }
