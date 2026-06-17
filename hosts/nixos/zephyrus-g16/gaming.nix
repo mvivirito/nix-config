@@ -41,10 +41,26 @@
   # Xbox controller support (Bluetooth)
   hardware.xpadneo.enable = true;
 
-  # 8BitDo controller udev rules (Steam needs hidraw access)
+  # Controller hidraw access (Steam, rpcs3 — the AppImage carries no udev rules)
   services.udev.extraRules = ''
+    # 8BitDo controllers
     KERNEL=="hidraw*", ATTRS{idVendor}=="2dc8", MODE="0660", TAG+="uaccess"
     SUBSYSTEM=="usb", ATTRS{idVendor}=="2dc8", MODE="0660", TAG+="uaccess"
+
+    # Sony DualSense (PS5) — USB + Bluetooth
+    KERNEL=="hidraw*", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="0ce6", MODE="0660", TAG+="uaccess"
+    KERNEL=="hidraw*", KERNELS=="*054C:0CE6*", MODE="0660", TAG+="uaccess"
+
+    # Sony DualShock 4 (PS4) — USB (incl. adapter + slim) + Bluetooth
+    KERNEL=="hidraw*", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="05c4", MODE="0660", TAG+="uaccess"
+    KERNEL=="hidraw*", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="0ba0", MODE="0660", TAG+="uaccess"
+    KERNEL=="hidraw*", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="09cc", MODE="0660", TAG+="uaccess"
+    KERNEL=="hidraw*", KERNELS=="*054C:05C4*", MODE="0660", TAG+="uaccess"
+    KERNEL=="hidraw*", KERNELS=="*054C:09CC*", MODE="0660", TAG+="uaccess"
+
+    # Sony DualShock 3 (PS3) — USB + Bluetooth
+    KERNEL=="hidraw*", ATTRS{idVendor}=="054c", ATTRS{idProduct}=="0268", MODE="0660", TAG+="uaccess"
+    KERNEL=="hidraw*", KERNELS=="*054C:0268*", MODE="0660", TAG+="uaccess"
   '';
 
   # Steam hardware (controllers, VR)

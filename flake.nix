@@ -97,6 +97,52 @@
               (final: prev: {
                 khal = final.writeShellScriptBin "khal" "echo 'khal disabled - broken in nixpkgs'";
               })
+              # rpcs3 is flagged `unfree` in nixpkgs so Hydra never caches it —
+              # every dep change is a ~30 min from-source compile, and current
+              # nixpkgs breaks that build outright (glew now defaults to EGL,
+              # dropping the GLX symbols rpcs3 needs:
+              # https://github.com/RPCS3/rpcs3/issues/16819).
+              # Use the official prebuilt AppImage instead: no compile, immune to
+              # nixpkgs packaging churn. Its dwarfs-based runtime can't be unpacked
+              # by appimageTools.wrapType2 (squashfs only), so extract the AppDir
+              # with dwarfsextract and wrap it in the FHS env ourselves.
+              # To update: bump url + hash to a newer build from
+              # https://github.com/RPCS3/rpcs3-binaries-linux/releases
+              (
+                final: prev:
+                let
+                  pname = "rpcs3";
+                  version = "0.0.41-19454";
+                  src = final.fetchurl {
+                    url = "https://github.com/RPCS3/rpcs3-binaries-linux/releases/download/build-0b535328c85b4ebea1a0781ba50670dbe5d41897/rpcs3-v0.0.41-19454-0b535328_linux64.AppImage";
+                    hash = "sha256-9QH2T2HcyPVhCRQQKq2/j3S/4v43ACLUnAKj9kuUf7c=";
+                  };
+                  appdir =
+                    final.runCommand "${pname}-${version}-extracted"
+                      { nativeBuildInputs = [ final.dwarfs ]; }
+                      ''
+                        mkdir -p $out
+                        dwarfsextract --image-offset=auto -i ${src} -o $out
+                      '';
+                in
+                {
+                  rpcs3 = final.appimageTools.wrapAppImage {
+                    inherit pname version;
+                    src = appdir;
+                    extraInstallCommands = ''
+                      install -Dm444 ${appdir}/rpcs3.desktop -t $out/share/applications
+                      install -Dm444 ${appdir}/rpcs3.svg $out/share/icons/hicolor/scalable/apps/rpcs3.svg
+                    '';
+                    meta = {
+                      description = "PS3 emulator/debugger (official prebuilt AppImage)";
+                      homepage = "https://rpcs3.net/";
+                      license = final.lib.licenses.gpl2Plus;
+                      platforms = [ "x86_64-linux" ];
+                      mainProgram = "rpcs3";
+                    };
+                  };
+                }
+              )
             ];
           }
 

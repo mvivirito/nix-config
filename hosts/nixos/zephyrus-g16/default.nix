@@ -103,6 +103,28 @@
   services.blueman.enable = true;
 
   # ============================================================================
+  # FILE SYNC (SYNCTHING)
+  # ============================================================================
+  # Syncs the Obsidian vault (~/vault) with the nixie-vm hub and other devices.
+  # Sync-only client: the vault automation (auto-commit, gdrive backup, Claude
+  # heartbeats, Telegram listener) deliberately stays on the always-on nixie-vm
+  # hub so those jobs don't double-fire or conflict.
+  #
+  # Runtime GUI pairing (overrideDevices/Folders = false): open the web UI at
+  # http://127.0.0.1:8384, add the nixie-vm device, and accept the shared vault
+  # folder (point it at /home/michael/vault).
+  services.syncthing = {
+    enable = true;
+    user = "michael";
+    group = "users";
+    dataDir = "/home/michael";
+    configDir = "/home/michael/.config/syncthing";
+    openDefaultPorts = true;      # TCP 22000, UDP 21027
+    overrideDevices = false;      # allow GUI device pairing
+    overrideFolders = false;      # allow GUI folder pairing
+  };
+
+  # ============================================================================
   # DISPLAY & SCREEN
   # ============================================================================
 

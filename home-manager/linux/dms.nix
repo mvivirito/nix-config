@@ -141,6 +141,7 @@
             "memUsage"
             "notificationButton"
             "battery"
+            "idleInhibitor"  # caffeine: click to toggle keep-awake (SessionService.toggleIdleInhibit)
             "controlCenterButton"
           ];
           spacing = 4;
