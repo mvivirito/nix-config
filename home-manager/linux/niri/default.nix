@@ -6,32 +6,9 @@ let
   playerctl = "${pkgs.playerctl}/bin/playerctl";
   brightnessctl = "${pkgs.brightnessctl}/bin/brightnessctl";
 
-  # Claude in YOLO mode: skip permissions + max effort (Mod+A / `cy` alias).
-  # Pre-trusts the launch directory in ~/.claude.json so the interactive
-  # workspace-trust dialog is skipped — `--dangerously-skip-permissions` does NOT
-  # skip that dialog in interactive mode; trust is persisted per-dir in that file.
-  claude-max = pkgs.writeShellScriptBin "claude-max" ''
-    set -u
-    cfg="$HOME/.claude.json"
-    dir="$(${pkgs.coreutils}/bin/pwd)"
-    jq="${pkgs.jq}/bin/jq"
-
-    if [ -f "$cfg" ]; then
-      tmp="$(${pkgs.coreutils}/bin/mktemp "$cfg.XXXXXX")"
-      if "$jq" --arg d "$dir" \
-          '.projects[$d] = ((.projects[$d] // {}) + { hasTrustDialogAccepted: true })' \
-          "$cfg" > "$tmp" 2>/dev/null; then
-        ${pkgs.coreutils}/bin/mv "$tmp" "$cfg"
-      else
-        ${pkgs.coreutils}/bin/rm -f "$tmp"
-      fi
-    else
-      "$jq" -n --arg d "$dir" \
-        '{ projects: { ($d): { hasTrustDialogAccepted: true } } }' > "$cfg"
-    fi
-
-    exec ${pkgs.claude-code}/bin/claude --dangerously-skip-permissions --effort max "$@"
-  '';
+  # `claude-max` (the Mod+A launcher / `cy` alias YOLO wrapper) now lives in
+  # home-manager/core/claude-max.nix so it installs on every Linux host — not
+  # just niri desktops. Referenced by bare name below (it's on the profile PATH).
 
   pdf-picker = pkgs.writeShellScript "pdf-picker" ''
     selected=$(${pkgs.fd}/bin/fd --type f --extension pdf . "$HOME" 2>/dev/null | \
@@ -456,7 +433,7 @@ in {
         # Claude — Mod+A ("Ask"): terminal running
         # `claude --dangerously-skip-permissions --effort max`
         # ==========================================
-        "Mod+A".action.spawn = [ "${pkgs.alacritty}/bin/alacritty" "--class" "claude-cli" "-e" "${claude-max}/bin/claude-max" ];
+        "Mod+A".action.spawn = [ "${pkgs.alacritty}/bin/alacritty" "--class" "claude-cli" "-e" "claude-max" ];
         "Mod+A".hotkey-overlay.title = "Open Claude (skip permissions, max effort)";
 
         # ==========================================
@@ -529,6 +506,5 @@ in {
     pkgs.brightnessctl
     pkgs.playerctl
     pkgs.wireplumber  # For wpctl
-    claude-max        # `claude-max` wrapper (Mod+A launcher + `cy` alias)
   ];
 }

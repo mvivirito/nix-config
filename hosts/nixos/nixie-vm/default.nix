@@ -43,7 +43,11 @@
   users.users.michael = {
     isNormalUser = true;
     description = "Michael Vivirito";
-    extraGroups = [ "networkmanager" "wheel" "input" "video" "render" ];
+    # "uinput" is required for Sunshine to create virtual kbd/mouse/gamepad:
+    # hardware.uinput (auto-enabled by services.sunshine) makes /dev/uinput
+    # group "uinput", not "input" — without this, Moonlight shows the desktop
+    # but no input works ("Permission denied" creating virtual devices).
+    extraGroups = [ "networkmanager" "wheel" "input" "uinput" "video" "render" ];
   };
 
   users.defaultUserShell = pkgs.zsh;

@@ -1,5 +1,8 @@
 { pkgs, lib, ... }:
 {
+  # `claude-max` wrapper backing the `cy` alias below (Linux-only, like the alias).
+  imports = [ ./claude-max.nix ];
+
   programs.eza = {
     enable = true;
     enableZshIntegration = true;

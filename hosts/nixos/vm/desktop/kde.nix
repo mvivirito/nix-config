@@ -21,6 +21,26 @@
   # Comment out the line below if you want to try Wayland instead
   services.displayManager.defaultSession = "plasmax11";
 
+  # Headless streaming: never lock the screen.
+  # Symptom this fixes: connecting via Moonlight shows only wallpaper + clock
+  # with no password field — the KDE lock greeter (kscreenlocker) had engaged on
+  # the headless display, and its unlock prompt won't render/wake over the stream.
+  # /etc/xdg is in XDG_CONFIG_DIRS, so this is read as the system default (a user
+  # ~/.config/kscreenlockerrc would override it, if one is ever created).
+  environment.etc."xdg/kscreenlockerrc".text = ''
+    [Daemon]
+    Autolock=false
+    LockOnResume=false
+  '';
+
+  # Never blank/DPMS-off the virtual display — it's the only thing Sunshine captures.
+  services.xserver.serverFlagsSection = ''
+    Option "BlankTime" "0"
+    Option "StandbyTime" "0"
+    Option "SuspendTime" "0"
+    Option "OffTime" "0"
+  '';
+
   # KDE packages
   environment.systemPackages = with pkgs; [
     # Core KDE apps
