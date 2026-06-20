@@ -95,12 +95,21 @@
       niriOverviewOverlayEnabled = true;
 
       # Power/idle. On AC: never blank/lock (desk use). On battery: blank the
-      # display after 3 min and lock after 5 min (battery + security). Keep the
-      # lock timeout well under the 30-min suspend-then-hibernate window.
+      # display after 3 min and lock after 5 min (battery + security).
+      #
+      # Idle sleep: after 10 min idle with the lid OPEN, DMS runs
+      # `systemctl suspend-then-hibernate` (IdleService -> SessionService) on
+      # BOTH AC and battery -> light sleep, then hibernate after HibernateDelaySec
+      # (15 min; see hosts/nixos/shared/hibernate.nix). Charging must not block it.
+      # DMS SuspendBehavior enum: 0=Suspend, 1=Hibernate, 2=SuspendThenHibernate.
       acMonitorTimeout = 0;
       acLockTimeout = 0;
+      acSuspendTimeout = 600;       # 10 min idle -> suspend-then-hibernate (AC too)
+      acSuspendBehavior = 2;        # SuspendThenHibernate
       batteryMonitorTimeout = 180;
       batteryLockTimeout = 300;
+      batterySuspendTimeout = 600;  # 10 min idle -> suspend-then-hibernate
+      batterySuspendBehavior = 2;   # SuspendThenHibernate
       lockBeforeSuspend = true;
       fadeToLockEnabled = true;
       fadeToLockGracePeriod = 5;

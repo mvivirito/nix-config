@@ -31,13 +31,14 @@ map('n', '<leader>fs', "<cmd>lua require('telescope.builtin').lsp_document_symbo
 map('n', '<leader>qn', '<cmd>:cn<CR>', 'Next quickfix')
 map('n', '<leader>qp', '<cmd>:cp<CR>', 'Previous quickfix')
 
--- Harpoon
-map('n', '<leader>ha', '<cmd>lua require("harpoon.mark").add_file()<cr>', 'Add file to harpoon')
-map('n', '<C-e>', '<cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>', 'Harpoon menu')
-map('n', '<C-h>', '<cmd>lua require("harpoon.ui").nav_file(1)<cr>', 'Harpoon file 1')
-map('n', '<C-j>', '<cmd>lua require("harpoon.ui").nav_file(2)<cr>', 'Harpoon file 2')
-map('n', '<C-k>', '<cmd>lua require("harpoon.ui").nav_file(3)<cr>', 'Harpoon file 3')
-map('n', '<C-l>', '<cmd>lua require("harpoon.ui").nav_file(4)<cr>', 'Harpoon file 4')
+-- Harpoon (v2 API). setup() is called in the plugin config (default.nix).
+local harpoon = require("harpoon")
+map('n', '<leader>ha', function() harpoon:list():add() end, 'Add file to harpoon')
+map('n', '<C-e>', function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, 'Harpoon menu')
+map('n', '<C-h>', function() harpoon:list():select(1) end, 'Harpoon file 1')
+map('n', '<C-j>', function() harpoon:list():select(2) end, 'Harpoon file 2')
+map('n', '<C-k>', function() harpoon:list():select(3) end, 'Harpoon file 3')
+map('n', '<C-l>', function() harpoon:list():select(4) end, 'Harpoon file 4')
 
 -- Clang
 map('n', '<leader>he', '<cmd>ClangdSwitchSourceHeader<cr>', 'Switch header/source')

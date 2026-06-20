@@ -53,6 +53,6 @@ vim.keymap.set({ "n", "x", "o" }, "[[", function() ts_move.goto_previous_start("
 vim.keymap.set({ "n", "x", "o" }, "[M", function() ts_move.goto_previous_end("@function.outer", "textobjects") end)
 vim.keymap.set({ "n", "x", "o" }, "[]", function() ts_move.goto_previous_end("@class.outer", "textobjects") end)
 
--- Swap keymaps
-vim.keymap.set("n", "<leader>a", function() ts_swap.swap_next("@parameter.inner") end, { desc = "Swap next param" })
-vim.keymap.set("n", "<leader>A", function() ts_swap.swap_previous("@parameter.inner") end, { desc = "Swap prev param" })
+-- Swap keymaps (moved off <leader>a/<leader>A, which are now the Claude/AI prefix)
+vim.keymap.set("n", "<leader>pa", function() ts_swap.swap_next("@parameter.inner") end, { desc = "Swap next param" })
+vim.keymap.set("n", "<leader>pA", function() ts_swap.swap_previous("@parameter.inner") end, { desc = "Swap prev param" })

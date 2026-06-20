@@ -22,14 +22,15 @@ in {
   programs = {
     neovim = {
       plugins = [
-        ## Theme - Gruvbox Dark for readability
+        ## Theme - Tokyo Night ("night"), to match the fixed Tokyo Night desktop
+        ## (kitty/alacritty/GTK/Qt/console are all #1a1b26 "night").
         {
-          plugin = pkgs.vimPlugins.gruvbox-nvim;
+          plugin = pkgs.vimPlugins.tokyonight-nvim;
           config = ''
-            require("gruvbox").setup({
-              contrast = "hard",  -- harder background for better contrast
+            require("tokyonight").setup({
+              style = "night",
             })
-            vim.cmd[[colorscheme gruvbox]]
+            vim.cmd.colorscheme("tokyonight")
           '';
           type = "lua";
         }
@@ -57,39 +58,62 @@ in {
           type = "lua";
         }
         pkgs.vimPlugins.telescope-fzf-native-nvim
-        pkgs.vimPlugins.harpoon
-
-        ## cmp
         {
-          plugin = pkgs.vimPlugins.nvim-cmp;
-          config = builtins.readFile config/setup/cmp.lua;
+          plugin = pkgs.vimPlugins.harpoon2;
+          config = "require('harpoon'):setup()";
           type = "lua";
         }
-        pkgs.vimPlugins.cmp-nvim-lsp
-        pkgs.vimPlugins.cmp-buffer
-        pkgs.vimPlugins.cmp-cmdline
-        pkgs.vimPlugins.cmp_luasnip
+
+        ## Completion - blink.cmp (replaces nvim-cmp + cmp-* sources + lspkind)
+        {
+          plugin = pkgs.vimPlugins.blink-cmp;
+          config = builtins.readFile config/setup/blink.lua;
+          type = "lua";
+        }
+        pkgs.vimPlugins.friendly-snippets
 
         ## Tpope
         pkgs.vimPlugins.vim-surround
         pkgs.vimPlugins.vim-sleuth
         pkgs.vimPlugins.vim-repeat
+
+        ## QoL
+        pkgs.vimPlugins.nvim-web-devicons
+        pkgs.vimPlugins.lazygit-nvim
         {
-          plugin = fromGitHub "afd76df166ed0f223ede1071e0cfde8075cc4a24" "main" "TabbyML/vim-tabby";
+          plugin = pkgs.vimPlugins.rainbow-delimiters-nvim;
+          config = "require('rainbow-delimiters.setup').setup({})";
+          type = "lua";
+        }
+        ## AI - Claude Code IDE integration (agentic; drives your existing claude CLI/auth)
+        {
+          plugin = pkgs.vimPlugins.claudecode-nvim;
           config = ''
-            vim.cmd([[
-              let g:tabby_keybinding_accept = '<Tab>'
-            ]])
+            require("claudecode").setup({
+              terminal = { provider = "native" }, -- built-in terminal, no snacks.nvim
+            })
+            local map = vim.keymap.set
+            map("n", "<leader>ac", "<cmd>ClaudeCode<cr>",          { desc = "Toggle Claude Code" })
+            map("n", "<leader>af", "<cmd>ClaudeCodeFocus<cr>",     { desc = "Focus Claude" })
+            map("n", "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>",     { desc = "Add current buffer to Claude" })
+            map("v", "<leader>as", "<cmd>ClaudeCodeSend<cr>",      { desc = "Send selection to Claude" })
+            map("n", "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>",{ desc = "Accept Claude diff" })
+            map("n", "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>",  { desc = "Reject Claude diff" })
+
+            -- Keyboard window nav that also works from INSIDE the Claude terminal.
+            -- In terminal mode we leave terminal-mode first (<C-\><C-n>, Claude keeps
+            -- running), then move. Alt-l onto a terminal starts typing immediately.
+            -- Avoided <C-w>/<C-h> on purpose: Claude's TUI uses them (delete-word / BS).
+            map("t", "<M-h>", [[<C-\><C-n><C-w>h]], { desc = "Term -> window left" })
+            map("t", "<M-l>", [[<C-\><C-n><C-w>l]], { desc = "Term -> window right" })
+            map("n", "<M-h>", "<C-w>h", { desc = "Window left" })
+            map("n", "<M-l>", function()
+              vim.cmd.wincmd("l")
+              if vim.bo.buftype == "terminal" then vim.cmd.startinsert() end
+            end, { desc = "Window right (enter terminal)" })
           '';
           type = "lua";
         }
-
-        ## QoL
-        pkgs.vimPlugins.lspkind-nvim
-        pkgs.vimPlugins.rainbow
-        pkgs.vimPlugins.nvim-web-devicons
-        pkgs.vimPlugins.lazygit-nvim
-        pkgs.vimPlugins.nvim-code-action-menu
         {
           plugin = fromGitHub "6218a401824c5733ac50b264991b62d064e85ab2" "main" "m-demare/hlargs.nvim";
           config = "require('hlargs').setup()";
@@ -130,7 +154,7 @@ in {
           config = ''
             require('lualine').setup {
                 options = {
-                    theme = 'gruvbox',
+                    theme = 'tokyonight',
                 }
             }
           '';
@@ -177,6 +201,7 @@ in {
               },
             })
             wk.add({
+              { "<leader>a", group = "AI / Claude" },
               { "<leader>f", group = "Find (Telescope)" },
               { "<leader>t", group = "Trouble" },
               { "<leader>d", group = "Diagnostics" },
@@ -185,11 +210,10 @@ in {
               { "<leader>q", group = "Quickfix" },
               { "<leader>w", group = "Workspace" },
               { "<leader>o", group = "Oil" },
-              { "<leader>n", group = "Neorg" },
+              { "<leader>p", group = "Param swap" },
               { "<leader>c", group = "Code Action" },
               { "<leader>r", group = "Rename" },
-              { "<leader>h", group = "Header" },
-              { "<leader>s", group = "Harpoon mark" },
+              { "<leader>h", group = "Harpoon / Header" },
             })
           '';
           type = "lua";
@@ -212,10 +236,8 @@ in {
             require("nvim-autopairs").setup({
               check_ts = true,
             })
-            -- integrate with cmp
-            local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-            local cmp = require("cmp")
-            cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+            -- Completion-accept bracket insertion is handled by blink.cmp's
+            -- completion.accept.auto_brackets (see config/setup/blink.lua).
           '';
           type = "lua";
         }
@@ -261,7 +283,6 @@ in {
         clang-tools # For clangd
         cmake-language-server
         dockerfile-language-server
-        vimPlugins.vim-vsnip # For snippets
       ];
     };
   };

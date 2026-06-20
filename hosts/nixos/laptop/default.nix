@@ -1,5 +1,40 @@
 { inputs, lib, config, pkgs, ... }:
 
+let
+  # battery-charge: flip the charge limit between the 80% longevity cap and a
+  # full 100% charge for travel / heavy days. The sysfs writes need root, so the
+  # command just (re)starts the two oneshot units below; the polkit rule lets
+  # michael do that without a password. Effect is immediate — no rebuild — and
+  # the cap is re-applied on the next boot by battery-charge-threshold.service.
+  batteryCharge = pkgs.writeShellApplication {
+    name = "battery-charge";
+    runtimeInputs = [ pkgs.systemd pkgs.coreutils ];
+    text = ''
+      bat=/sys/class/power_supply/BAT0
+      case "''${1:-status}" in
+        full|100)
+          systemctl restart battery-charge-full.service
+          echo "Charging to 100% — reverts to the 80% cap on next reboot."
+          ;;
+        limit|80|cap)
+          systemctl restart battery-charge-threshold.service
+          echo "Charge capped at 80%."
+          ;;
+        status)
+          printf 'start %s%%  stop %s%%  now %s%% (%s)\n' \
+            "$(cat "$bat"/charge_control_start_threshold)" \
+            "$(cat "$bat"/charge_control_end_threshold)" \
+            "$(cat "$bat"/capacity)" \
+            "$(cat "$bat"/status)"
+          ;;
+        *)
+          echo "usage: battery-charge [full|limit|status]" >&2
+          exit 1
+          ;;
+      esac
+    '';
+  };
+in
 {
   # Host-specific configuration for nixos-laptop
 
@@ -45,7 +80,8 @@
   boot.kernelParams = [ "i915.enable_fbc=1" ];
 
   # Cap battery charge at 80% on AC to slow lithium-ion wear when desk-bound.
-  # Raise both to 100 before travel for full runtime.
+  # Runs at every boot, so it also re-applies the cap after a full-charge day.
+  # Flip it live with `battery-charge full` / `battery-charge limit` (see top).
   systemd.services.battery-charge-threshold = {
     description = "Limit battery charge to 80% for longevity";
     wantedBy = [ "multi-user.target" ];
@@ -53,11 +89,45 @@
       Type = "oneshot";
       RemainAfterExit = true;
     };
+    # Lower start before stop so start < stop holds even coming down from 95/100.
     script = ''
       echo 75 > /sys/class/power_supply/BAT0/charge_control_start_threshold
       echo 80 > /sys/class/power_supply/BAT0/charge_control_end_threshold
     '';
   };
+
+  # Manual counterpart: charge all the way to 100% for travel / heavy days.
+  # Started on demand by `battery-charge full`; deliberately NOT wanted at boot,
+  # so the 80% cap always wins on a fresh start.
+  systemd.services.battery-charge-full = {
+    description = "Allow battery to charge to 100%";
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    # Raise stop before start so start < stop holds while moving up from 75/80.
+    script = ''
+      echo 100 > /sys/class/power_supply/BAT0/charge_control_end_threshold
+      echo 95  > /sys/class/power_supply/BAT0/charge_control_start_threshold
+    '';
+  };
+
+  # Let michael (re)start the two battery units above without a password, so
+  # `battery-charge` is a frictionless toggle instead of a sudo dance.
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+      if (action.id == "org.freedesktop.systemd1.manage-units" &&
+          subject.user == "michael") {
+        var unit = action.lookup("unit");
+        if (unit == "battery-charge-full.service" ||
+            unit == "battery-charge-threshold.service") {
+          return polkit.Result.YES;
+        }
+      }
+    });
+  '';
+
+  environment.systemPackages = [ batteryCharge ];
 
   # Default power-profiles-daemon to "balanced" at boot (it otherwise persists
   # "performance"). Bump to performance from the DMS control center when needed.
@@ -148,6 +218,7 @@
     vim              # Emergency editor if home-manager breaks
     git              # To clone/update this config repository
     claude-code      # System-level claude-code installation
+    codex
     gemini-cli
   ];
 

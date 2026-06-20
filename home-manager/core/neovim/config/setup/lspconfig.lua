@@ -1,93 +1,75 @@
-local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- LSP setup using Neovim's native vim.lsp.config / vim.lsp.enable API (0.11+).
+--
+-- The old `require('lspconfig').<server>.setup{}` "framework" is deprecated and
+-- prints a multi-line warning + traceback at startup (that was the source of the
+-- "press ENTER to continue" prompt). nvim-lspconfig still ships the per-server
+-- defaults (cmd, root_markers, filetypes) under its `lsp/` runtime dir, so we
+-- only need to layer our overrides + completion capabilities on top.
 
--- C/C++
-require'lspconfig'.clangd.setup{capabilities=capabilities}
+local capabilities = require('blink.cmp').get_lsp_capabilities()
 
--- Rust (use rustaceanvim for full setup, or uncomment below for basic)
--- require'lspconfig'.rust_analyzer.setup{capabilities=capabilities}
+-- Apply blink's completion capabilities to every server.
+vim.lsp.config('*', {
+  capabilities = capabilities,
+})
 
--- Build tools
-require'lspconfig'.cmake.setup{capabilities=capabilities}
-
--- Docker
-require'lspconfig'.dockerls.setup{capabilities=capabilities}
-
--- Nix
-require'lspconfig'.nixd.setup{
-  capabilities=capabilities,
+-- Per-server overrides (merged over nvim-lspconfig's shipped defaults).
+vim.lsp.config('nixd', {
   settings = {
     nixd = {
-      nixpkgs = {
-        expr = "import <nixpkgs> { }",
-      },
+      nixpkgs = { expr = "import <nixpkgs> { }" },
     },
   },
-}
+})
 
--- Protobuf
-require'lspconfig'.bufls.setup{capabilities=capabilities}
-
--- Ansible
-require'lspconfig'.ansiblels.setup{}
-
--- Python
-require'lspconfig'.pyright.setup{
-  capabilities=capabilities,
+vim.lsp.config('pyright', {
   settings = {
     python = {
-      analysis = {
-        typeCheckingMode = "off",
-      }
-    }
-  }
-}
+      analysis = { typeCheckingMode = "off" },
+    },
+  },
+})
 
--- Vim
-require'lspconfig'.vimls.setup{}
-
--- TypeScript/JavaScript
-require'lspconfig'.ts_ls.setup{
-  capabilities=capabilities,
-}
-
--- Lua (for neovim config editing)
-require'lspconfig'.lua_ls.setup{
-  capabilities=capabilities,
+vim.lsp.config('lua_ls', {
   settings = {
     Lua = {
-      runtime = {
-        version = 'LuaJIT',
-      },
-      diagnostics = {
-        globals = { 'vim' },
-      },
+      runtime = { version = 'LuaJIT' },
+      diagnostics = { globals = { 'vim' } },
       workspace = {
         library = vim.api.nvim_get_runtime_file("", true),
         checkThirdParty = false,
       },
-      telemetry = {
-        enable = false,
-      },
+      telemetry = { enable = false },
     },
   },
-}
+})
 
--- Global mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
+-- Enable only the servers we actually ship binaries for (extraPackages).
+-- Dropped: buf_ls, ansiblels, vimls (no binary was installed -> dead configs).
+vim.lsp.enable({
+  'clangd',
+  'cmake',
+  'dockerls',
+  'nixd',
+  'pyright',
+  'ts_ls',
+  'lua_ls',
+})
+
+-- Global diagnostic keymaps (modern vim.diagnostic.jump API, replaces the
+-- deprecated goto_prev/goto_next).
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open diagnostic float' })
-vim.keymap.set('n', '<leader>dn', vim.diagnostic.goto_prev, { desc = 'Previous diagnostic' })
-vim.keymap.set('n', '<leader>dp', vim.diagnostic.goto_next, { desc = 'Next diagnostic' })
+vim.keymap.set('n', '<leader>dn', function() vim.diagnostic.jump({ count = -1, float = true }) end, { desc = 'Previous diagnostic' })
+vim.keymap.set('n', '<leader>dp', function() vim.diagnostic.jump({ count = 1, float = true }) end, { desc = 'Next diagnostic' })
 vim.keymap.set('n', '<leader>dq', vim.diagnostic.setloclist, { desc = 'Diagnostics to loclist' })
 
--- Use LspAttach autocommand to only map the following keys
--- after the language server attaches to the current buffer
+-- Buffer-local keymaps, set once a server attaches.
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
     -- Enable completion triggered by <c-x><c-o>
     vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-    -- Helper for buffer-local mappings with descriptions
     local function opts(desc)
       return { buffer = ev.buf, desc = desc }
     end
@@ -112,7 +94,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     -- Refactoring
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts('Rename symbol'))
-    vim.keymap.set('n', '<leader>ca', '<cmd>CodeActionMenu<cr>', opts('Code action'))
+    -- nvim-code-action-menu was archived; 0.11's built-in code_action UI replaces it.
+    vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts('Code action'))
     vim.keymap.set('n', '<leader>fm', function()
       vim.lsp.buf.format { async = true }
     end, opts('Format buffer'))

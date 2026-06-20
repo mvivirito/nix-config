@@ -304,3 +304,7 @@ vim.keymap.set("i", "<c-u>", require "luasnip.extras.select_choice")
 
 -- shorcut to source my luasnips file again, which will reload my snippets
 vim.keymap.set("n", "<leader><leader>r", "<cmd>source ~/.config/nvim/lua/setup/luasnip.lua<CR>")
+
+-- Load the friendly-snippets collection (VSCode-format) into luasnip so blink.cmp
+-- can surface them alongside the custom snippets above.
+require("luasnip.loaders.from_vscode").lazy_load()
