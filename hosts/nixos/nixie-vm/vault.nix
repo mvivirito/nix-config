@@ -181,6 +181,70 @@ in
     };
   };
 
+  # ── Dream consolidation (continuous memory maintenance) ──────
+  # Tiered "dreaming" over the vault: prune stale / merge dupes / synthesize
+  # insights with provenance / supersede changed facts + retrieval analytics.
+  # Propose-first — judgment-bound changes land in _agent/dream/review-queue.md
+  # and Michael approves via /vault. Safe, reversible fixes apply directly.
+  # See 10-projects/vault-dream-consolidation.md for the full design.
+  #   nightly (23:00, after the night heartbeat): light dedup + retrieval heat
+  #   weekly  (Sun 11:00, after the weekly review): synthesis + merges + supersession + stale
+  #   monthly (1st, 03:30): MOC regen + decay sweep + dashboard + qmd embed
+
+  systemd.user.services.vault-dream-nightly = {
+    description = "Vault dream — nightly light consolidation (Claude Agent SDK)";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "/home/michael/vault/.scripts/dream-nightly.sh";
+      Environment = [ "PATH=${vaultServicePath}" ];
+    };
+  };
+
+  systemd.user.timers.vault-dream-nightly = {
+    description = "Nightly vault dream at 11 PM (after the night heartbeat)";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "*-*-* 23:00:00";
+      Persistent = true;
+    };
+  };
+
+  systemd.user.services.vault-dream-weekly = {
+    description = "Vault dream — weekly deep consolidation (Claude Agent SDK)";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "/home/michael/vault/.scripts/dream-weekly.sh";
+      Environment = [ "PATH=${vaultServicePath}" ];
+    };
+  };
+
+  systemd.user.timers.vault-dream-weekly = {
+    description = "Weekly deep dream Sunday 11 AM (after the weekly review)";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "Sun *-*-* 11:00:00";
+      Persistent = true;
+    };
+  };
+
+  systemd.user.services.vault-dream-monthly = {
+    description = "Vault dream — monthly graph rollup (Claude Agent SDK)";
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "/home/michael/vault/.scripts/dream-monthly.sh";
+      Environment = [ "PATH=${vaultServicePath}" ];
+    };
+  };
+
+  systemd.user.timers.vault-dream-monthly = {
+    description = "Monthly vault dream rollup on the 1st at 03:30";
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "*-*-01 03:30:00";
+      Persistent = true;
+    };
+  };
+
   # ── Telegram bridge ──────────────────────────────────────────
   # Long-polling listener for @NixieVMBot: captures inbound text /
   # voice (whisper-cli transcribed) / photo / file to 00-inbox/.
