@@ -32,7 +32,7 @@
   ];
 
   # Note: nixpkgs config is disabled when using home-manager as NixOS module with useGlobalPkgs
-  # The system nixpkgs config (in nixos/configuration.nix) is used instead
+  # The system nixpkgs config (set per-host, e.g. hosts/nixos/laptop/default.nix) is used instead
   # nixpkgs = {
   #   overlays = [ ];
   #   config = {

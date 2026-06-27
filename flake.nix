@@ -56,16 +56,29 @@
           inherit inputs outputs;
           hostname = "nixos-laptop";
         };
-        # > Our main nixos configuration file <
         modules = [
-          ./nixos/configuration.nix
+          # Shared modules
           ./hosts/nixos/shared/nix.nix
+          ./hosts/nixos/shared/boot.nix
+          ./hosts/nixos/shared/locale.nix
+          ./hosts/nixos/shared/networking.nix
+          ./hosts/nixos/shared/audio.nix
+          ./hosts/nixos/shared/fonts.nix
+          ./hosts/nixos/shared/users.nix
+          ./hosts/nixos/shared/power.nix
+          ./hosts/nixos/shared/hibernate.nix
 
-          # Niri compositor NixOS module
+          # Desktop (Niri + DMS)
           niri.nixosModules.niri
-
-          # Dank Material Shell (bar, launcher, notifications, lock)
           dms.nixosModules.dank-material-shell
+          ./nixos/niri.nix
+          ./nixos/greetd.nix
+          ./nixos/kanata
+          ./nixos/theme.nix
+
+          # Host-specific
+          ./hosts/nixos/laptop/hardware.nix
+          ./hosts/nixos/laptop/default.nix
 
           # Integrate home-manager as NixOS module
           home-manager.nixosModules.home-manager

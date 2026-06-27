@@ -8,14 +8,14 @@ This is a multi-platform Nix configuration repository managing NixOS (laptop + V
 nix-config/
 ├── flake.nix                    # Entry point - all system definitions
 ├── darwin/                      # macOS system config (nix-darwin)
-├── nixos/                       # NixOS system config (laptop-focused)
+├── nixos/                       # Shared NixOS desktop modules (Niri, greetd, kanata, theme)
 ├── hosts/
 │   ├── darwin/                  # macOS host-specific configs
 │   │   ├── macbook/
 │   │   ├── michaelvivirito-mbp/
 │   │   └── shared/              # Homebrew, fonts, system prefs
 │   └── nixos/
-│       ├── laptop/              # Laptop hardware + overrides
+│       ├── laptop/              # ThinkPad (nixos-laptop) host config: hardware + system
 │       ├── nixie-vm/            # Proxmox VM (KDE Plasma)
 │       ├── vm/                  # Shared VM modules
 │       │   ├── base.nix         # QEMU guest, grub, virtio
