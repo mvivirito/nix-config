@@ -133,6 +133,13 @@
   # Steam Deck-equivalent map count. Required by some modern games and EAC titles.
   boot.kernel.sysctl."vm.max_map_count" = 2147483642;
 
+  # Disable split-lock detection. RE Engine / Steam's HTTP client threads issue
+  # split-lock atomics; the kernel's default mitigation throttles the offending
+  # thread to protect the bus, which shows up as game micro-stutter (plus log spam:
+  # "x86/split lock detection: #AC ... took a split_lock trap"). Off = no trap, no
+  # throttle — the standard trade-off for a gaming machine.
+  boot.kernelParams = [ "split_lock_detect=off" ];
+
   # ZRAM swap to absorb memory pressure during long sessions / shader compile.
   zramSwap.enable = true;
 }

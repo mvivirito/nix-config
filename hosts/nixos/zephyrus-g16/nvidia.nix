@@ -8,8 +8,13 @@
   services.xserver.videoDrivers = [ "nvidia" ];
 
   hardware.nvidia = {
-    # Use open-source kernel modules (required for RTX 40 series)
-    open = true;
+    # Kernel module flavor. The "open" modules are recommended for Turing+ but are
+    # NOT required for RTX 40. They are compiled from source locally and hit a
+    # NULL-pointer deref in RM client cleanup (mapFind_IMPL / refRemoveInterMapping)
+    # when Proton/Steam GPU clients exit, which froze the machine (Jun 2026).
+    # Proprietary ships NVIDIA's prebuilt build of that same code and avoids the crash.
+    # Revert to `true` after a future driver bump confirms the open module is fixed.
+    open = false;
 
     # Enable kernel modesetting (required for Wayland)
     modesetting.enable = true;

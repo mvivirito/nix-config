@@ -79,6 +79,10 @@
     "mem_sleep_default=s2idle"
     # IOMMU passthrough for NVIDIA PRIME stability
     "iommu=pt"
+    # Disable deep NVMe APST power states. Both SSDs (SK hynix HFS002TEJ9X101N and
+    # WD_BLACK SN850X) emit recurring "I/O timeout, completion polled" stalls when
+    # waking from deep power states -> system sluggishness. Keep them at full power.
+    "nvme_core.default_ps_max_latency_us=0"
   ];
 
   # Hardware quirks/fixes
