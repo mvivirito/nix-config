@@ -25,20 +25,12 @@ jobs:
       - name: Evaluate nixosConfigurations
         run: |
           set -euo pipefail
-          for host in nixos-laptop zephyrus nixie-vm; do
+          for host in thinkpad zephyrus nixie-vm; do
             echo "::group::nixosConfigurations.$host"
             nix eval --raw ".#nixosConfigurations.$host.config.system.build.toplevel.drvPath" --show-trace
             echo
             echo "::endgroup::"
           done
-
-      - name: Evaluate homeConfigurations
-        run: |
-          set -euo pipefail
-          echo "::group::homeConfigurations.michael@nixos-laptop"
-          nix eval --raw '.#homeConfigurations."michael@nixos-laptop".activationPackage.drvPath' --show-trace
-          echo
-          echo "::endgroup::"
 
   darwin:
     name: eval nix-darwin (aarch64-darwin)
