@@ -36,10 +36,10 @@ let
   };
 in
 {
-  # Host-specific configuration for nixos-laptop
+  # Host-specific configuration for thinkpad
 
   # Hostname
-  networking.hostName = "nixos-laptop";
+  networking.hostName = "thinkpad";
 
   # Intel Iris Xe (11th gen Tiger Lake) hardware video acceleration
   # Required for Moonlight, mpv, Firefox, etc. to use GPU decoding
@@ -50,6 +50,21 @@ in
       vpl-gpu-rt            # Intel Video Processing Library (QSV successor)
     ];
   };
+
+  # Firefox hardware video decode (VA-API) on the Iris Xe iGPU — a real battery
+  # win for video on battery (offloads H.264/VP9/AV1 decode to the GPU). The iHD
+  # driver is provided above; pin it and run Firefox natively on Wayland so it can
+  # use zero-copy dmabuf decoding instead of XWayland software decode.
+  # NB: session variables — take effect on next login, not just a rebuild.
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "iHD";
+    MOZ_ENABLE_WAYLAND = "1";
+  };
+  programs.firefox.preferences = {
+    "media.ffmpeg.vaapi.enabled" = true;
+    "media.hardware-video-decoding.force-enabled" = true;
+  };
+  programs.firefox.preferencesStatus = "default"; # defaults, still user-overridable
 
   # LUKS encryption device
   boot.initrd.luks.devices."luks-77a6df21-58f4-4c91-84c0-7ac231e5208d".device = "/dev/disk/by-uuid/77a6df21-58f4-4c91-84c0-7ac231e5208d";
@@ -78,6 +93,14 @@ in
   # Intel display power saving. FBC (framebuffer compression) is safe on Tiger
   # Lake and saves idle-display power. (PSR can flicker on some panels — left off.)
   boot.kernelParams = [ "i915.enable_fbc=1" ];
+
+  # Run `powertop --auto-tune` at boot: enables runtime PM on PCI devices, audio
+  # codec power-down, USB autosuspend, etc. (the "Bad" tunables powertop flags).
+  # Caveat: USB autosuspend can make some external mice/keyboards/dongles need a
+  # re-plug after wake — exclude a specific one with a udev power/control=on rule
+  # if it misbehaves. (NB: PCIe ASPM is firmware-disabled on this ThinkPad — the
+  # FADT declares it unsupported — so it stays off unless forced; see note below.)
+  powerManagement.powertop.enable = true;
 
   # Cap battery charge at 80% on AC to slow lithium-ion wear when desk-bound.
   # Runs at every boot, so it also re-applies the cap after a full-charge day.
@@ -127,20 +150,35 @@ in
     });
   '';
 
-  environment.systemPackages = [ batteryCharge ];
-
-  # Default power-profiles-daemon to "balanced" at boot (it otherwise persists
-  # "performance"). Bump to performance from the DMS control center when needed.
-  systemd.services.default-power-profile = {
-    description = "Set power-profiles-daemon to balanced at boot";
+  # Auto-switch power-profiles-daemon on AC/battery transitions. PPD has no
+  # built-in AC/battery awareness under niri, so on its own it just persists
+  # whatever was last set — it kept getting stuck in "performance" on battery.
+  # A udev event on the AC adapter (plug/unplug) triggers this oneshot, which
+  # reads the live AC state and picks the profile:
+  #   - on battery -> power-saver (EPP=power, platform_profile=low-power)
+  #   - on AC      -> balanced
+  # Also wanted at boot so the right profile is set from the start. You can still
+  # bump to performance from DMS while plugged in; unplugging drops to power-saver.
+  systemd.services.power-profile-ac = {
+    description = "Set power profile from AC adapter state";
     wantedBy = [ "multi-user.target" ];
     after = [ "power-profiles-daemon.service" ];
     requires = [ "power-profiles-daemon.service" ];
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = "${pkgs.power-profiles-daemon}/bin/powerprofilesctl set balanced";
-    };
+    path = [ pkgs.power-profiles-daemon ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      if [ "$(cat /sys/class/power_supply/AC/online 2>/dev/null)" = "1" ]; then
+        powerprofilesctl set balanced
+      else
+        powerprofilesctl set power-saver
+      fi
+    '';
   };
+
+  # Re-run the switch whenever the AC adapter changes state.
+  services.udev.extraRules = ''
+    SUBSYSTEM=="power_supply", KERNEL=="AC", TAG+="systemd", ENV{SYSTEMD_WANTS}+="power-profile-ac.service"
+  '';
 
   # Disable non-essential ACPI wake sources (USB / PCIe / Thunderbolt) so the
   # laptop can't wake itself in a bag and then sit awake draining the battery.
@@ -215,6 +253,7 @@ in
   # Minimal system packages - only essentials for system administration
   # All user applications are now in home-manager for better portability
   environment.systemPackages = with pkgs; [
+    batteryCharge    # battery-charge 80%/100% toggle (defined in let above)
     vim              # Emergency editor if home-manager breaks
     git              # To clone/update this config repository
     claude-code      # System-level claude-code installation

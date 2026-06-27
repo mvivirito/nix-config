@@ -20,6 +20,15 @@
       # Enable RGB color support
       set -ag terminal-overrides ",xterm-256color:RGB"
 
+      # Clipboard over SSH (OSC 52): let apps inside tmux (e.g. Neovim yanks)
+      # and copy-mode set the *outer* terminal's clipboard. Works over plain
+      # SSH with no X/Wayland forwarding. tmux's default "external" silently
+      # drops OSC 52 coming from inner apps; "on" forwards it to the terminal.
+      set -g set-clipboard on
+      # Many terminals' terminfo (alacritty included) lacks the Ms capability,
+      # so tmux won't emit OSC 52 unless we declare the clipboard feature here.
+      set -ag terminal-features ",*:clipboard"
+
       # Vim-style pane navigation
       bind h select-pane -L
       bind j select-pane -D

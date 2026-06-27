@@ -6,7 +6,7 @@ Multi-platform Nix configuration for NixOS (laptops, VMs) and macOS (personal + 
 
 ```bash
 # NixOS Laptop - full system rebuild
-sudo nixos-rebuild switch --flake .#nixos-laptop
+sudo nixos-rebuild switch --flake .#thinkpad
 
 # Asus ROG Zephyrus G16 - full system rebuild
 sudo nixos-rebuild switch --flake .#zephyrus
@@ -39,7 +39,7 @@ nix-collect-garbage -d
 
 | Host | System | Arch | Description |
 |------|--------|------|-------------|
-| `nixos-laptop` | NixOS | x86_64-linux | Personal dev laptop (Intel, LUKS encrypted, NVMe) |
+| `thinkpad` | NixOS | x86_64-linux | Personal dev laptop (Intel, LUKS encrypted, NVMe) |
 | `zephyrus` | NixOS | x86_64-linux | Asus ROG Zephyrus G16 (Intel Core Ultra 9 + RTX 4090, NVIDIA PRIME, gaming, Ollama CUDA) |
 | `nixie-vm` | NixOS | x86_64-linux | Proxmox VM (KDE Plasma, RTX 4080 GPU passthrough, Sunshine/NVENC streaming) |
 | `macbook` | macOS | aarch64-darwin | Personal MacBook (Apple Silicon) |
@@ -129,7 +129,7 @@ nix-config/
 - **Emulators:** RetroArch, Dolphin (GC/Wii), RPCS3 (PS3), PCSX2 (PS2), PPSSPP, Duckstation, Cemu
 - **AI/ML:** Ollama with CUDA acceleration (qwen2.5:14b pre-loaded)
 - **Power:** TLP (performance on AC, powersave on battery), Intel thermald
-- **Desktop:** Niri compositor + DMS shell (same as nixos-laptop)
+- **Desktop:** Niri compositor + DMS shell (same as thinkpad)
 
 ### Proxmox VMs
 - **Base:** QEMU guest agent, GRUB bootloader, virtio drivers, kernel tuning (zswap, sysctl)
@@ -178,7 +178,7 @@ Edit `hosts/darwin/shared/homebrew.nix`, add to `casks` list, rebuild.
 Edit `home-manager/core/cli-tools.nix`, add to `home.packages`, rebuild.
 
 ### Add a Linux GUI app
-Edit `home-manager/linux/gui-apps.nix`, add package, rebuild with `sudo nixos-rebuild switch --flake .#nixos-laptop`.
+Edit `home-manager/linux/gui-apps.nix`, add package, rebuild with `sudo nixos-rebuild switch --flake .#thinkpad`.
 
 ### Add a zsh alias
 Edit `home-manager/core/zsh.nix`, add to `shellAliases`, rebuild.
@@ -190,7 +190,7 @@ Edit `home-manager/core/neovim/default.nix`, add to plugins list, rebuild.
 Edit `home-manager/core/neovim/config/setup/lspconfig.lua`, add server config, rebuild.
 
 ### Customize DMS settings (Linux)
-Export from DMS GUI (Settings → Export), convert JSON to Nix syntax, add to `home-manager/linux/dms.nix` under `settings`, rebuild with `sudo nixos-rebuild switch --flake .#nixos-laptop`, then `systemctl --user restart dms.service`.
+Export from DMS GUI (Settings → Export), convert JSON to Nix syntax, add to `home-manager/linux/dms.nix` under `settings`, rebuild with `sudo nixos-rebuild switch --flake .#thinkpad`, then `systemctl --user restart dms.service`.
 
 ### Add a new Proxmox VM
 1. Clone from Proxmox template (Full Clone)
@@ -202,7 +202,7 @@ Export from DMS GUI (Settings → Export), convert JSON to Nix syntax, add to `h
 4. Boot VM, clone nix-config, run `sudo nixos-rebuild switch --flake .#<hostname>`
 
 ### Change Niri keybindings (Linux)
-Edit `home-manager/linux/niri/default.nix`, modify `config.binds`, rebuild with `sudo nixos-rebuild switch --flake .#nixos-laptop`.
+Edit `home-manager/linux/niri/default.nix`, modify `config.binds`, rebuild with `sudo nixos-rebuild switch --flake .#thinkpad`.
 
 ### Change Aerospace keybindings (macOS)
 Edit `home-manager/darwin/aerospace.nix`, modify binding sets, rebuild then `aerospace reload-config`.
@@ -572,7 +572,7 @@ brewup         → brew update && upgrade && cleanup
 ### Home-manager changes not applying (NixOS)
 ```bash
 # Home-manager is a NixOS module — apply it with the system rebuild:
-sudo nixos-rebuild switch --flake .#nixos-laptop
+sudo nixos-rebuild switch --flake .#thinkpad
 # Then verify the user activation succeeded:
 systemctl --user status home-manager-michael.service
 ```

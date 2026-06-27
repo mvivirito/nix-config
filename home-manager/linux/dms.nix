@@ -1,5 +1,19 @@
 { inputs, pkgs, config, ... }:
-
+let
+  # Tailscale bar widget — third-party DMS plugin, pinned as the `dms-tailscale`
+  # flake input and patched here so it's fully declarative (replaces the old
+  # manual `git clone` under ~/.config). The toggle's bare `tailscale up` is
+  # rewritten to come up as a client of the `net-gateway` exit node (full-tunnel)
+  # while keeping LAN reachable. `--replace-fail` makes a rebuild fail loudly if
+  # upstream ever changes that line, rather than silently dropping the flags.
+  tailscalePlugin = pkgs.runCommand "dms-tailscale-patched" { } ''
+    cp -r ${inputs.dms-tailscale} $out
+    chmod -R u+w $out
+    substituteInPlace $out/TailscaleWidget.qml \
+      --replace-fail '["tailscale", "up"];' \
+        '["tailscale", "up", "--accept-routes", "--exit-node=net-gateway", "--exit-node-allow-lan-access"];'
+  '';
+in
 {
   # Import DMS home-manager modules
   imports = [
@@ -170,6 +184,11 @@
 
     clipboardSettings.maxItems = 100;
   };
+
+  # Tailscale plugin files, managed declaratively (was a manual git clone).
+  # DMS loads plugins from ~/.config/DankMaterialShell/plugins/<id>/; the enabled
+  # flag lives in the sibling plugin_settings.json, left as DMS runtime state.
+  xdg.configFile."DankMaterialShell/plugins/tailscale".source = tailscalePlugin;
 
   systemd.user.services.dms.Service.Environment = [
     "QT_QPA_PLATFORM=wayland"

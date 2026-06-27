@@ -1,5 +1,5 @@
 {
-  description = "Multi-host NixOS + nix-darwin config (nixos-laptop, zephyrus, nixie-vm, 2x macOS)";
+  description = "Multi-host NixOS + nix-darwin config (thinkpad, zephyrus, nixie-vm, 2x macOS)";
 
   inputs = {
     # Nixpkgs - unstable for latest packages
@@ -20,6 +20,12 @@
     # Dank Material Shell (desktop shell: bar, launcher, notifications, lock screen)
     dms.url = "github:AvengeMedia/DankMaterialShell/stable";
     dms.inputs.nixpkgs.follows = "nixpkgs";
+
+    # dms-tailscale: third-party DMS bar plugin (Tailscale toggle widget). Source
+    # only (not a flake); patched in home-manager/linux/dms.nix to bake in our
+    # exit-node flags. Bump with `nix flake update dms-tailscale`.
+    dms-tailscale.url = "github:cglavin50/dms-tailscale";
+    dms-tailscale.flake = false;
 
     # Google Workspace CLI (gws)
     gws.url = "github:googleworkspace/cli";
@@ -51,10 +57,10 @@
     # NixOS configuration entrypoint
     # Available through 'nixos-rebuild --flake .#your-hostname'
     nixosConfigurations = {
-      nixos-laptop = nixpkgs.lib.nixosSystem {
+      thinkpad = nixpkgs.lib.nixosSystem {
         specialArgs = {
           inherit inputs outputs;
-          hostname = "nixos-laptop";
+          hostname = "thinkpad";
         };
         modules = [
           # Shared modules
@@ -77,8 +83,8 @@
           ./nixos/theme.nix
 
           # Host-specific
-          ./hosts/nixos/laptop/hardware.nix
-          ./hosts/nixos/laptop/default.nix
+          ./hosts/nixos/thinkpad/hardware.nix
+          ./hosts/nixos/thinkpad/default.nix
 
           # Integrate home-manager as NixOS module
           home-manager.nixosModules.home-manager

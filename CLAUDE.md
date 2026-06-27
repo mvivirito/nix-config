@@ -15,7 +15,7 @@ nix-config/
 │   │   ├── michaelvivirito-mbp/
 │   │   └── shared/              # Homebrew, fonts, system prefs
 │   └── nixos/
-│       ├── laptop/              # ThinkPad (nixos-laptop) host config: hardware + system
+│       ├── thinkpad/            # ThinkPad (thinkpad) host config: hardware + system
 │       ├── nixie-vm/            # Proxmox VM (KDE Plasma)
 │       ├── vm/                  # Shared VM modules
 │       │   ├── base.nix         # QEMU guest, grub, virtio
@@ -36,7 +36,7 @@ nix-config/
 
 | Host | Type | Desktop | Purpose |
 |------|------|---------|---------|
-| `nixos-laptop` | NixOS | Niri + DMS | Personal dev laptop |
+| `thinkpad` | NixOS | Niri + DMS | Personal dev laptop |
 | `nixie-vm` | NixOS | KDE Plasma | Proxmox VM (RTX 4080 GPU passthrough, Sunshine/NVENC streaming) |
 | `macbook` | macOS | Aerospace | Personal MacBook |
 | `michaelvivirito-mbp` | macOS | Aerospace | Work MacBook |
@@ -44,8 +44,8 @@ nix-config/
 ## Key Commands
 
 ```bash
-# NixOS laptop
-sudo nixos-rebuild switch --flake .#nixos-laptop
+# NixOS laptop (ThinkPad)
+sudo nixos-rebuild switch --flake .#thinkpad
 
 # NixOS VM (Proxmox)
 sudo nixos-rebuild switch --flake .#nixie-vm

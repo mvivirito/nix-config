@@ -36,7 +36,7 @@
     power-profiles-daemon.enable = true;  # Power profiles
     accounts-daemon.enable = true;        # User account information
     # NOTE: thermald intentionally NOT enabled here. On this DYTC ThinkPad
-    # (nixos-laptop) thermald refuses to run ("can't run on this platform") and
+    # (thinkpad) thermald refuses to run ("can't run on this platform") and
     # exits immediately — firmware/DPTF owns thermal management. zephyrus enables
     # its own thermald in hosts/nixos/zephyrus-g16/power.nix where it applies.
   };
