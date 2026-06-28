@@ -20,8 +20,8 @@ sudo nixos-rebuild switch --flake .#nixie-vm
 # macOS - personal machine
 darwin-rebuild switch --flake ~/repos/nix-config#macbook
 
-# macOS - work machine
-darwin-rebuild switch --flake ~/repos/nix-config#michaelvivirito-mbp
+# macOS - M1 server (lid-closed in rack: SSH + Tailscale + Syncthing)
+darwin-rebuild switch --flake ~/repos/nix-config#m1
 
 # Update all flake inputs
 nix flake update
@@ -43,7 +43,7 @@ nix-collect-garbage -d
 | `zephyrus` | NixOS | x86_64-linux | Asus ROG Zephyrus G16 (Intel Core Ultra 9 + RTX 4090, NVIDIA PRIME, gaming, Ollama CUDA) |
 | `nixie-vm` | NixOS | x86_64-linux | Proxmox VM (KDE Plasma, RTX 4080 GPU passthrough, Sunshine/NVENC streaming) |
 | `macbook` | macOS | aarch64-darwin | Personal MacBook (Apple Silicon) |
-| `michaelvivirito-mbp` | macOS | aarch64-darwin | Work MacBook (Apple Silicon) |
+| `m1` | macOS | aarch64-darwin | M1 MacBook Air — headless server (SSH, Tailscale, Syncthing→iCloud vault bridge; never sleeps lid-closed) |
 
 ## Flake Inputs
 
@@ -70,7 +70,7 @@ nix-config/
 ├── hosts/
 │   ├── darwin/
 │   │   ├── macbook/             # Personal Mac host
-│   │   ├── michaelvivirito-mbp/ # Work Mac host
+│   │   ├── m1/                  # M1 MacBook Air server host (SSH, Tailscale, no-sleep)
 │   │   └── shared/              # Homebrew casks, system prefs, fonts
 │   └── nixos/
 │       ├── laptop/              # Laptop hardware, host overrides

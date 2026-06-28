@@ -46,7 +46,7 @@ jobs:
       - name: Evaluate darwinConfigurations
         run: |
           set -euo pipefail
-          for host in macbook michaelvivirito-mbp; do
+          for host in macbook m1; do
             echo "::group::darwinConfigurations.$host"
             nix eval --raw ".#darwinConfigurations.$host.config.system.build.toplevel.drvPath" --show-trace
             echo

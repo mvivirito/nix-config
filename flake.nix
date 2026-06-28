@@ -263,17 +263,25 @@
             home-manager.extraSpecialArgs = {
               inherit inputs outputs;
               username = "mvivirito";
+              # Must be passed explicitly (used in home-darwin.nix `imports`,
+              # where an un-provided arg would cause infinite recursion).
+              server = false;
             };
             home-manager.users.mvivirito = ./home-manager/home-darwin.nix;
           }
         ];
       };
 
-      michaelvivirito-mbp = nix-darwin.lib.darwinSystem {
+      # M1 MacBook Air — server (lives lid-closed in a rack, but keeps the full
+      # desktop config for when it's used directly). The `server = true` flag
+      # pulls in the server-only home modules (Syncthing for the Obsidian vault
+      # mesh + iCloud bridge); the SSH/Tailscale/no-sleep bits live in the host
+      # module hosts/darwin/m1.
+      m1 = nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = {
           inherit inputs outputs;
-          hostname = "michaelvivirito-mbp";
+          hostname = "m1";
           username = "michaelvivirito";
         };
         modules = [
@@ -288,6 +296,7 @@
             home-manager.extraSpecialArgs = {
               inherit inputs outputs;
               username = "michaelvivirito";
+              server = true;
             };
             home-manager.users.michaelvivirito = ./home-manager/home-darwin.nix;
           }

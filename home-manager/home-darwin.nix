@@ -6,6 +6,7 @@
   config,
   pkgs,
   username ? "mvivirito",
+  server ? false,
   ...
 }: {
   imports = [
@@ -21,11 +22,18 @@
     ./core/kitty.nix
     ./core/tmux.nix
 
-    # Darwin-specific configuration
+    # Darwin-specific configuration (kept on the server too — handy when the
+    # machine is used directly with a display/keyboard)
     ./darwin/gui-apps.nix
     ./darwin/karabiner
     ./darwin/aerospace.nix
     ./darwin/hammerspoon.nix
+  ]
+  # Server-only modules: Syncthing (vault mesh peer on ~/vault) + Unison bridge
+  # that two-way reconciles ~/vault with the iCloud Obsidian container for iOS.
+  ++ lib.optionals server [
+    ./darwin/syncthing.nix
+    ./darwin/unison-vault.nix
   ];
 
   home = {
