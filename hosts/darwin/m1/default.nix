@@ -1,7 +1,8 @@
 # M1 MacBook Air — server host.
-# Lives lid-closed in a rack: never sleeps, auto-restarts after power loss, and
-# is reachable over LAN SSH (Remote Login) + Tailscale. Keeps the full desktop
-# config (see home-darwin.nix / shared homebrew) for when it's used directly.
+# Lives lid-closed in a rack: never sleeps and is reachable over LAN SSH (Remote
+# Login) + Tailscale. (No auto-power-on after a full outage — a MacBook can't do
+# that; its battery rides out short ones instead.) Keeps the full desktop config
+# (see home-darwin.nix / shared homebrew) for when it's used directly.
 {
   hostname,
   pkgs,

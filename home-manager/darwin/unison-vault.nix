@@ -8,14 +8,19 @@
 #   iCloud / iOS   ──> iCloud~md~obsidian/.../vault   (iCloud owns)
 #
 # WHY A FIXED-PATH BINARY COPY: macOS TCC blocks background launchd agents from
-# iCloud (~/Library/Mobile Documents) unless the executable has Full Disk Access.
-# A nix-store path changes on updates, breaking the FDA grant. The unison binary is
-# fully self-contained (only links /usr/lib/libSystem), so we copy it ONCE to a
-# stable path (~/.local/bin/unison-bridge) and grant FDA to THAT. It never changes,
-# so the grant survives forever. One-time manual step after first rebuild:
-#   System Settings → Privacy & Security → Full Disk Access → + →
-#   ~/.local/bin/unison-bridge  (toggle ON)
-# To update unison later: rm ~/.local/bin/unison-bridge, rebuild, re-grant FDA.
+# iCloud (~/Library/Mobile Documents) unless the executable has been granted access.
+# That grant is keyed to the binary's path + cdhash, and a nix-store path changes on
+# updates, which would break it. The unison binary is fully self-contained (only
+# links /usr/lib/libSystem), so we copy it ONCE to a stable path
+# (~/.local/bin/unison-bridge) and grant THAT. It never changes, so the grant survives.
+#
+# GRANTING IT (one-time, after the first rebuild): the first time the agent touches
+# iCloud, macOS shows a consent prompt — "unison-bridge wants to access data from
+# other apps." Click Allow (needs a logged-in GUI session, so Screen-Share / VNC in
+# on a headless box to see it). That narrow "data from other apps" grant is all it
+# needs — Full Disk Access is NOT required.
+# To update unison later: rm ~/.local/bin/unison-bridge, rebuild (re-copies), then
+# click Allow once more when the prompt reappears.
 #
 # Tuning that sidesteps iCloud's behaviour:
 #   fastcheck = false  -> detect changes by CONTENT, not mtime (ignores iCloud's
@@ -34,8 +39,8 @@ let
 in {
   home.packages = [ pkgs.unison ];
 
-  # Stable, FDA-grantable copy of the (self-contained) unison binary. Copy-if-absent
-  # so the path/cdhash — and therefore the Full Disk Access grant — never change.
+  # Stable, grantable copy of the (self-contained) unison binary. Copy-if-absent
+  # so the path/cdhash — and therefore the TCC grant — never change.
   home.activation.unisonBridgeBinary = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     if [ ! -e "${bridgeBin}" ]; then
       $DRY_RUN_CMD mkdir -p "${home}/.local/bin"
@@ -70,7 +75,7 @@ in {
   '';
 
   # Reconcile every 60s as a user agent (needs the GUI session for iCloud). Runs the
-  # FIXED-PATH copy so its Full Disk Access grant stays valid across rebuilds.
+  # FIXED-PATH copy so its iCloud (TCC) grant stays valid across rebuilds.
   launchd.agents.unison-vault = {
     enable = true;
     config = {
