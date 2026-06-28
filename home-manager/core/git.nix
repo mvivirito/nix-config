@@ -4,6 +4,8 @@
     enable = true;
 
     settings = {
+      user.name = "Michael Vivirito";
+      user.email = "mvivirito@gmail.com";
       init.defaultBranch = "main";
       pull.rebase = true;
       push.autoSetupRemote = true;
