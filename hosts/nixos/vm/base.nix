@@ -8,6 +8,9 @@
     loader.grub = {
       enable = true;
       device = "/dev/sda";
+      # Cap the GRUB menu (and /boot clutter) at the 10 newest generations.
+      # This only trims the menu — old generations are reclaimed by nix.gc below.
+      configurationLimit = 10;
     };
     initrd.availableKernelModules = [
       "ata_piix"
@@ -36,6 +39,17 @@
       "vm.dirty_background_ratio" = 5;
       "vm.vfs_cache_pressure" = 50;
     };
+  };
+
+  # Override the shared weekly/30d baseline (shared/nix.nix) 
+  # with a tighter daily/7d policy so
+  # the store stays bounded under frequent rebuilds.
+  nix.gc = {
+    automatic = true;
+    dates = "daily";
+    options = "--delete-older-than 7d";
+    # VM is often powered off at the scheduled time — run a missed GC on boot.
+    persistent = true;
   };
 
   # QEMU guest agent for Proxmox integration
