@@ -4,6 +4,12 @@
   # Timezone and internationalization
   time.timeZone = "America/Los_Angeles";
 
+  # NTP — prefer homefw (local) at home, fall back to public servers when traveling.
+  # Both go in `servers` on purpose: systemd-timesyncd's fallbackServers only apply
+  # when `servers` is empty, so they would NOT fail over from an unreachable home
+  # server. homefw is listed first → used at home, skipped (→ Cloudflare/Google) away.
+  services.timesyncd.servers = [ "10.0.0.1" "time.cloudflare.com" "time.google.com" ];
+
   i18n.defaultLocale = "en_US.UTF-8";
 
   i18n.extraLocaleSettings = {
